@@ -2,6 +2,8 @@ package br.org.sae;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -22,6 +24,8 @@ public class Importador {
 		LeitorCandidato leitorCandidato = new LeitorCandidato();
 		LeitorCurso leitorCurso = new LeitorCurso();
 		
+		DateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");
+		
 		for(int i = 1; i < 200; i++){
 			HSSFRow row = sheet.getRow(i);
 			
@@ -30,6 +34,10 @@ public class Importador {
 			
 			System.out.println("Nome: " + candidato.getNome());
 			System.out.println("RG: " + candidato.getRg());
+			System.out.println("Orgao Expedidor: " + candidato.getOrgaoExpedidor());
+			System.out.println("Sexo: " + candidato.getSexo());
+			System.out.println("Data Nascimento: " + formatador.format(candidato.getDataNascimento()));
+			System.out.println("Estado Civil: " + candidato.getEstadoCivil());
 		}
 	}
 
