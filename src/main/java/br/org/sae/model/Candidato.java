@@ -1,4 +1,4 @@
-package br.com.sae.model;
+package br.org.sae.model;
 
 import java.io.Serializable;
 import java.util.Date;

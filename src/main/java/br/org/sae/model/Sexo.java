@@ -1,4 +1,4 @@
-package br.com.sae.model;
+package br.org.sae.model;
 
 public enum Sexo {
 	
