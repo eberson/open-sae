@@ -29,7 +29,7 @@ public class Candidato implements Serializable {
 
 	private String email;
 
-	private boolean necessidadeEspecial;
+	private String necessidadeEspecial;
 	private String necessidadeTipo;
 
 	private boolean afroDescendente;
@@ -103,14 +103,6 @@ public class Candidato implements Serializable {
 		this.email = email;
 	}
 
-	public boolean isNecessidadeEspecial() {
-		return necessidadeEspecial;
-	}
-
-	public void setNecessidadeEspecial(boolean necessidadeEspecial) {
-		this.necessidadeEspecial = necessidadeEspecial;
-	}
-
 	public String getNecessidadeTipo() {
 		return necessidadeTipo;
 	}
@@ -149,6 +141,14 @@ public class Candidato implements Serializable {
 
 	public void setTelefoneSecundario(Telefone telefoneSecundario) {
 		this.telefoneSecundario = telefoneSecundario;
+	}
+
+	public String getNecessidadeEspecial() {
+		return necessidadeEspecial;
+	}
+
+	public void setNecessidadeEspecial(String necessidadeEspecial) {
+		this.necessidadeEspecial = necessidadeEspecial;
 	}
 
 }
