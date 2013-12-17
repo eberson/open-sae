@@ -11,6 +11,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import br.org.sae.model.Candidato;
 import br.org.sae.model.Curso;
+import br.org.sae.model.OpcaoPrestada;
 
 public class Importador {
 	
@@ -23,6 +24,8 @@ public class Importador {
 		HSSFSheet sheet = workbook.getSheetAt(1);
 		LeitorCandidato leitorCandidato = new LeitorCandidato();
 		LeitorCurso leitorCurso = new LeitorCurso();
+		LeitorOpcao1 leitoropcao1 = new LeitorOpcao1();
+		
 		
 		DateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");
 		
@@ -31,6 +34,7 @@ public class Importador {
 			
 			Candidato candidato = leitorCandidato.le(row);
 			Curso curso = leitorCurso.le(row);
+			OpcaoPrestada opcao = leitoropcao1.le(row);
 			
 			System.out.println("Nome: " + candidato.getNome());
 			System.out.println("RG: " + candidato.getRg());
@@ -55,6 +59,9 @@ public class Importador {
 			System.out.println("DDD2: " + candidato.getTelefoneSecundario().getDdd());
 			System.out.println("Telefone2: " + candidato.getTelefoneSecundario().getTelefone());
 			System.out.println("Ramal2: " + candidato.getTelefoneSecundario().getRamal());
+			System.out.println("Classificação " + opcao.getClassificacao());
+			System.out.println("primeiraopcao: " + opcao.getCurso().getNome());
+            System.out.println("Codigo do Curso: " + opcao.getCodCurso());
 		}
 	}
 

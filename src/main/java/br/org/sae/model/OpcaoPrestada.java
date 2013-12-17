@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class OpcaoPrestada implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private String opcao;
+	private Opcao opcao;
 	private int classificacao;
 	private int ano;
 	private int semestre;
@@ -31,11 +31,11 @@ public class OpcaoPrestada implements Serializable {
 		this.tipoProva = tipoProva;
 	}
 
-	public String getOpcao() {
+	public Opcao getOpcao() {
 		return opcao;
 	}
 
-	public void setOpcao(String opcao) {
+	public void setOpcao(Opcao opcao) {
 		this.opcao = opcao;
 	}
 
