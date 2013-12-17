@@ -1,8 +1,8 @@
-package br.org.sae;
+package br.org.sae.importador.leitor;
 
 import org.apache.poi.hssf.usermodel.HSSFRow;
 
-import br.org.sae.model.Opcao;
+import br.org.sae.model.TipoOpcao;
 import br.org.sae.model.OpcaoPrestada;
 
 public class LeitorOpcao1 extends LeitorOpcao {
@@ -14,7 +14,7 @@ public class LeitorOpcao1 extends LeitorOpcao {
 	public OpcaoPrestada le(HSSFRow row) {
 		OpcaoPrestada opcao = super.le(row);
 		
-		opcao.setOpcao(Opcao.PRIMEIRA);
+		opcao.setOpcao(TipoOpcao.PRIMEIRA);
 			
 		return opcao;
 	}

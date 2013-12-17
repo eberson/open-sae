@@ -5,12 +5,11 @@ import java.io.Serializable;
 public class OpcaoPrestada implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private Opcao opcao;
+	private TipoOpcao opcao;
 	private int classificacao;
 	private int ano;
 	private int semestre;
 	private Curso curso;
-	private Candidato candidato;
 	private Periodo periodo;
 	private String tipoProva;
 	private int codCurso;
@@ -31,11 +30,11 @@ public class OpcaoPrestada implements Serializable {
 		this.tipoProva = tipoProva;
 	}
 
-	public Opcao getOpcao() {
+	public TipoOpcao getOpcao() {
 		return opcao;
 	}
 
-	public void setOpcao(Opcao opcao) {
+	public void setOpcao(TipoOpcao opcao) {
 		this.opcao = opcao;
 	}
 
@@ -69,14 +68,6 @@ public class OpcaoPrestada implements Serializable {
 
 	public void setCurso(Curso curso) {
 		this.curso = curso;
-	}
-
-	public Candidato getCandidato() {
-		return candidato;
-	}
-
-	public void setCandidato(Candidato candidato) {
-		this.candidato = candidato;
 	}
 
 	public Periodo getPeriodo() {

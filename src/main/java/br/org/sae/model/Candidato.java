@@ -38,6 +38,9 @@ public class Candidato implements Serializable {
 
 	private Telefone telefonePrincipal;
 	private Telefone telefoneSecundario;
+	
+	private OpcaoPrestada primeiraOpcao;
+	private OpcaoPrestada segundaOpcao;
 
 	public Long getCodigo() {
 		return codigo;
@@ -149,6 +152,22 @@ public class Candidato implements Serializable {
 
 	public void setNecessidadeEspecial(String necessidadeEspecial) {
 		this.necessidadeEspecial = necessidadeEspecial;
+	}
+	
+	public OpcaoPrestada getPrimeiraOpcao() {
+		return primeiraOpcao;
+	}
+	
+	public void setPrimeiraOpcao(OpcaoPrestada primeiraOpcao) {
+		this.primeiraOpcao = primeiraOpcao;
+	}
+	
+	public OpcaoPrestada getSegundaOpcao() {
+		return segundaOpcao;
+	}
+	
+	public void setSegundaOpcao(OpcaoPrestada segundaOpcao) {
+		this.segundaOpcao = segundaOpcao;
 	}
 
 }

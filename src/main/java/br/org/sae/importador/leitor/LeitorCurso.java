@@ -1,13 +1,13 @@
-package br.org.sae;
+package br.org.sae.importador.leitor;
 
-import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.ss.usermodel.Row;
 
 import br.org.sae.model.Curso;
 
 public class LeitorCurso implements DadoLegivel<Curso> {
 
 	@Override
-	public Curso le(HSSFRow row) {
+	public Curso le(Row row) {
 		Curso c = new Curso();
 		c.setNome(row.getCell(1).getStringCellValue());
 

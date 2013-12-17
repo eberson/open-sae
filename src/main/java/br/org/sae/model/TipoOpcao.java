@@ -1,5 +1,5 @@
 package br.org.sae.model;
 
-public enum Opcao {
+public enum TipoOpcao {
 	PRIMEIRA, SEGUNDA
 }

@@ -1,10 +1,11 @@
-package br.org.sae;
+package br.org.sae.importador.leitor;
 
-import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.ss.usermodel.Row;
 
 import br.org.sae.model.Candidato;
 import br.org.sae.model.EstadoCivil;
 import br.org.sae.model.Sexo;
+import br.org.sae.model.Telefone;
 
 public class LeitorCandidato implements DadoLegivel<Candidato>{
 	
@@ -14,7 +15,7 @@ public class LeitorCandidato implements DadoLegivel<Candidato>{
 	private DataNascimentoLeitor nascimentoLeitor = new DataNascimentoLeitor();
 	private LeitorTelefone leitorTelefone = new LeitorTelefone();
 
-	public Candidato le(HSSFRow row) {
+	public Candidato le(Row row) {
 		Candidato c = new Candidato();
 		
 		c.setNome(row.getCell(0).getStringCellValue());
@@ -28,8 +29,10 @@ public class LeitorCandidato implements DadoLegivel<Candidato>{
 		c.setNecessidadeEspecial(row.getCell(21).getStringCellValue());
 		c.setNecessidadeTipo(row.getCell(22).getStringCellValue());
 		c.setAfroDescendente(leitorAfroDescendente.le(row.getCell(17)));
-		c.setTelefonePrincipal(leitorTelefone.le(row));
-		c.setTelefoneSecundario(leitorTelefone.le2(row));
+		
+		Telefone[] telefones = leitorTelefone.le(row);
+		c.setTelefonePrincipal(telefones[0]);
+		c.setTelefoneSecundario(telefones[1]);
 		
 		return c;
 	}

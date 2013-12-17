@@ -1,11 +1,11 @@
-package br.org.sae;
+package br.org.sae.importador.leitor;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.ss.usermodel.Cell;
 
 public class NomeCandidatoLeitor implements ColunaLegivel<String>{
 
 	@Override
-	public String le(HSSFCell cell) {
+	public String le(Cell cell) {
 		return cell.getStringCellValue();
 	}
 	

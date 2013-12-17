@@ -1,13 +1,13 @@
-package br.org.sae;
+package br.org.sae.importador.leitor;
 
-import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.ss.usermodel.Row;
 
 import br.org.sae.model.Endereco;
 
 public class LeitorEndereco implements DadoLegivel<Endereco>{
 
 	@Override
-	public Endereco le(HSSFRow row) {
+	public Endereco le(Row row) {
 		Endereco endereco = new Endereco();
 		
 		endereco.setEndereco(row.getCell(7).getStringCellValue());

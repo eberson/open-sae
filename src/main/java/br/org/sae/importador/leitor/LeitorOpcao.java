@@ -1,10 +1,11 @@
-package br.org.sae;
+package br.org.sae.importador.leitor;
 
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
 
-import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.ss.usermodel.Row;
 
+import br.org.sae.importador.ImportadorUtil;
 import br.org.sae.model.OpcaoPrestada;
 import br.org.sae.model.Periodo;
 
@@ -23,7 +24,7 @@ public class LeitorOpcao implements DadoLegivel<OpcaoPrestada> {
 		this.periodo = periodo;
 	}
 
-	public OpcaoPrestada le(HSSFRow row) {
+	public OpcaoPrestada le(Row row) {
 		OpcaoPrestada op = new OpcaoPrestada();
 
 		op.setCurso(leitorcurso.le(row));
