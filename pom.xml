@@ -19,12 +19,15 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- INICIO DAS CONFIGURAÇÕES DO APACHE POI -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>3.9</version>
 		</dependency>
-
+		<!-- FIM DAS CONFIGURAÇÕES DO APACHE POI -->
+		
+		<!-- INICIO DAS CONFIGURAÇÕES DO SPRING -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
@@ -87,6 +90,25 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- FIM DAS CONFIGURAÇÕES DO SPRING -->
+		
+		<!-- INICIO DAS CONFIGURAÇÕES DO HIBERNATE ORM-->
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-core</artifactId>
+		    <version>4.3.0.Final</version>
+		    <scope>provided</scope>
+		</dependency>
+		<!-- FIM DAS CONFIGURAÇÕES DO HIBERNATE ORM-->
+		
+		<!-- INICIO DAS CONFIGURAÇÕES DO HIBERNATE VALIDATOR-->
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-validator</artifactId>
+		    <version>5.0.1.Final</version>
+		    <scope>provided</scope>
+		</dependency>
+		<!-- FIM DAS CONFIGURAÇÕES DO HIBERNATE VALIDATOR -->
 	</dependencies>
 
 	<build>
