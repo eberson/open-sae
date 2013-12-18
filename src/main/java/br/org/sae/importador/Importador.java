@@ -1,5 +1,13 @@
 package br.org.sae.importador;
 
+import static br.org.sae.importador.ImportadorConstants.COLUNAS;
+import static br.org.sae.importador.ImportadorConstants.CURSO1_CLASSIFICACAO;
+import static br.org.sae.importador.ImportadorConstants.CURSO1_CODESCOLACURSO;
+import static br.org.sae.importador.ImportadorConstants.CURSO2_CLASSIFICACAO;
+import static br.org.sae.importador.ImportadorConstants.CURSO2_CODESCOLACURSO;
+import static br.org.sae.importador.ImportadorConstants.TELEFONE_P_DDD;
+import static br.org.sae.importador.ImportadorConstants.TELEFONE_S_DDD;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,20 +17,28 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import br.org.sae.exception.ArquivoVazioException;
 import br.org.sae.exception.FormatoInvalidoException;
 import br.org.sae.exception.ImpossivelLerException;
+import br.org.sae.importador.leitor.LeitorUtil;
 import br.org.sae.model.Candidato;
 
-abstract class Importador {
+public abstract class Importador {
+	
+	protected int limiteInferior = 1;
+	protected int limiteSuperior = 1000;
 	
 	private File source;
 	private int ano;
 	private int semestre;
 	
 	public abstract Workbook create(InputStream in) throws IOException;
-	public abstract List<Candidato> processa(Workbook workbook);
+	public abstract List<Candidato> processa(Sheet sheet, LeitorUtil util);
 	
 	public Importador withSource(File source) {
 		this.source = source;
@@ -47,7 +63,7 @@ abstract class Importador {
 		return semestre;
 	}
 	
-	public List<Candidato> importar() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException{
+	public List<Candidato> importar() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException{
 		if(source == null || !source.exists()){
 			throw new FileNotFoundException("Arquivo contendo dados não foi encontrado no caminho especificado.");
 		}
@@ -60,19 +76,70 @@ abstract class Importador {
 			FileInputStream in = new FileInputStream(source);
 			Workbook workbook = create(in);
 			
-			if(!checkFormato(workbook)){
-				throw new FormatoInvalidoException();
-			}
+			checkFormato(workbook);
 			
-			return processa(workbook);
+			Sheet sheet = workbook.getSheet("dados");
+			
+			limiteInferior = 1;
+			limiteSuperior = sheet.getLastRowNum();
+
+			LeitorUtil util = new LeitorUtil(ano, semestre);
+			
+			return processa(sheet, util);
 			
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
-	protected boolean checkFormato(Workbook workbook){
-		return true;
+	protected void checkFormato(Workbook workbook) throws ArquivoVazioException, FormatoInvalidoException{
+		Sheet sheet = workbook.getSheet("dados");
+		
+		if(sheet == null){
+			throw new FormatoInvalidoException();
+		}
+		
+		if(sheet.getLastRowNum() == 0){
+			throw new ArquivoVazioException();
+		}
+		
+		int inicio = sheet.getFirstRowNum() + 1;
+		int fim = sheet.getLastRowNum();
+		
+		for(int i = inicio; i <= fim; i++ ){
+			checkColumn(sheet.getRow(i));
+		}
+		
+	}
+	
+	private void checkColumn(Row row) throws FormatoInvalidoException {
+		for (int i = 0; i <= COLUNAS.length; i++) {
+			int indexColuna = COLUNAS[i];
+			Cell cell = row.getCell(indexColuna);
+
+			if (cell != null && cell.getCellType() == Cell.CELL_TYPE_BLANK) {
+				continue;
+			}
+			
+			switch (indexColuna) {
+				case CURSO1_CODESCOLACURSO:
+				case CURSO1_CLASSIFICACAO:
+				case CURSO2_CODESCOLACURSO:
+				case CURSO2_CLASSIFICACAO:
+				case TELEFONE_P_DDD:
+				case TELEFONE_S_DDD:
+					if (cell.getCellType() != Cell.CELL_TYPE_NUMERIC) {
+						throw new FormatoInvalidoException();
+					}
+					break;
+				default:
+					if (cell.getCellType() != Cell.CELL_TYPE_STRING) {
+						throw new FormatoInvalidoException();
+					}
+					break;
+			}
+		}
+
 	}
 	
 	public static void main(String[] args) throws Exception {

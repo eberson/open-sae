@@ -14,6 +14,10 @@ public class ImportadorBuilder {
 		this.source = source;
 		return this;
 	}
+
+	public ImportadorBuilder setSource(String source) {
+		return setSource(new File(source));
+	}
 	
 	public ImportadorBuilder setAno(int ano) {
 		this.ano = ano;

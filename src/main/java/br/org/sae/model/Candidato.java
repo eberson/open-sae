@@ -1,7 +1,9 @@
 package br.org.sae.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Classe responsável por representar um Candidato interessado em alguns dos
@@ -38,9 +40,8 @@ public class Candidato implements Serializable {
 
 	private Telefone telefonePrincipal;
 	private Telefone telefoneSecundario;
-	
-	private OpcaoPrestada primeiraOpcao;
-	private OpcaoPrestada segundaOpcao;
+
+	private List<Vestibulinho> vestibulinhos;
 
 	public Long getCodigo() {
 		return codigo;
@@ -154,20 +155,20 @@ public class Candidato implements Serializable {
 		this.necessidadeEspecial = necessidadeEspecial;
 	}
 	
-	public OpcaoPrestada getPrimeiraOpcao() {
-		return primeiraOpcao;
+	public List<Vestibulinho> getVestibulinhos() {
+		if(vestibulinhos == null){
+			vestibulinhos = new ArrayList<>();
+		}
+		
+		return vestibulinhos;
 	}
 	
-	public void setPrimeiraOpcao(OpcaoPrestada primeiraOpcao) {
-		this.primeiraOpcao = primeiraOpcao;
+	public void setVestibulinhos(List<Vestibulinho> vestibulinhos) {
+		this.vestibulinhos = vestibulinhos;
 	}
 	
-	public OpcaoPrestada getSegundaOpcao() {
-		return segundaOpcao;
-	}
-	
-	public void setSegundaOpcao(OpcaoPrestada segundaOpcao) {
-		this.segundaOpcao = segundaOpcao;
+	public void addVestibulinho(Vestibulinho vestibulinho){
+		getVestibulinhos().add(vestibulinho);
 	}
 
 }

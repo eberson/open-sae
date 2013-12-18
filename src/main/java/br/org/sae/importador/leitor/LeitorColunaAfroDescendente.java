@@ -2,10 +2,10 @@ package br.org.sae.importador.leitor;
 
 import org.apache.poi.ss.usermodel.Cell;
 
-public class LeitorAfroDescendente implements ColunaLegivel<Boolean>{
+public class LeitorColunaAfroDescendente implements ColunaLegivel<Boolean>{
 
 	@Override
-	public Boolean le(Cell cell) {
+	public Boolean le(Cell cell, LeitorUtil util) {
 		if (cell.getStringCellValue().equals("SIM")) {
 			return true;
 		}

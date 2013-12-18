@@ -5,12 +5,14 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import br.org.sae.importador.leitor.LeitorCandidato;
+import br.org.sae.importador.leitor.LeitorUtil;
 import br.org.sae.model.Candidato;
 
 class XLSXImportador extends Importador {
@@ -25,15 +27,15 @@ class XLSXImportador extends Importador {
 	}
 
 	@Override
-	public List<Candidato> processa(Workbook workbook) {
-		XSSFSheet sheet = (XSSFSheet) workbook.getSheetAt(1);
+	public List<Candidato> processa(Sheet sheet, LeitorUtil util) {
 		LeitorCandidato leitor = new LeitorCandidato();
 		List<Candidato> candidatos = new ArrayList<>();
 		
-		for(int i = 1; i < 200; i++){
-			XSSFRow row = sheet.getRow(i);
-			
-			candidatos.add(leitor.le(row));
+		XSSFSheet sheetImpl = (XSSFSheet) sheet;
+		
+		for(int i = limiteInferior; i < limiteSuperior; i++){
+			XSSFRow row = sheetImpl.getRow(i);
+			candidatos.add(leitor.le(row, util));
 		}
 		
 		return candidatos;

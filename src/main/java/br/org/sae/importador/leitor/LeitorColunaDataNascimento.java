@@ -7,12 +7,12 @@ import java.util.Date;
 
 import org.apache.poi.ss.usermodel.Cell;
 
-public class DataNascimentoLeitor implements ColunaLegivel<Date> {
+public class LeitorColunaDataNascimento implements ColunaLegivel<Date> {
 
 	private DateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");
 
 	@Override
-	public Date le(Cell cell) {
+	public Date le(Cell cell, LeitorUtil util) {
 		try {
 			return formatador.parse(cell.getStringCellValue());
 		} catch (ParseException e) {

@@ -1,5 +1,14 @@
 package br.org.sae.importador.leitor;
 
+import static br.org.sae.importador.ImportadorConstants.CURSO1_NOME;
+import static br.org.sae.importador.ImportadorConstants.CURSO1_CLASSIFICACAO;
+import static br.org.sae.importador.ImportadorConstants.CURSO1_CODESCOLACURSO;
+import static br.org.sae.importador.ImportadorConstants.CURSO1_PERIODO;
+import static br.org.sae.importador.ImportadorConstants.CURSO2_NOME;
+import static br.org.sae.importador.ImportadorConstants.CURSO2_CLASSIFICACAO;
+import static br.org.sae.importador.ImportadorConstants.CURSO2_CODESCOLACURSO;
+import static br.org.sae.importador.ImportadorConstants.CURSO2_PERIODO;
+
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
 
@@ -9,34 +18,35 @@ import br.org.sae.importador.ImportadorUtil;
 import br.org.sae.model.OpcaoPrestada;
 import br.org.sae.model.Periodo;
 
-public class LeitorOpcao implements DadoLegivel<OpcaoPrestada> {
+public class LeitorOpcao implements DadoLegivel<OpcaoPrestada[]> {
 
-	private LeitorCurso leitorcurso = new LeitorCurso();
+	public OpcaoPrestada[] le(Row row, LeitorUtil util) {
+		OpcaoPrestada[] opcoes = new OpcaoPrestada[2];
+		
+		opcoes[0] = leImpl(row, util, CURSO1_NOME, CURSO1_CODESCOLACURSO, CURSO1_CLASSIFICACAO, CURSO1_PERIODO);
+		opcoes[1] = leImpl(row, util, CURSO2_NOME, CURSO2_CODESCOLACURSO, CURSO2_CLASSIFICACAO, CURSO2_PERIODO);
 
-	private int classificacao;
-	private int codCurso;
-	private int periodo;
-
-	public LeitorOpcao(int classificacao, int codCurso, int periodo) {
-		super();
-		this.classificacao = classificacao;
-		this.codCurso = codCurso;
-		this.periodo = periodo;
+		return opcoes;
 	}
 
-	public OpcaoPrestada le(Row row) {
+	public OpcaoPrestada leImpl(Row row, LeitorUtil util, int nomeCurso, int codCurso, int classificacao, int periodo) {
 		OpcaoPrestada op = new OpcaoPrestada();
-
-		op.setCurso(leitorcurso.le(row));
-
+		
+		op.setCurso(util.leitorColunaCurso().le(row.getCell(nomeCurso), util));
+		
 		op.setCodCurso(ImportadorUtil.getIntValue(row.getCell(codCurso)));
 		op.setClassificacao(ImportadorUtil.getIntValue(row.getCell(classificacao)));
 		
 		String speriodo = Normalizer.normalize(row.getCell(periodo).getStringCellValue(), Form.NFD);
 		speriodo = speriodo.replaceAll("[^\\p{ASCII}]", "");
 		speriodo = speriodo.replaceAll(" ", "_");
-		op.setPeriodo(Periodo.valueOf(speriodo));
-
+		
+		try {
+			op.setPeriodo(Periodo.valueOf(speriodo));
+		} catch (IllegalArgumentException e) {
+			op.setPeriodo(null);
+		}
+		
 		return op;
 	}
 }

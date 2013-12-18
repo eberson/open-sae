@@ -4,6 +4,6 @@ import java.io.File;
 
 public interface ImportService {
 
-	public RespostaService importar(File xlsFile, int ano, int semestre);
+	public RespostaImportService importar(File xlsFile, int ano, int semestre);
 
 }

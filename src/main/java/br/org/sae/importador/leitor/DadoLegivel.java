@@ -4,6 +4,6 @@ import org.apache.poi.ss.usermodel.Row;
 
 public interface DadoLegivel<T> {
 	
-	public T le(Row row);
+	public T le(Row row, LeitorUtil util);
 
 }
