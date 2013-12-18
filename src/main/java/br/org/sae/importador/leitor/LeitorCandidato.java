@@ -10,6 +10,7 @@ import static br.org.sae.importador.ImportadorConstants.CANDIDATO_NOME;
 import static br.org.sae.importador.ImportadorConstants.CANDIDATO_RG_NUMERO;
 import static br.org.sae.importador.ImportadorConstants.CANDIDATO_RG_ORGAO_EXPED;
 import static br.org.sae.importador.ImportadorConstants.CANDIDATO_SEXO;
+import static br.org.sae.importador.ImportadorConstants.CANDIDATO_CPF;
 
 import org.apache.poi.ss.usermodel.Row;
 
@@ -24,6 +25,7 @@ public class LeitorCandidato implements DadoLegivel<Candidato>{
 		Candidato c = new Candidato();
 		
 		c.setNome(row.getCell(CANDIDATO_NOME).getStringCellValue());
+		c.setCpf(row.getCell(CANDIDATO_CPF).getStringCellValue());
 		c.setRg(util.leitorColunaRGCandidato().le(row.getCell(CANDIDATO_RG_NUMERO), util));
 		c.setOrgaoExpedidor(row.getCell(CANDIDATO_RG_ORGAO_EXPED).getStringCellValue());
 		c.setSexo(Sexo.valueOf(row.getCell(CANDIDATO_SEXO).getStringCellValue()));

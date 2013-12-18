@@ -18,6 +18,8 @@ public class Candidato implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long codigo;
+	
+	private String cpf;
 	private String nome;
 
 	private String rg;
@@ -49,6 +51,14 @@ public class Candidato implements Serializable {
 
 	public void setCodigo(Long codigo) {
 		this.codigo = codigo;
+	}
+	
+	public String getCpf() {
+		return cpf;
+	}
+	
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 
 	public String getNome() {

@@ -1,12 +1,13 @@
 package br.org.sae.importador;
 
-import static br.org.sae.importador.ImportadorConstants.COLUNAS;
 import static br.org.sae.importador.ImportadorConstants.CURSO1_CLASSIFICACAO;
 import static br.org.sae.importador.ImportadorConstants.CURSO1_CODESCOLACURSO;
 import static br.org.sae.importador.ImportadorConstants.CURSO2_CLASSIFICACAO;
 import static br.org.sae.importador.ImportadorConstants.CURSO2_CODESCOLACURSO;
 import static br.org.sae.importador.ImportadorConstants.TELEFONE_P_DDD;
 import static br.org.sae.importador.ImportadorConstants.TELEFONE_S_DDD;
+
+import static br.org.sae.importador.ImportadorConstants.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -113,26 +114,58 @@ public abstract class Importador {
 	}
 	
 	private void checkColumn(Row row) throws FormatoInvalidoException {
-		for (int i = 0; i <= COLUNAS.length; i++) {
-			int indexColuna = COLUNAS[i];
-			Cell cell = row.getCell(indexColuna);
+		short lastCellNum = row.getLastCellNum();
+		
+		for (int i = 0; i < lastCellNum; i++) {
+			Cell cell = row.getCell(i);
+			
+			if(cell == null){
+				continue;
+			}
 
-			if (cell != null && cell.getCellType() == Cell.CELL_TYPE_BLANK) {
+			if (cell.getCellType() == Cell.CELL_TYPE_BLANK) {
 				continue;
 			}
 			
-			switch (indexColuna) {
+			switch (i) {
 				case CURSO1_CODESCOLACURSO:
 				case CURSO1_CLASSIFICACAO:
 				case CURSO2_CODESCOLACURSO:
 				case CURSO2_CLASSIFICACAO:
 				case TELEFONE_P_DDD:
 				case TELEFONE_S_DDD:
-					if (cell.getCellType() != Cell.CELL_TYPE_NUMERIC) {
+					if (cell.getCellType() != Cell.CELL_TYPE_NUMERIC && cell.getCellType() != Cell.CELL_TYPE_STRING) {
 						throw new FormatoInvalidoException();
 					}
 					break;
-				default:
+				case CANDIDATO_NOME:
+				case CANDIDATO_RG_NUMERO:
+				case CANDIDATO_RG_ORGAO_EXPED:
+				case CANDIDATO_SEXO:
+				case CANDIDATO_DT_NASCIMENTO:
+				case CANDIDATO_ESTADO_CIVIL:
+				case CANDIDATO_AFRODESCENDENTE:
+				case CANDIDATO_ESCOLARIDADE:
+				case CANDIDATO_EMAIL:
+				case CANDIDATO_NECESSIDADE:
+				case CANDIDATO_NECESSIDADE_TIPO:
+				case CANDIDATO_CPF:
+				case VESTIBULINHO_TIPO_PROVA:
+				case CURSO1_NOME:
+				case CURSO1_PERIODO:
+				case CURSO2_NOME:
+				case CURSO2_PERIODO:
+				case TELEFONE_P_NUMERO:
+				case TELEFONE_P_RAMAL:
+				case TELEFONE_S_NUMERO:
+				case TELEFONE_S_RAMAL:
+				case ENDERECO_LOGRADOURO:
+				case ENDERECO_NUMERO:
+				case ENDERECO_COMPLEMENTO:
+				case ENDERECO_BAIRRO:
+				case ENDERECO_CIDADE:
+				case ENDERECO_UF:
+				case ENDERECO_CEP:
 					if (cell.getCellType() != Cell.CELL_TYPE_STRING) {
 						throw new FormatoInvalidoException();
 					}
