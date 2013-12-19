@@ -12,12 +12,16 @@ import br.org.sae.exception.ImpossivelLerException;
 import br.org.sae.importador.Importador;
 import br.org.sae.importador.ImportadorBuilder;
 import br.org.sae.model.Candidato;
+import br.org.sae.repositorio.RepositorioCandidato;
 import br.org.sae.service.ImportService;
 import br.org.sae.service.RespostaImportService;
 
 @Service
 public class ImportServiceImpl implements ImportService{
 
+	
+	private RepositorioCandidato repositorio;
+	
 	@Override
 	public RespostaImportService importar(File xlsFile, int ano, int semestre) {
 		ImportadorBuilder impBuilder = new ImportadorBuilder();

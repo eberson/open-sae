@@ -1,10 +1,12 @@
 package br.org.sae.test;
 
+import static org.junit.Assert.*;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
-
 import org.junit.Test;
-
 import br.org.sae.exception.ArquivoVazioException;
 import br.org.sae.exception.FormatoInvalidoException;
 import br.org.sae.exception.ImpossivelLerException;
@@ -12,67 +14,80 @@ import br.org.sae.importador.Importador;
 import br.org.sae.importador.ImportadorBuilder;
 import br.org.sae.model.Candidato;
 
-import static org.junit.Assert.*;
-
 public class TestImportacao {
 	
 	@Test(expected=IllegalArgumentException.class)
-	public void testArquivoXLSOrXLSX() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException{
-		ImportadorBuilder builder = new ImportadorBuilder();
-		builder.setAno(2013).setSemestre(2).setSource("C:\\Users\\aluno\\Desktop\\matricula-real.doc");
+	public void testArquivoXLSOrXLSX() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, URISyntaxException{
+		URI uri = getClass().getResource("matricula-real.docx").toURI();
 		
+		ImportadorBuilder builder = new ImportadorBuilder();
+		builder.setAno(2013).setSemestre(2).setSource(new File(uri));
 		builder.build();
 	}
 	
 	@Test(expected=FileNotFoundException.class)
 	public void testArquivoInexistente() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException{
 		ImportadorBuilder builder = new ImportadorBuilder();
-		builder.setAno(2013).setSemestre(2).setSource("C:\\Users\\aluno\\Desktop\\matricula-real-teste.xls");
-		
+		builder.setAno(2013).setSemestre(2).setSource("matricula-real-teste.xls");
+
 		Importador importador = builder.build();
 		importador.importar();
 	}
 
 	@Test(expected=FormatoInvalidoException.class)
-	public void testArquivoVazioFormatoInvalido() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException{
+	public void testArquivoVazioFormatoInvalido() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException, URISyntaxException{
+		URI uri = getClass().getResource("arquivo-vazio-formato-invalido.xlsx").toURI();
+
 		ImportadorBuilder builder = new ImportadorBuilder();
-		builder.setAno(2013).setSemestre(2).setSource("C:\\Users\\aluno\\Desktop\\arquivo-vazio-formato-invalido.xlsx");
+		builder.setAno(2013).setSemestre(2).setSource(new File(uri));
+
+		File file = new File("./br/org/sae/test");
+		System.out.println(file.getAbsolutePath());
+		System.out.println(file.exists());
 		
 		Importador importador = builder.build();
 		importador.importar();
 	}
 
 	@Test(expected=ArquivoVazioException.class)
-	public void testArquivoVazio() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException{
+	public void testArquivoVazio() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException, URISyntaxException{
+		URI uri = getClass().getResource("arquivo-vazio.xlsx").toURI();
+
 		ImportadorBuilder builder = new ImportadorBuilder();
-		builder.setAno(2013).setSemestre(2).setSource("C:\\Users\\aluno\\Desktop\\arquivo-vazio.xlsx");
+		builder.setAno(2013).setSemestre(2).setSource(new File(uri));
 		
 		Importador importador = builder.build();
 		importador.importar();
 	}
 	
 	@Test(expected=FormatoInvalidoException.class)
-	public void testFormatoInvalidoXLS() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException{
+	public void testFormatoInvalidoXLS() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException, URISyntaxException{
+		URI uri = getClass().getResource("formato-invalido.xls").toURI();
+
 		ImportadorBuilder builder = new ImportadorBuilder();
-		builder.setAno(2013).setSemestre(2).setSource("C:\\Users\\aluno\\Desktop\\formato-invalido.xls");
+		builder.setAno(2013).setSemestre(2).setSource(new File(uri));
 		
 		Importador importador = builder.build();
 		importador.importar();
 	}
 
 	@Test(expected=FormatoInvalidoException.class)
-	public void testFormatoInvalidoXLSX() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException{
+	public void testFormatoInvalidoXLSX() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException, URISyntaxException{
+		URI uri = getClass().getResource("formato-invalido.xlsx").toURI();
+		
 		ImportadorBuilder builder = new ImportadorBuilder();
-		builder.setAno(2013).setSemestre(2).setSource("C:\\Users\\aluno\\Desktop\\formato-invalido.xlsx");
+		builder.setAno(2013).setSemestre(2).setSource(new File(uri));
 		
 		Importador importador = builder.build();
 		importador.importar();
 	}
 
 	@Test
-	public void testDadosCarregadosXLSX() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException{
+	public void testDadosCarregadosXLSX() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException, URISyntaxException{
+		URI uri = getClass().getResource("arquivo-completo.xlsx").toURI();
+		
 		ImportadorBuilder builder = new ImportadorBuilder();
-		builder.setAno(2013).setSemestre(2).setSource("C:\\Users\\aluno\\Desktop\\arquivo-completo.xlsx");
+		builder.setAno(2013).setSemestre(2).setSource(new File(uri));
 		
 		Importador importador = builder.build();
 		List<Candidato> candidatos = importador.importar();
@@ -88,9 +103,11 @@ public class TestImportacao {
 	}
 
 	@Test
-	public void testDadosCarregadosXLS() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException{
+	public void testDadosCarregadosXLS() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException, URISyntaxException{
+		URI uri = getClass().getResource("arquivo-completo.xls").toURI();
+		
 		ImportadorBuilder builder = new ImportadorBuilder();
-		builder.setAno(2013).setSemestre(2).setSource("C:\\Users\\aluno\\Desktop\\arquivo-completo.xls");
+		builder.setAno(2013).setSemestre(2).setSource(new File(uri));
 		
 		Importador importador = builder.build();
 		List<Candidato> candidatos = importador.importar();
@@ -104,5 +121,13 @@ public class TestImportacao {
 			assertNotNull(candidato.getNome());
 		}
 	}
-
+	
+	@Test
+	public void testImportacao(){
+		File xls = new File("./br/org/sae/test/resources/arquivo-completo.xls");
+		
+//		ApplicationContext context = new classpa
+		
+		
+	}
 }
