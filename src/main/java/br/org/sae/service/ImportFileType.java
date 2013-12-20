@@ -2,8 +2,8 @@ package br.org.sae.service;
 
 public enum ImportFileType {
 	
-	XLS("xls"),
-	XLSX("xlsx");
+	XLS("application/vnd.ms-excel"),
+	XLSX("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 	
 	private String mime;
 	
