@@ -1,22 +1,17 @@
 package br.org.sae.model;
 
-import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-public class Vestibulinho implements Serializable {
+@Entity
+@Table(name = "tbvestibulinho")
+public class Vestibulinho extends Entidade {
 
 	private static final long serialVersionUID = 1L;
 
-	private Long codigo;
 	private int ano;
 	private int semestre;
 
-	public Long getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(Long codigo) {
-		this.codigo = codigo;
-	}
 
 	public int getAno() {
 		return ano;

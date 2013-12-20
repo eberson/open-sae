@@ -2,8 +2,10 @@ package br.org.sae.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
+@Embeddable
 public class Endereco implements Serializable {
 
 	private static final long serialVersionUID = 1L;

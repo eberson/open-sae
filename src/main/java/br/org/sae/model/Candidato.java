@@ -1,20 +1,19 @@
 package br.org.sae.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -29,14 +28,10 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Entity
 @Table(name="tbcandidato")
-public class Candidato implements Serializable {
+public class Candidato extends Entidade {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long codigo;
-	
 	@NotNull
 	@NotBlank
 	private String cpf;
@@ -75,23 +70,17 @@ public class Candidato implements Serializable {
 	@NotNull
 	private Endereco endereco;
 
-	@Transient
 	@NotNull
 	private Telefone telefonePrincipal;
 
-	@Transient
+	@AttributeOverrides({
+			@AttributeOverride(name = "ddd", column = @Column(name = "ddd2")),
+			@AttributeOverride(name = "telefone", column = @Column(name = "telefone2")),
+			@AttributeOverride(name = "ramal", column = @Column(name = "ramal2")) })
 	private Telefone telefoneSecundario;
 
-	@Transient
+	@OneToMany(mappedBy = "candidato")
 	private List<VestibulinhoPrestado> vestibulinhos;
-
-	public Long getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(Long codigo) {
-		this.codigo = codigo;
-	}
 	
 	public String getCpf() {
 		return cpf;

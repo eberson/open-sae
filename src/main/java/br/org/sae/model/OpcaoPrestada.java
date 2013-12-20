@@ -2,17 +2,22 @@ package br.org.sae.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+@Embeddable
 public class OpcaoPrestada implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private int classificacao;
-	private int ano;
-	private int semestre;
+
 	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "curso")
 	private Curso curso;
 	
 	@NotNull
@@ -45,21 +50,6 @@ public class OpcaoPrestada implements Serializable {
 		this.classificacao = classificacao;
 	}
 
-	public int getAno() {
-		return ano;
-	}
-
-	public void setAno(int ano) {
-		this.ano = ano;
-	}
-
-	public int getSemestre() {
-		return semestre;
-	}
-
-	public void setSemestre(int semestre) {
-		this.semestre = semestre;
-	}
 
 	public Curso getCurso() {
 		return curso;
