@@ -20,8 +20,8 @@ public class LeitorVestibulinho implements DadoLegivel<VestibulinhoPrestado>{
 	public VestibulinhoPrestado le(Row row, LeitorUtil util) {
 		VestibulinhoPrestado vestibulinho = new VestibulinhoPrestado();
 		
-		vestibulinho.setAno(ano);
-		vestibulinho.setSemestre(semestre);
+//		vestibulinho.setAno(ano);
+//		vestibulinho.setSemestre(semestre);
 
 		OpcaoPrestada[] opcoes = util.leitorOpcao().le(row, util);
 		
