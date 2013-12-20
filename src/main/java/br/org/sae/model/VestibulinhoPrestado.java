@@ -33,8 +33,8 @@ public class VestibulinhoPrestado extends Entidade {
 
 	@Embedded
 	@AttributeOverrides({
+			@AttributeOverride(name = "classificacao", column = @Column(name = "classificacao2")),
 			@AttributeOverride(name = "periodo", column = @Column(name = "periodo2")),
-			@AttributeOverride(name = "tipoProva", column = @Column(name = "tipoProva2")),
 			@AttributeOverride(name = "codCurso", column = @Column(name = "codCurso2")) })
 	@AssociationOverrides({ @AssociationOverride(name = "curso", joinColumns = @JoinColumn(name = "curso2")) })
 	private OpcaoPrestada segundaOpcao;

@@ -19,11 +19,10 @@ public class OpcaoPrestada implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "curso")
 	private Curso curso;
-	
+
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Periodo periodo;
-	private String tipoProva;
 	private int codCurso;
 
 	public int getCodCurso() {
@@ -34,14 +33,6 @@ public class OpcaoPrestada implements Serializable {
 		this.codCurso = codCurso;
 	}
 
-	public String getTipoProva() {
-		return tipoProva;
-	}
-
-	public void setTipoProva(String tipoProva) {
-		this.tipoProva = tipoProva;
-	}
-
 	public int getClassificacao() {
 		return classificacao;
 	}
@@ -49,7 +40,6 @@ public class OpcaoPrestada implements Serializable {
 	public void setClassificacao(int classificacao) {
 		this.classificacao = classificacao;
 	}
-
 
 	public Curso getCurso() {
 		return curso;
@@ -65,10 +55,6 @@ public class OpcaoPrestada implements Serializable {
 
 	public void setPeriodo(Periodo periodo) {
 		this.periodo = periodo;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 
 }
