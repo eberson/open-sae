@@ -2,13 +2,21 @@ package br.org.sae.model;
 
 import java.io.Serializable;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
+
 public class OpcaoPrestada implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private int classificacao;
 	private int ano;
 	private int semestre;
+	@NotNull
 	private Curso curso;
+	
+	@NotNull
+	@Enumerated(EnumType.STRING)
 	private Periodo periodo;
 	private String tipoProva;
 	private int codCurso;

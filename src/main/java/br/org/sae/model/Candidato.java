@@ -5,6 +5,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * Classe responsável por representar um Candidato interessado em alguns dos
  * Cursos da Unidade
@@ -13,24 +27,44 @@ import java.util.List;
  * @since 12/12/2013
  * 
  */
+@Entity
+@Table(name="tbcandidato")
 public class Candidato implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long codigo;
 	
+	@NotNull
+	@NotBlank
 	private String cpf;
+	
+	@NotNull
+	@NotBlank
 	private String nome;
 
+	@NotNull
 	private String rg;
+	
+	@NotNull
 	private String orgaoExpedidor;
 
+	@NotNull
+	@Enumerated(EnumType.STRING)
 	private Sexo sexo;
 
+	@NotNull
+	@Temporal(TemporalType.DATE)
 	private Date dataNascimento;
 
+	@NotNull
+	@Enumerated(EnumType.STRING)
 	private EstadoCivil estadoCivil;
 
+	@NotNull
+	@NotBlank
 	private String email;
 
 	private String necessidadeEspecial;
@@ -38,12 +72,18 @@ public class Candidato implements Serializable {
 
 	private boolean afroDescendente;
 
+	@NotNull
 	private Endereco endereco;
 
+	@Transient
+	@NotNull
 	private Telefone telefonePrincipal;
+
+	@Transient
 	private Telefone telefoneSecundario;
 
-	private List<Vestibulinho> vestibulinhos;
+	@Transient
+	private List<VestibulinhoPrestado> vestibulinhos;
 
 	public Long getCodigo() {
 		return codigo;
@@ -165,7 +205,7 @@ public class Candidato implements Serializable {
 		this.necessidadeEspecial = necessidadeEspecial;
 	}
 	
-	public List<Vestibulinho> getVestibulinhos() {
+	public List<VestibulinhoPrestado> getVestibulinhos() {
 		if(vestibulinhos == null){
 			vestibulinhos = new ArrayList<>();
 		}
@@ -173,11 +213,11 @@ public class Candidato implements Serializable {
 		return vestibulinhos;
 	}
 	
-	public void setVestibulinhos(List<Vestibulinho> vestibulinhos) {
+	public void setVestibulinhos(List<VestibulinhoPrestado> vestibulinhos) {
 		this.vestibulinhos = vestibulinhos;
 	}
 	
-	public void addVestibulinho(Vestibulinho vestibulinho){
+	public void addVestibulinho(VestibulinhoPrestado vestibulinho){
 		getVestibulinhos().add(vestibulinho);
 	}
 

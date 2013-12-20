@@ -15,7 +15,7 @@ import br.org.sae.service.ImportFileType;
 import br.org.sae.service.ImportService;
 import br.org.sae.service.RespostaImportService;
 
-public class TestImportacao {
+public class TestImportacaoService {
 	
 	private static ApplicationContext context;
 	private static ImportService service;

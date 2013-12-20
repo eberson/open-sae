@@ -2,16 +2,24 @@ package br.org.sae.model;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+
 public class Endereco implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@NotNull
 	private String endereco;
+	@NotNull
 	private String numero;
 	private String complemento;
+	@NotNull
 	private String bairro;
+	@NotNull
 	private String cidade;
+	@NotNull
 	private String uf;
+	@NotNull
 	private String cep;
 
 	public String getEndereco() {

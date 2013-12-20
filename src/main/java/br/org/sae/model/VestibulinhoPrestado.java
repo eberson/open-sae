@@ -2,14 +2,17 @@ package br.org.sae.model;
 
 import java.io.Serializable;
 
-public class Vestibulinho implements Serializable {
+import javax.validation.constraints.NotNull;
+
+public class VestibulinhoPrestado implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private int ano;
 	private int semestre;
 	private String tipoProva;
-
+	
+	@NotNull
 	private OpcaoPrestada primeiraOpcao;
 	private OpcaoPrestada segundaOpcao;
 

@@ -18,27 +18,55 @@
 			<version>15.0</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<!--CONFIGURAÇÕES DOS TESTES AUTOMATIZADOS -->		
+		<dependency>
+		    <groupId>hsqldb</groupId>
+		    <artifactId>hsqldb</artifactId>
+		    <version>1.8.0.10</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-test</artifactId>
+		    <version>3.0.5.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
 		
 		<dependency>
 		    <groupId>org.dbunit</groupId>
 		    <artifactId>dbunit</artifactId>
 		    <version>2.4.9</version>
+			<scope>test</scope>
 		</dependency>
 
-		<!-- INICIO DAS CONFIGURAÇÕES DO APACHE POI -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!--CONFIGURAÇÕES DO APACHE POI -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>3.9</version>
 		</dependency>
-		<!-- FIM DAS CONFIGURAÇÕES DO APACHE POI -->
 		
-		<!-- INICIO DAS CONFIGURAÇÕES DO SPRING -->
+		<!--CONFIGURAÇÕES DO SPRING -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
 			<version>3.0.5.RELEASE</version>
 			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-orm</artifactId>
+		    <version>3.0.5.RELEASE</version>
 		</dependency>
 		
 		<dependency>
@@ -89,32 +117,30 @@
 			<version>1.6.9</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- FIM DAS CONFIGURAÇÕES DO SPRING -->
 		
-		<!-- INICIO DAS CONFIGURAÇÕES DO HIBERNATE ORM-->
+		<!--CONFIGURAÇÕES DO HIBERNATE ORM-->
 		<dependency>
 		    <groupId>org.hibernate</groupId>
 		    <artifactId>hibernate-core</artifactId>
 		    <version>4.3.0.Final</version>
 		    <scope>provided</scope>
 		</dependency>
-		<!-- FIM DAS CONFIGURAÇÕES DO HIBERNATE ORM-->
 		
-		<!-- INICIO DAS CONFIGURAÇÕES DO HIBERNATE VALIDATOR-->
+		<dependency>
+            <!-- hibernate entity manager -->
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>4.3.0.Final</version>
+		    <scope>provided</scope>
+        </dependency>
+		
+		<!--CONFIGURAÇÕES DO HIBERNATE VALIDATOR-->
 		<dependency>
 		    <groupId>org.hibernate</groupId>
 		    <artifactId>hibernate-validator</artifactId>
 		    <version>5.0.1.Final</version>
 		    <scope>provided</scope>
 		</dependency>
-		<!-- FIM DAS CONFIGURAÇÕES DO HIBERNATE VALIDATOR -->
 	</dependencies>
 
 	<build>
