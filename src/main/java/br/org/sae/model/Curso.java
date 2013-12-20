@@ -1,21 +1,21 @@
 package br.org.sae.model;
 
-import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
-public class Curso implements Serializable {
+import org.hibernate.validator.constraints.NotBlank;
+
+@Entity
+@Table(name = "tbcurso")
+public class Curso extends Entidade {
 
 	private static final long serialVersionUID = 1L;
-
-	private Long codigo;
+	@NotNull
+	@NotBlank
 	private String nome;
 
-	public Long getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(Long codigo) {
-		this.codigo = codigo;
-	}
+	private int vagas;
 
 	public String getNome() {
 		return nome;
@@ -23,6 +23,14 @@ public class Curso implements Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public int getVagas() {
+		return vagas;
+	}
+
+	public void setVagas(int vagas) {
+		this.vagas = vagas;
 	}
 
 }
