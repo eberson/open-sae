@@ -1,133 +1,98 @@
 package br.org.sae.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
-import br.org.sae.exception.ArquivoVazioException;
-import br.org.sae.exception.FormatoInvalidoException;
-import br.org.sae.exception.ImpossivelLerException;
-import br.org.sae.importador.Importador;
-import br.org.sae.importador.ImportadorBuilder;
-import br.org.sae.model.Candidato;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import br.org.sae.service.ImportFileType;
+import br.org.sae.service.ImportService;
+import br.org.sae.service.RespostaImportService;
 
 public class TestImportacao {
 	
-	@Test(expected=IllegalArgumentException.class)
-	public void testArquivoXLSOrXLSX() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, URISyntaxException{
+	private static ApplicationContext context;
+	private static ImportService service;
+	
+	@BeforeClass
+	public static void setup(){
+		context = new ClassPathXmlApplicationContext("/br/org/sae/test/opensae.xml");
+		service = context.getBean(ImportService.class);
+	}
+
+	@Test
+	public void testImportacaoArquivoInexistente() throws Exception{
 		URI uri = getClass().getResource("matricula-real.docx").toURI();
+		FileInputStream fis = new FileInputStream(new File(uri));
 		
-		ImportadorBuilder builder = new ImportadorBuilder();
-		builder.setAno(2013).setSemestre(2).setSource(new File(uri));
-		builder.build();
+		RespostaImportService resposta = service.importar(ImportFileType.XLSX, fis, 2013, 2);
+		
+		assertEquals(RespostaImportService.ARQUIVO_FORMATO_INVALIDO, resposta);
 	}
 	
-	@Test(expected=FileNotFoundException.class)
-	public void testArquivoInexistente() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException{
-		ImportadorBuilder builder = new ImportadorBuilder();
-		builder.setAno(2013).setSemestre(2).setSource("matricula-real-teste.xls");
-
-		Importador importador = builder.build();
-		importador.importar();
-	}
-
-	@Test(expected=FormatoInvalidoException.class)
-	public void testArquivoVazioFormatoInvalido() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException, URISyntaxException{
+	@Test
+	public void testImportacaoArquivoVazioFormatoInvalido() throws Exception{
 		URI uri = getClass().getResource("arquivo-vazio-formato-invalido.xlsx").toURI();
+		FileInputStream fis = new FileInputStream(new File(uri));
 
-		ImportadorBuilder builder = new ImportadorBuilder();
-		builder.setAno(2013).setSemestre(2).setSource(new File(uri));
-
-		File file = new File("./br/org/sae/test");
-		System.out.println(file.getAbsolutePath());
-		System.out.println(file.exists());
+		RespostaImportService resposta = service.importar(ImportFileType.XLSX, fis, 2013, 2);
 		
-		Importador importador = builder.build();
-		importador.importar();
+		assertEquals(RespostaImportService.ARQUIVO_ESTRUTURA_INVALIDA, resposta);
 	}
 
-	@Test(expected=ArquivoVazioException.class)
-	public void testArquivoVazio() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException, URISyntaxException{
+	@Test
+	public void testImportacaoArquivoVazio() throws Exception{
 		URI uri = getClass().getResource("arquivo-vazio.xlsx").toURI();
+		FileInputStream fis = new FileInputStream(new File(uri));
 
-		ImportadorBuilder builder = new ImportadorBuilder();
-		builder.setAno(2013).setSemestre(2).setSource(new File(uri));
+		RespostaImportService resposta = service.importar(ImportFileType.XLSX, fis, 2013, 2);
 		
-		Importador importador = builder.build();
-		importador.importar();
+		assertEquals(RespostaImportService.ARQUIVO_VAZIO, resposta);
 	}
 	
-	@Test(expected=FormatoInvalidoException.class)
-	public void testFormatoInvalidoXLS() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException, URISyntaxException{
+	@Test
+	public void testImportacaoFormatoInvalidoXLS() throws Exception{
 		URI uri = getClass().getResource("formato-invalido.xls").toURI();
-
-		ImportadorBuilder builder = new ImportadorBuilder();
-		builder.setAno(2013).setSemestre(2).setSource(new File(uri));
+		FileInputStream fis = new FileInputStream(new File(uri));
 		
-		Importador importador = builder.build();
-		importador.importar();
+		RespostaImportService resposta = service.importar(ImportFileType.XLS, fis, 2013, 2);
+		
+		assertEquals(RespostaImportService.ARQUIVO_ESTRUTURA_INVALIDA, resposta);
 	}
 
-	@Test(expected=FormatoInvalidoException.class)
-	public void testFormatoInvalidoXLSX() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException, URISyntaxException{
+	@Test
+	public void testFormatoInvalidoXLSX() throws Exception{
 		URI uri = getClass().getResource("formato-invalido.xlsx").toURI();
+		FileInputStream fis = new FileInputStream(new File(uri));
 		
-		ImportadorBuilder builder = new ImportadorBuilder();
-		builder.setAno(2013).setSemestre(2).setSource(new File(uri));
+		RespostaImportService resposta = service.importar(ImportFileType.XLSX, fis, 2013, 2);
 		
-		Importador importador = builder.build();
-		importador.importar();
+		assertEquals(RespostaImportService.ARQUIVO_ESTRUTURA_INVALIDA, resposta);
 	}
 
 	@Test
-	public void testDadosCarregadosXLSX() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException, URISyntaxException{
+	public void testDadosCarregadosXLSX() throws Exception{
 		URI uri = getClass().getResource("arquivo-completo.xlsx").toURI();
+		FileInputStream fis = new FileInputStream(new File(uri));
 		
-		ImportadorBuilder builder = new ImportadorBuilder();
-		builder.setAno(2013).setSemestre(2).setSource(new File(uri));
+		RespostaImportService resposta = service.importar(ImportFileType.XLSX, fis, 2013, 2);
 		
-		Importador importador = builder.build();
-		List<Candidato> candidatos = importador.importar();
-		
-		for (Candidato candidato : candidatos) {
-			assertNotNull(candidato.getNome());
-			assertNotNull(candidato.getEndereco());
-			assertNotNull(candidato.getTelefonePrincipal());
-			assertNotNull(candidato.getRg());
-			assertNotNull(candidato.getCpf());
-			assertNotNull(candidato.getNome());
-		}
+		assertEquals(RespostaImportService.SUCESSO, resposta);
 	}
 
 	@Test
-	public void testDadosCarregadosXLS() throws FileNotFoundException, ImpossivelLerException, FormatoInvalidoException, ArquivoVazioException, URISyntaxException{
+	public void testDadosCarregadosXLS() throws Exception{
 		URI uri = getClass().getResource("arquivo-completo.xls").toURI();
+		FileInputStream fis = new FileInputStream(new File(uri));
 		
-		ImportadorBuilder builder = new ImportadorBuilder();
-		builder.setAno(2013).setSemestre(2).setSource(new File(uri));
+		RespostaImportService resposta = service.importar(ImportFileType.XLS, fis, 2013, 2);
 		
-		Importador importador = builder.build();
-		List<Candidato> candidatos = importador.importar();
-		
-		for (Candidato candidato : candidatos) {
-			assertNotNull(candidato.getNome());
-			assertNotNull(candidato.getEndereco());
-			assertNotNull(candidato.getTelefonePrincipal());
-			assertNotNull(candidato.getRg());
-			assertNotNull(candidato.getCpf());
-			assertNotNull(candidato.getNome());
-		}
-	}
-	
-	@Test
-	public void testImportacao(){
-		File xls = new File("./br/org/sae/test/resources/arquivo-completo.xls");
-		
-//		ApplicationContext context = new classpa
-		
-		
+		assertEquals(RespostaImportService.SUCESSO, resposta);
 	}
 }

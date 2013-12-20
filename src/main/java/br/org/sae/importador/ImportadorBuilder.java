@@ -1,18 +1,35 @@
 package br.org.sae.importador;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
-import com.google.common.io.Files;
+import br.org.sae.service.ImportFileType;
 
 public class ImportadorBuilder {
 	
-	private File source;
+	private ImportFileType ft;
+	private InputStream input;
 	private int ano;
 	private int semestre;
 	
-	public ImportadorBuilder setSource(File source) {
-		this.source = source;
+	public ImportadorBuilder setFileType(ImportFileType fileType) {
+		this.ft = fileType;
 		return this;
+	}
+	
+	public ImportadorBuilder setSource(InputStream input) {
+		this.input = input;
+		return this;
+	}
+
+	public ImportadorBuilder setSource(File source) {
+		try {
+			return setSource(new FileInputStream(source));
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public ImportadorBuilder setSource(String source) {
@@ -30,26 +47,24 @@ public class ImportadorBuilder {
 	}
 	
 	public Importador build(){
-		if(source == null){
+		if(input == null){
 			throw new IllegalStateException("Não foi informado nenhum arquivo para importação.");
 		}
 		
 		Importador importador;
 		
-		String path = source.getPath();
-		String extension = Files.getFileExtension(path);
-		
-		if("xls".equals(extension)){
-			importador = new XLSImportador();
+		if(ft == null){
+			throw new IllegalArgumentException("Um tipo de arquivo deve ser informado na criação do Importador.");
 		}
-		else if ("xlsx".equals(extension)){
+
+		if(ft== ImportFileType.XLSX){
 			importador = new XLSXImportador();
 		}
 		else{
-			throw new IllegalArgumentException("O arquivo para importação deve ser do tipo xls ou xlsx.");
+			importador = new XLSImportador();
 		}
 		
-		return importador.withAno(ano).withSemestre(semestre).withSource(source);
+		return importador.withAno(ano).withSemestre(semestre).withSource(input);
 	}
 	
 	

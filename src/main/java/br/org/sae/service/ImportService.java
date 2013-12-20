@@ -1,9 +1,9 @@
 package br.org.sae.service;
 
-import java.io.File;
+import java.io.InputStream;
 
 public interface ImportService {
 
-	public RespostaImportService importar(File xlsFile, int ano, int semestre);
+	public RespostaImportService importar(ImportFileType fileType, InputStream input, int ano, int semestre);
 
 }

@@ -7,7 +7,7 @@ import br.org.sae.model.Curso;
 import br.org.sae.model.Endereco;
 import br.org.sae.model.OpcaoPrestada;
 import br.org.sae.model.Telefone;
-import br.org.sae.model.Vestibulinho;
+import br.org.sae.model.VestibulinhoPrestado;
 
 public class LeitorUtil {
 
@@ -15,7 +15,7 @@ public class LeitorUtil {
 	private DadoLegivel<Endereco> leitorEndereco;
 	private DadoLegivel<OpcaoPrestada[]> leitorOpcao;
 	private DadoLegivel<Telefone[]> leitorTelefone;
-	private DadoLegivel<Vestibulinho> leitorVestibulinho;
+	private DadoLegivel<VestibulinhoPrestado> leitorVestibulinho;
 
 	private ColunaLegivel<Boolean> leitorColunaAfrodescendente;
 	private ColunaLegivel<Curso> leitorColunaCurso;
@@ -53,7 +53,7 @@ public class LeitorUtil {
 		return leitorTelefone;
 	}
 
-	public DadoLegivel<Vestibulinho> leitorVestibulinho() {
+	public DadoLegivel<VestibulinhoPrestado> leitorVestibulinho() {
 		return leitorVestibulinho;
 	}
 

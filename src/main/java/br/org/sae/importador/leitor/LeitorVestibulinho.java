@@ -3,9 +3,9 @@ package br.org.sae.importador.leitor;
 import org.apache.poi.ss.usermodel.Row;
 
 import br.org.sae.model.OpcaoPrestada;
-import br.org.sae.model.Vestibulinho;
+import br.org.sae.model.VestibulinhoPrestado;
 
-public class LeitorVestibulinho implements DadoLegivel<Vestibulinho>{
+public class LeitorVestibulinho implements DadoLegivel<VestibulinhoPrestado>{
 
 	private int ano;
 	private int semestre;
@@ -17,8 +17,8 @@ public class LeitorVestibulinho implements DadoLegivel<Vestibulinho>{
 	}
 
 	@Override
-	public Vestibulinho le(Row row, LeitorUtil util) {
-		Vestibulinho vestibulinho = new Vestibulinho();
+	public VestibulinhoPrestado le(Row row, LeitorUtil util) {
+		VestibulinhoPrestado vestibulinho = new VestibulinhoPrestado();
 		
 		vestibulinho.setAno(ano);
 		vestibulinho.setSemestre(semestre);
