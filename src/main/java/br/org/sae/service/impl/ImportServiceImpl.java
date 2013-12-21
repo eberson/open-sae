@@ -19,7 +19,7 @@ import br.org.sae.service.ImportFileType;
 import br.org.sae.service.ImportService;
 import br.org.sae.service.RespostaImportService;
 
-@Service(value="excelImport")
+@Service
 @SuppressWarnings("unused")
 public class ImportServiceImpl implements ImportService{
 

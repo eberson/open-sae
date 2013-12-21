@@ -6,25 +6,25 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.net.URI;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import br.org.sae.service.ImportFileType;
 import br.org.sae.service.ImportService;
 import br.org.sae.service.RespostaImportService;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations={"classpath:/br/org/sae/test/opensae.xml"})
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
 public class TestImportacaoService {
-	
-	private static ApplicationContext context;
-	private static ImportService service;
-	
-	@BeforeClass
-	public static void setup(){
-		context = new ClassPathXmlApplicationContext("/br/org/sae/test/opensae.xml");
-		service = context.getBean(ImportService.class);
-	}
+
+	@Autowired
+	private ImportService service;
 
 	@Test
 	public void testImportacaoArquivoInexistente() throws Exception{
