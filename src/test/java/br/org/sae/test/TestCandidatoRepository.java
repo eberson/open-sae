@@ -135,6 +135,12 @@ public class TestCandidatoRepository extends TestDatabaseGeneric{
 	}
 
 	@Test
+	public void testFindCandidatoPorAnoVestibulinoSegundaOpcaoSemResultado(){
+		Map<Curso, List<Candidato>> mapa = repository.findByVestibulinho(2014, 2, false);
+		Assert.assertEquals(0, mapa.size());
+	}
+
+	@Test
 	public void testFindCandidatoPorAnoVestibulino(){
 		Map<Curso, List<Candidato>> mapa = repository.findByVestibulinho(2013, 2, true);
 		Set<Entry<Curso,List<Candidato>>> entrySet = mapa.entrySet();
@@ -161,6 +167,30 @@ public class TestCandidatoRepository extends TestDatabaseGeneric{
 				Assert.assertEquals(2, entry.getValue().size());
 				continue;
 			}
+			
+			Assert.fail();
+		}
+	}
+
+	@Test
+	public void testFindCandidatoPorAnoVestibulinoSegundaOpcao(){
+		Map<Curso, List<Candidato>> mapa = repository.findByVestibulinho(2013, 2, false);
+		Set<Entry<Curso,List<Candidato>>> entrySet = mapa.entrySet();
+		
+		for (Entry<Curso, List<Candidato>> entry : entrySet) {
+			String nome = entry.getKey().getNome();
+			
+			if("FINANÇAS".equals(nome)){
+				Assert.assertEquals(2, entry.getValue().size());
+				continue;
+			}
+			
+			if("INFORMÁTICA".equals(nome)){
+				Assert.assertEquals(4, entry.getValue().size());
+				continue;
+			}
+			
+			Assert.fail();
 		}
 	}
 
