@@ -33,7 +33,7 @@ class XLSXImportador extends Importador {
 		
 		XSSFSheet sheetImpl = (XSSFSheet) sheet;
 		
-		for(int i = limiteInferior; i < limiteSuperior; i++){
+		for(int i = limiteInferior; i <= limiteSuperior; i++){
 			XSSFRow row = sheetImpl.getRow(i);
 			candidatos.add(leitor.le(row, util));
 		}

@@ -45,7 +45,7 @@ public class ImportadorBuilder {
 		this.semestre = semestre;
 		return this;
 	}
-	
+
 	public Importador build(){
 		if(input == null){
 			throw new IllegalStateException("Não foi informado nenhum arquivo para importação.");

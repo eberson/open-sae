@@ -35,11 +35,8 @@ import static br.org.sae.importador.ImportadorConstants.TELEFONE_S_NUMERO;
 import static br.org.sae.importador.ImportadorConstants.TELEFONE_S_RAMAL;
 import static br.org.sae.importador.ImportadorConstants.VESTIBULINHO_TIPO_PROVA;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.apache.poi.POIXMLException;
@@ -54,6 +51,7 @@ import br.org.sae.exception.ArquivoVazioException;
 import br.org.sae.exception.EstruturaInvalidaException;
 import br.org.sae.importador.leitor.LeitorUtil;
 import br.org.sae.model.Candidato;
+import br.org.sae.model.Vestibulinho;
 
 public abstract class Importador {
 	
@@ -63,6 +61,7 @@ public abstract class Importador {
 	private InputStream source;
 	private int ano;
 	private int semestre;
+	private LeitorUtil util;
 	
 	public abstract Workbook create(InputStream in) throws IOException;
 	public abstract List<Candidato> processa(Sheet sheet, LeitorUtil util);
@@ -90,7 +89,13 @@ public abstract class Importador {
 		return semestre;
 	}
 	
+	public Vestibulinho getVestibulinhoAtual(){
+		return util.vestibulinho();
+	}
+	
 	public List<Candidato> importar() throws EstruturaInvalidaException, ArquivoVazioException, ArquivoInvalidoImportacaoException{
+		util = new LeitorUtil(ano, semestre);
+
 		try {
 			Workbook workbook = create(source);
 			
@@ -101,7 +106,6 @@ public abstract class Importador {
 			limiteInferior = 1;
 			limiteSuperior = sheet.getLastRowNum();
 
-			LeitorUtil util = new LeitorUtil(ano, semestre);
 			
 			return processa(sheet, util);
 			
@@ -157,12 +161,12 @@ public abstract class Importador {
 				case CURSO2_CLASSIFICACAO:
 				case TELEFONE_P_DDD:
 				case TELEFONE_S_DDD:
+				case CANDIDATO_RG_NUMERO:
 					if (cell.getCellType() != Cell.CELL_TYPE_NUMERIC && cell.getCellType() != Cell.CELL_TYPE_STRING) {
 						throw new EstruturaInvalidaException();
 					}
 					break;
 				case CANDIDATO_NOME:
-				case CANDIDATO_RG_NUMERO:
 				case CANDIDATO_RG_ORGAO_EXPED:
 				case CANDIDATO_SEXO:
 				case CANDIDATO_DT_NASCIMENTO:
@@ -190,6 +194,9 @@ public abstract class Importador {
 				case ENDERECO_UF:
 				case ENDERECO_CEP:
 					if (cell.getCellType() != Cell.CELL_TYPE_STRING) {
+						System.out.println("ERRO Celula: " + cell.getCellType() + " - LINHA: " + row.getRowNum() +  "- COLUNA: "  + i);
+						System.out.println(cell.getNumericCellValue());
+						
 						throw new EstruturaInvalidaException();
 					}
 					break;
@@ -197,42 +204,4 @@ public abstract class Importador {
 		}
 
 	}
-	
-	public static void main(String[] args) throws Exception {
-		File file = new File("C:\\Users\\aluno\\Desktop\\matricula-real.xlsx");
-
-		DateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");
-		
-		ImportadorBuilder builder = new ImportadorBuilder();
-		Importador importador = builder.setAno(2013).setSemestre(2).setSource(file).build();
-		
-		List<Candidato> candidatos = importador.importar();
-		
-		for (Candidato candidato : candidatos) {
-			System.out.println("Nome: " + candidato.getNome());
-			System.out.println("RG: " + candidato.getRg());
-			System.out.println("Orgao Expedidor: " + candidato.getOrgaoExpedidor());
-			System.out.println("Sexo: " + candidato.getSexo());
-			System.out.println("Data Nascimento: " + formatador.format(candidato.getDataNascimento()));
-			System.out.println("Estado Civil: " + candidato.getEstadoCivil());
-			System.out.println("Endereco: " + candidato.getEndereco().getEndereco());
-			System.out.println("Numero: " + candidato.getEndereco().getNumero());
-			System.out.println("Complemento: " + candidato.getEndereco().getComplemento());
-			System.out.println("Bairro: " + candidato.getEndereco().getBairro());
-			System.out.println("Cidade: " + candidato.getEndereco().getCidade());
-			System.out.println("UF: " + candidato.getEndereco().getUf());
-			System.out.println("CEP: " + candidato.getEndereco().getCep());
-			System.out.println("E-mail: " + candidato.getEmail());
-			System.out.println("Necessidade Especial: " + candidato.getNecessidadeEspecial());
-			System.out.println("Tipo de Necessidade: " + candidato.getNecessidadeTipo());
-			System.out.println("Afro Descendente: " + candidato.isAfroDescendente());
-			System.out.println("DDD1: " + candidato.getTelefonePrincipal().getDdd());
-			System.out.println("Telefone1: " + candidato.getTelefonePrincipal().getTelefone());
-			System.out.println("Ramal1: " + candidato.getTelefonePrincipal().getRamal());
-			System.out.println("DDD2: " + candidato.getTelefoneSecundario().getDdd());
-			System.out.println("Telefone2: " + candidato.getTelefoneSecundario().getTelefone());
-			System.out.println("Ramal2: " + candidato.getTelefoneSecundario().getRamal());
-		}
-	}
-
 }

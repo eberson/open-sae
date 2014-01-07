@@ -10,7 +10,7 @@ public class LeitorColunaCurso implements ColunaLegivel<Curso> {
 	public Curso le(Cell cell, LeitorUtil util) {
 		Curso c = new Curso();
 		c.setNome(cell.getStringCellValue());
-
+		
 		return c;
 	}
 

@@ -32,7 +32,7 @@ class XLSImportador extends Importador{
 		LeitorCandidato leitor = new LeitorCandidato();
 		List<Candidato> candidatos = new ArrayList<>();
 		
-		for(int i = limiteInferior; i < limiteSuperior; i++){
+		for(int i = limiteInferior; i <= limiteSuperior; i++){
 			HSSFRow row = sheetImpl.getRow(i);
 			
 			candidatos.add(leitor.le(row, util));

@@ -10,6 +10,8 @@ public interface Repository<T> {
 	
 	void save(T value);
 	
+	void update(T value);
+	
 	void delete(Object id);
 
 }

@@ -11,7 +11,16 @@ public class Vestibulinho extends Entidade {
 
 	private int ano;
 	private int semestre;
+	
+	public Vestibulinho(int ano, int semestre) {
+		super();
+		this.ano = ano;
+		this.semestre = semestre;
+	}
 
+	public Vestibulinho() {
+		super();
+	}
 
 	public int getAno() {
 		return ano;

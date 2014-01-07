@@ -7,6 +7,7 @@ import br.org.sae.model.Curso;
 import br.org.sae.model.Endereco;
 import br.org.sae.model.OpcaoPrestada;
 import br.org.sae.model.Telefone;
+import br.org.sae.model.Vestibulinho;
 import br.org.sae.model.VestibulinhoPrestado;
 
 public class LeitorUtil {
@@ -22,19 +23,27 @@ public class LeitorUtil {
 	private ColunaLegivel<Date> leitorColunaDataNascimento;
 	private ColunaLegivel<String> leitorColunaRGCandidato;
 	
+	private Vestibulinho vestibulinho;
+	
 	public LeitorUtil(int ano, int semestre) {
 		super();
+		
+		vestibulinho = new Vestibulinho(ano, semestre); 
 		
 		leitorCandidato = new LeitorCandidato();
 		leitorEndereco = new LeitorEndereco();
 		leitorOpcao = new LeitorOpcao();
 		leitorTelefone = new LeitorTelefone();
-		leitorVestibulinho = new LeitorVestibulinho(ano, semestre);
+		leitorVestibulinho = new LeitorVestibulinho();
 		
 		leitorColunaAfrodescendente = new LeitorColunaAfroDescendente();
 		leitorColunaCurso = new LeitorColunaCurso();
 		leitorColunaDataNascimento = new LeitorColunaDataNascimento();
 		leitorColunaRGCandidato = new LeitorColunaRGCandidato();
+	}
+	
+	public Vestibulinho vestibulinho(){
+		return vestibulinho;
 	}
 
 	public DadoLegivel<Candidato> leitorCandidato() {

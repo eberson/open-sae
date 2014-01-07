@@ -9,11 +9,15 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "tbvestibulinhoprestado")
+@NamedQueries({@NamedQuery(name="VestibulinhoPorCandidato", query="select v from VestibulinhoPrestado v where v.candidato = :candidato"),
+	           @NamedQuery(name="VestibulinhoPrestadoPorAnoSemestre", query="select v from VestibulinhoPrestado v where v.candidato = :candidato and v.vestibulinho.ano = :ano and v.vestibulinho.semestre = :semestre")})
 public class VestibulinhoPrestado extends Entidade {
 
 	private static final long serialVersionUID = 1L;
@@ -34,8 +38,7 @@ public class VestibulinhoPrestado extends Entidade {
 	@Embedded
 	@AttributeOverrides({
 			@AttributeOverride(name = "classificacao", column = @Column(name = "classificacao2")),
-			@AttributeOverride(name = "periodo", column = @Column(name = "periodo2")),
-			@AttributeOverride(name = "codCurso", column = @Column(name = "codCurso2")) })
+			@AttributeOverride(name = "periodo", column = @Column(name = "periodo2")) })
 	@AssociationOverrides({ @AssociationOverride(name = "curso", joinColumns = @JoinColumn(name = "curso2")) })
 	private OpcaoPrestada segundaOpcao;
 

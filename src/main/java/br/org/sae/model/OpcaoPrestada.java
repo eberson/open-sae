@@ -23,15 +23,6 @@ public class OpcaoPrestada implements Serializable {
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Periodo periodo;
-	private int codCurso;
-
-	public int getCodCurso() {
-		return codCurso;
-	}
-
-	public void setCodCurso(int codCurso) {
-		this.codCurso = codCurso;
-	}
 
 	public int getClassificacao() {
 		return classificacao;

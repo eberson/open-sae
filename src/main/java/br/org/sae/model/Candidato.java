@@ -10,6 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -28,6 +30,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Entity
 @Table(name="tbcandidato")
+@NamedQueries({@NamedQuery(name="CandidatoPorNomeOuCPF", query="select c from Candidato c where c.cpf = :cpf or c.nome = :nome" )})
 public class Candidato extends Entidade {
 
 	private static final long serialVersionUID = 1L;
@@ -207,6 +210,7 @@ public class Candidato extends Entidade {
 	}
 	
 	public void addVestibulinho(VestibulinhoPrestado vestibulinho){
+		vestibulinho.setCandidato(this);
 		getVestibulinhos().add(vestibulinho);
 	}
 

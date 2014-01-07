@@ -1,49 +1,50 @@
 package br.org.sae.repository.impl;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 
-import org.springframework.orm.jpa.JpaTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import br.org.sae.exception.SaeValidationException;
 import br.org.sae.repository.Repository;
 
-@org.springframework.stereotype.Repository
-public class RepositoryImpl<T> implements Repository<T>{
+public abstract class RepositoryImpl<T> implements Repository<T>{
 
-	private Class<T> type;
-	private JpaTemplate jpa;
+	protected abstract Class<T> type();
 	
-	public Repository<T> withType(Class<T> type) {
-		this.type = type;
-		return this;
-	}
+	@PersistenceContext(type=PersistenceContextType.EXTENDED)
+	private EntityManager em;
 	
-	public JpaTemplate getJpa() {
-		return jpa;
-	}
+	@Autowired
+	private Validator validator;
 	
-	public void setJpa(JpaTemplate jpa) {
-		this.jpa = jpa;
+	public EntityManager em() {
+		return em;
 	}
 	
 	@Override
 	public T find(Object id) {
-		return jpa.find(type, id);
+		return em.find(type(), id);
 	}
 
 	@Override
 	public List<T> all() {
-		EntityManager em = jpa.getEntityManager();
-		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<T> cq = cb.createQuery(type);
-		cq.from(type);
+		CriteriaQuery<T> cq = cb.createQuery(type());
+		cq.from(type());
 		
 		TypedQuery<T> query = em.createQuery(cq);
 		
@@ -54,14 +55,29 @@ public class RepositoryImpl<T> implements Repository<T>{
 		}
 	}
 
+	@Transactional
 	@Override
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void save(T value) {
-		jpa.persist(value);
+		Set<ConstraintViolation> violations = new HashSet(validator.validate(value));
+		
+		if(!violations.isEmpty()){
+			throw new SaeValidationException(violations);
+		}
+		
+		em.persist(value);
+	}
+	
+	@Transactional
+	@Override
+	public void update(T value) {
+		em.merge(value);
 	}
 
+	@Transactional
 	@Override
 	public void delete(Object id) {
-		jpa.remove(find(id));
+		em.remove(find(id));
 	}
 
 }

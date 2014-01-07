@@ -7,6 +7,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import br.org.sae.exception.ArquivoInvalidoImportacaoException;
@@ -35,10 +36,6 @@ public class TestImportacaoLeitura {
 		ImportadorBuilder builder = new ImportadorBuilder();
 		builder.setAno(2013).setFileType(ImportFileType.XLSX).setSemestre(2).setSource(new File(uri));
 
-		File file = new File("./br/org/sae/test");
-		System.out.println(file.getAbsolutePath());
-		System.out.println(file.exists());
-		
 		Importador importador = builder.build();
 		importador.importar();
 	}
@@ -98,13 +95,16 @@ public class TestImportacaoLeitura {
 
 	@Test
 	public void testDadosCarregadosXLS() throws EstruturaInvalidaException, ArquivoVazioException, URISyntaxException, ArquivoInvalidoImportacaoException{
-		URI uri = getClass().getResource("arquivo-completo.xls").toURI();
+//		URI uri = getClass().getResource("arquivo-completo.xls").toURI();
+		URI uri = getClass().getResource("matricula-dados-reais.xls").toURI();
 		
 		ImportadorBuilder builder = new ImportadorBuilder();
 		builder.setFileType(ImportFileType.XLS).setAno(2013).setSemestre(2).setSource(new File(uri));
 		
 		Importador importador = builder.build();
 		List<Candidato> candidatos = importador.importar();
+		
+		Assert.assertEquals(496, candidatos.size());
 		
 		for (Candidato candidato : candidatos) {
 			assertNotNull(candidato.getNome());
