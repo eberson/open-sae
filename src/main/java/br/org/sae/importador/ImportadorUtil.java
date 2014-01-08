@@ -18,4 +18,19 @@ public class ImportadorUtil {
 		return 0;
 	}
 
+	public static double getNumericValue(Cell cell){
+		if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+			String conteudo = cell.getStringCellValue();
+			conteudo = conteudo.replace(",", ".");
+			
+			if (conteudo != null && !conteudo.isEmpty()) {
+				return Double.parseDouble(conteudo);
+			}
+		} else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+			return cell.getNumericCellValue();
+		}
+		
+		return 0;
+	}
+
 }

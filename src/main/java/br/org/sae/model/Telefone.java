@@ -2,6 +2,9 @@ package br.org.sae.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Telefone implements Serializable {
 
 	private static final long serialVersionUID = 1L;

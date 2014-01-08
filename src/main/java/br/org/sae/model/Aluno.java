@@ -3,19 +3,20 @@ package br.org.sae.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
-
 
 @Entity
 @Table(name = "tbaluno")
@@ -29,6 +30,7 @@ public class Aluno extends Entidade {
 
 	@NotNull
 	@NotBlank
+	@Column(unique=true)
 	private String cpf;
 
 	@NotNull
@@ -43,6 +45,8 @@ public class Aluno extends Entidade {
 	@NotBlank
 	private String RM;
 
+	private String RA;
+
 	@NotNull
 	@Temporal(TemporalType.DATE)
 	private Date dataNascimento;
@@ -54,24 +58,30 @@ public class Aluno extends Entidade {
 	@NotNull
 	@NotBlank
 	private String email;
-	
+
 	@Enumerated(EnumType.STRING)
 	private EstadoCivil estadoCivil;
-	
+
 	private String necessidaEspecial;
 	private String necessidadeTipo;
-	private boolean afroDescendentes;
+	private boolean afroDescendente;
 
 	@NotNull
 	private Endereco endereco;
 
 	@NotNull
+	@Embedded
 	private Telefone telefonePrincipal;
+
+	@AttributeOverrides({
+			@AttributeOverride(name = "ddd", column = @Column(name = "ddd2")),
+			@AttributeOverride(name = "telefone", column = @Column(name = "telefone2")),
+			@AttributeOverride(name = "ramal", column = @Column(name = "ramal2")) })
+	@Embedded
 	private Telefone telefoneSecundario;
-	
-	@ManyToMany
-	@JoinTable(name="matricula", joinColumns={@JoinColumn(name="codAluno")}, inverseJoinColumns={@JoinColumn(name="codTurma")})
-	private List<Turma> turmas;
+
+	@OneToMany(mappedBy = "aluno")
+	private List<Matricula> matriculas;
 
 	public String getNome() {
 		return nome;
@@ -103,6 +113,14 @@ public class Aluno extends Entidade {
 
 	public void setOrgaoExpedidor(String orgaoExpedidor) {
 		this.orgaoExpedidor = orgaoExpedidor;
+	}
+	
+	public String getRA() {
+		return RA;
+	}
+	
+	public void setRA(String rA) {
+		RA = rA;
 	}
 
 	public String getRM() {
@@ -161,12 +179,12 @@ public class Aluno extends Entidade {
 		this.necessidadeTipo = necessidadeTipo;
 	}
 
-	public boolean isAfroDescendentes() {
-		return afroDescendentes;
+	public boolean isAfroDescendente() {
+		return afroDescendente;
 	}
 
-	public void setAfroDescendentes(boolean afroDescendentes) {
-		this.afroDescendentes = afroDescendentes;
+	public void setAfroDescendente(boolean afroDescendente) {
+		this.afroDescendente = afroDescendente;
 	}
 
 	public Endereco getEndereco() {
@@ -191,6 +209,14 @@ public class Aluno extends Entidade {
 
 	public void setTelefoneSecundario(Telefone telefoneSecundario) {
 		this.telefoneSecundario = telefoneSecundario;
+	}
+
+	public List<Matricula> getMatriculas() {
+		return matriculas;
+	}
+
+	public void setMatriculas(List<Matricula> matriculas) {
+		this.matriculas = matriculas;
 	}
 
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -37,6 +38,7 @@ public class Candidato extends Entidade {
 
 	@NotNull
 	@NotBlank
+	@Column(unique=true)
 	private String cpf;
 	
 	@NotNull
@@ -74,12 +76,14 @@ public class Candidato extends Entidade {
 	private Endereco endereco;
 
 	@NotNull
+	@Embedded
 	private Telefone telefonePrincipal;
 
 	@AttributeOverrides({
 			@AttributeOverride(name = "ddd", column = @Column(name = "ddd2")),
 			@AttributeOverride(name = "telefone", column = @Column(name = "telefone2")),
 			@AttributeOverride(name = "ramal", column = @Column(name = "ramal2")) })
+	@Embedded
 	private Telefone telefoneSecundario;
 
 	@OneToMany(mappedBy = "candidato")
@@ -212,6 +216,47 @@ public class Candidato extends Entidade {
 	public void addVestibulinho(VestibulinhoPrestado vestibulinho){
 		vestibulinho.setCandidato(this);
 		getVestibulinhos().add(vestibulinho);
+	}
+	
+	public VestibulinhoPrestado getVestibulinhoPrestado(int ano, int semestre, Curso curso, Periodo periodo){
+		List<VestibulinhoPrestado> prestados = getVestibulinhos();
+		
+		for (VestibulinhoPrestado prestado : prestados) {
+			Vestibulinho vestibulinho = prestado.getVestibulinho();
+			
+			if(vestibulinho == null || vestibulinho.getAno() != ano || vestibulinho.getSemestre() != semestre){
+				continue;
+			}
+			
+			if(periodo == null){
+				if(prestado.getPrimeiraOpcao().getCurso().equals(curso) && prestado.getPrimeiraOpcao().getPeriodo() == periodo){
+					return prestado;
+				}
+				
+				OpcaoPrestada segundaOpcao = prestado.getSegundaOpcao();
+				
+				if(segundaOpcao != null && segundaOpcao.getCurso().equals(curso) && segundaOpcao.getPeriodo() == periodo){
+					return prestado;
+				}
+			}
+			else{
+				if(prestado.getPrimeiraOpcao().getCurso().equals(curso)){
+					return prestado;
+				}
+
+				OpcaoPrestada segundaOpcao = prestado.getSegundaOpcao();
+				
+				if(segundaOpcao != null && segundaOpcao.getCurso().equals(curso)){
+					return prestado;
+				}
+			}
+		}
+		
+		return null;
+	}
+
+	public VestibulinhoPrestado getVestibulinhoPrestado(int ano, int semestre, Curso curso){
+		return getVestibulinhoPrestado(ano, semestre, curso, null);
 	}
 
 }

@@ -36,8 +36,8 @@ public class CandidatoRepositoryImpl extends RepositoryImpl<Candidato> implement
 		return Candidato.class;
 	}
 
-	@Transactional(noRollbackFor={NoResultException.class})
 	@Override
+	@Transactional(noRollbackFor={NoResultException.class})
 	public void saveOrUpdate(Candidato value) {
 		Candidato stored = findByCpfOrNome(value.getCpf(), value.getNome());
 		
@@ -46,24 +46,29 @@ public class CandidatoRepositoryImpl extends RepositoryImpl<Candidato> implement
 		}
 		else{
 			value.setCodigo(stored.getCodigo());
+			List<VestibulinhoPrestado> vestibulinhos = stored.getVestibulinhos();
+			
+			for (VestibulinhoPrestado vestibulinho : vestibulinhos) {
+				value.addVestibulinho(vestibulinho);
+			}
+			
 			super.update(value);
 		}
 
-		List<VestibulinhoPrestado> vestibulinhos = value.getVestibulinhos();
+		List<VestibulinhoPrestado> prestados = value.getVestibulinhos();
 		
-		for (VestibulinhoPrestado vestibulinho : vestibulinhos) {
+		for (VestibulinhoPrestado prestado : prestados) {
 			TypedQuery<VestibulinhoPrestado> query = em().createNamedQuery("VestibulinhoPrestadoPorAnoSemestre", VestibulinhoPrestado.class);
 			query.setParameter("candidato", value);
-			query.setParameter("ano", vestibulinho.getVestibulinho().getAno());
-			query.setParameter("semestre", vestibulinho.getVestibulinho().getSemestre());
+			query.setParameter("ano", prestado.getVestibulinho().getAno());
+			query.setParameter("semestre", prestado.getVestibulinho().getSemestre());
 
 			try {
 				query.getSingleResult();
 			} catch (NoResultException e) {
-				em().persist(vestibulinho);
+				em().persist(prestado);
 			}
 		}
-		
 	}
 	
 	@Override

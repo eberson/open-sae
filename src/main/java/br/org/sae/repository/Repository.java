@@ -2,7 +2,11 @@ package br.org.sae.repository;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 public interface Repository<T> {
+	
+	Repository<T> withEm(EntityManager em);
 	
 	T find(Object id);
 	
@@ -13,5 +17,9 @@ public interface Repository<T> {
 	void update(T value);
 	
 	void delete(Object id);
+
+	void deleteAll();
+	
+	boolean exists(T value);
 
 }

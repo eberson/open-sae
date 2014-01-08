@@ -1,8 +1,13 @@
 package br.org.sae.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -23,6 +28,10 @@ public class Curso extends Entidade {
 	private String nome;
 
 	private int vagas;
+
+	@OrderBy("codigo asc")
+	@OneToMany(mappedBy="curso")
+	private List<Modulo> modulos;
 	
 	public Curso(int codigoEscolaCurso, String nome, int vagas) {
 		super();
@@ -33,6 +42,23 @@ public class Curso extends Entidade {
 
 	public Curso() {
 		super();
+	}
+	
+	public List<Modulo> getModulos() {
+		if(modulos == null){
+			modulos = new ArrayList<>();
+		}
+		
+		return modulos;
+	}
+	
+	public void setModulos(List<Modulo> modulos) {
+		this.modulos = modulos;
+	}
+	
+	public void addModulo(Modulo modulo){
+		modulo.setCurso(this);
+		getModulos().add(modulo);
 	}
 
 	public int getCodigoEscolaCurso() {

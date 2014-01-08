@@ -23,6 +23,17 @@ public class OpcaoPrestada implements Serializable {
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Periodo periodo;
+	
+	@Enumerated(EnumType.STRING)
+	private StatusCandidato status = StatusCandidato.INSCRITO;
+	
+	public StatusCandidato getStatus() {
+		return status;
+	}
+	
+	public void setStatus(StatusCandidato status) {
+		this.status = status;
+	}
 
 	public int getClassificacao() {
 		return classificacao;

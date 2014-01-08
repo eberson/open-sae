@@ -31,6 +31,8 @@ public class VestibulinhoPrestado extends Entidade {
 	private Vestibulinho vestibulinho;
 	private String tipoProva;
 	
+	private double nota;
+	
 	@Embedded
 	@NotNull
 	private OpcaoPrestada primeiraOpcao;
@@ -38,10 +40,19 @@ public class VestibulinhoPrestado extends Entidade {
 	@Embedded
 	@AttributeOverrides({
 			@AttributeOverride(name = "classificacao", column = @Column(name = "classificacao2")),
-			@AttributeOverride(name = "periodo", column = @Column(name = "periodo2")) })
+			@AttributeOverride(name = "periodo", column = @Column(name = "periodo2")),
+			@AttributeOverride(name = "status", column = @Column(name = "status2")) })
 	@AssociationOverrides({ @AssociationOverride(name = "curso", joinColumns = @JoinColumn(name = "curso2")) })
 	private OpcaoPrestada segundaOpcao;
 
+	public double getNota() {
+		return nota;
+	}
+	
+	public void setNota(double nota) {
+		this.nota = nota;
+	}
+	
 	public Candidato getCandidato() {
 		return candidato;
 	}

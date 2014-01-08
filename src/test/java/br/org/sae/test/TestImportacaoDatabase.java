@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import br.org.sae.model.Curso;
+import br.org.sae.repository.CandidatoRepository;
 import br.org.sae.service.CandidatoService;
 import br.org.sae.service.CursoService;
 import br.org.sae.service.ImportFileType;
@@ -34,10 +35,15 @@ public class TestImportacaoDatabase {
 	private CandidatoService candidatoService;
 	
 	@Autowired
+	private CandidatoRepository repository;
+	
+	@Autowired
 	private ImportService importService;
 	
 	@Before
 	public void before(){
+		repository.deleteAll();
+		
 		if(cursoService.findAll().size() == 0){
 			cursoService.save(new Curso(903, "FINANÇAS", 40));
 			cursoService.save(new Curso(914, "MECATRÔNICA", 40));

@@ -6,6 +6,7 @@ import java.net.URI;
 import java.util.Date;
 
 import org.junit.Assert;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.org.sae.model.Candidato;
 import br.org.sae.model.Curso;
@@ -24,6 +25,7 @@ public abstract class TestDatabaseGeneric {
 	private static boolean loadedCursos;
 	private static boolean loadedCandidatos;
 	
+	@Transactional
 	protected void carregaCandidato(CandidatoRepository repository){
 		if(repository.findByCpfOrNome("22222222222", "") != null){
 			return;
@@ -59,6 +61,7 @@ public abstract class TestDatabaseGeneric {
 		repository.save(c);
 	}
 	
+	@Transactional
 	protected void carregaCursos(CursoRepository cursoService){
 		if(loadedCursos){
 			return;
@@ -74,6 +77,7 @@ public abstract class TestDatabaseGeneric {
 		loadedCursos = true;
 	}
 	
+	@Transactional
 	protected void carregaCandidatos(ImportService importService, CandidatoRepository candidatoRepository) throws Exception{
 		if(loadedCandidatos){
 			return;

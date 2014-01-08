@@ -16,6 +16,7 @@ public interface ImportadorConstants {
 	int CANDIDATO_CPF = 59;
 	
 	int VESTIBULINHO_TIPO_PROVA = 23;
+	int VESTIBULINHO_NOTA = 36;
 	
 	int CURSO1_NOME = 1;
 	int CURSO1_PERIODO = 19;
@@ -44,38 +45,4 @@ public interface ImportadorConstants {
 	int ENDERECO_UF = 15;
 	int ENDERECO_CEP = 16;
 
-	int[] COLUNAS = { CANDIDATO_NOME,
-                      CANDIDATO_RG_NUMERO,
-                      CANDIDATO_RG_ORGAO_EXPED,
-                      CANDIDATO_SEXO,
-                      CANDIDATO_DT_NASCIMENTO,
-                      CANDIDATO_ESTADO_CIVIL,
-                      CANDIDATO_AFRODESCENDENTE,
-                      CANDIDATO_ESCOLARIDADE,
-                      CANDIDATO_EMAIL,
-                      CANDIDATO_NECESSIDADE,
-                      CANDIDATO_NECESSIDADE_TIPO,
-                      CANDIDATO_CPF,
-                      VESTIBULINHO_TIPO_PROVA,
-                      CURSO1_NOME,
-                      CURSO1_PERIODO,
-                      CURSO1_CODESCOLACURSO,
-                      CURSO1_CLASSIFICACAO,
-                      CURSO2_NOME,
-                      CURSO2_PERIODO,
-                      CURSO2_CODESCOLACURSO,
-                      CURSO2_CLASSIFICACAO,
-                      TELEFONE_P_DDD,
-                      TELEFONE_P_NUMERO,
-                      TELEFONE_P_RAMAL,
-                      TELEFONE_S_DDD,
-                      TELEFONE_S_NUMERO,
-                      TELEFONE_S_RAMAL,
-                      ENDERECO_LOGRADOURO,
-                      ENDERECO_NUMERO,
-                      ENDERECO_COMPLEMENTO,
-                      ENDERECO_BAIRRO,
-                      ENDERECO_CIDADE,
-                      ENDERECO_UF,
-                      ENDERECO_CEP };
 }

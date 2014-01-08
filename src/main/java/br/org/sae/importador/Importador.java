@@ -194,9 +194,6 @@ public abstract class Importador {
 				case ENDERECO_UF:
 				case ENDERECO_CEP:
 					if (cell.getCellType() != Cell.CELL_TYPE_STRING) {
-						System.out.println("ERRO Celula: " + cell.getCellType() + " - LINHA: " + row.getRowNum() +  "- COLUNA: "  + i);
-						System.out.println(cell.getNumericCellValue());
-						
 						throw new EstruturaInvalidaException();
 					}
 					break;

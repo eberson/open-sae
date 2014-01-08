@@ -9,6 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.org.sae.repository.CursoRepository;
 
@@ -20,6 +21,7 @@ public class TestCursoRepository extends TestDatabaseGeneric {
 	private CursoRepository repository;
 
 	@Before
+	@Transactional
 	public void before() {
 		carregaCursos(repository);
 	}
