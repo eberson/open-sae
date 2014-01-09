@@ -6,6 +6,7 @@ import br.org.sae.model.Aluno;
 import br.org.sae.model.Candidato;
 import br.org.sae.model.Matricula;
 import br.org.sae.model.Turma;
+import br.org.sae.model.VestibulinhoPrestado;
 import br.org.sae.util.OpcaoVestibulinho;
 
 public interface MatriculaRepository extends Repository<Matricula>{
@@ -37,5 +38,7 @@ public interface MatriculaRepository extends Repository<Matricula>{
 	List<Matricula> find(Aluno aluno, int ano, int semestre);
 	
 	List<Matricula> find(Aluno aluno);
+	
+	List<VestibulinhoPrestado> getVestibulinhosPrestados(Candidato candidato);
 	
 }

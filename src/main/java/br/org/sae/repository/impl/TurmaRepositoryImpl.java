@@ -1,5 +1,6 @@
 package br.org.sae.repository.impl;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,14 +19,32 @@ import br.org.sae.model.Curso;
 import br.org.sae.model.Etapa;
 import br.org.sae.model.Periodo;
 import br.org.sae.model.Turma;
+import br.org.sae.repository.EtapaRepository;
 import br.org.sae.repository.TurmaRepository;
 
 @Repository
 public class TurmaRepositoryImpl extends RepositoryImpl<Turma> implements TurmaRepository{
+	
+	@Autowired
+	private EtapaRepository etapaRepository;
 
 	@Override
 	protected Class<Turma> type() {
 		return Turma.class;
+	}
+	
+	@Override
+	public Turma find(Object id) {
+		Turma turma = super.find(id);
+		loadEtapas(turma);
+		return turma;
+	}
+	
+	@Override
+	public List<Turma> all() {
+		List<Turma> all = super.all();
+		loadEtapas(all);
+		return all;
 	}
 	
 	@Override
@@ -55,12 +75,15 @@ public class TurmaRepositoryImpl extends RepositoryImpl<Turma> implements TurmaR
 		
 		try {
 			TypedQuery<Turma> query = em().createQuery(select);
-			return query.getResultList();
+			List<Turma> resultList = query.getResultList();
+			loadEtapas(resultList);
+			return resultList;
 		} catch (NoResultException e) {
 			return Collections.emptyList();
 		}
 	}
-	
+
+	@Transactional(readOnly=true)
 	@Override
 	public List<Turma> find(int ano, int semestre, Curso curso, Periodo periodo) {
 		CriteriaBuilder qb = em().getCriteriaBuilder();
@@ -69,7 +92,7 @@ public class TurmaRepositoryImpl extends RepositoryImpl<Turma> implements TurmaR
 		Root<Turma> from = cq.from(Turma.class);
 		
 		from.fetch("curso");
-		
+
 		Predicate predicate = qb.and(qb.equal(from.get("ano"), ano), 
 				                     qb.equal(from.get("semestre"), semestre),
 				                     qb.equal(from.get("periodo"), periodo),
@@ -80,10 +103,25 @@ public class TurmaRepositoryImpl extends RepositoryImpl<Turma> implements TurmaR
 		
 		try {
 			TypedQuery<Turma> query = em().createQuery(select);
-			return query.getResultList();
+			List<Turma> lista = query.getResultList();
+			loadEtapas(lista);
+			return lista;
 		} catch (NoResultException e) {
 			return Collections.emptyList();
 		}
 	}
+	
+	private void loadEtapas(Turma... turmas){
+		for (Turma turma : turmas) {
+			turma.setEtapaAtual(etapaRepository.findAtual(turma));
+			turma.setEtapas(etapaRepository.findAll(turma));
+		}
+	}
 
+	private void loadEtapas(Collection<Turma> turmas){
+		for (Turma turma : turmas) {
+			turma.setEtapaAtual(etapaRepository.findAtual(turma));
+			turma.setEtapas(etapaRepository.findAll(turma));
+		}
+	}
 }

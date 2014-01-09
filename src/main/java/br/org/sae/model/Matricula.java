@@ -22,10 +22,6 @@ public class Matricula extends Entidade {
 	private Aluno aluno;
 
 	@ManyToOne
-	@JoinColumn(name = "turma")
-	private Turma turma;
-	
-	@ManyToOne
 	@JoinColumn(name="etapa")
 	private Etapa etapa;
 
@@ -57,14 +53,6 @@ public class Matricula extends Entidade {
 
 	public void setAluno(Aluno aluno) {
 		this.aluno = aluno;
-	}
-
-	public Turma getTurma() {
-		return turma;
-	}
-
-	public void setTurma(Turma turma) {
-		this.turma = turma;
 	}
 
 	public Date getData() {

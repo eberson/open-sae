@@ -25,6 +25,7 @@ import br.org.sae.model.Turma;
 import br.org.sae.model.Vestibulinho;
 import br.org.sae.model.VestibulinhoPrestado;
 import br.org.sae.repository.AlunoRepository;
+import br.org.sae.repository.CandidatoRepository;
 import br.org.sae.repository.MatriculaRepository;
 import br.org.sae.repository.TurmaRepository;
 import br.org.sae.util.OpcaoVestibulinho;
@@ -37,6 +38,9 @@ public class MatriculaRepositoryImpl extends RepositoryImpl<Matricula> implement
 	
 	@Autowired
 	private AlunoRepository alunoRepository;
+	
+	@Autowired
+	private CandidatoRepository candidatoRepository;
 	
 	@Transactional
 	public void marcaConvocado(Turma turma, List<Candidato> candidatos) {
@@ -143,15 +147,25 @@ public class MatriculaRepositoryImpl extends RepositoryImpl<Matricula> implement
 	public void cancelarMatricula(Matricula matricula) {
 		Candidato candidato = findCandidato(matricula);
 		
-		Turma turma = matricula.getTurma();
-		Etapa etapaAtual = turma.getEtapaAtual();
+		Etapa etapa = matricula.getEtapa();
+		Turma turma = etapa.getTurma();
 		
-		VestibulinhoPrestado prestado = candidato.getVestibulinhoPrestado(etapaAtual.getAno(), etapaAtual.getSemestre(), turma.getCurso(), turma.getPeriodo());
+		List<VestibulinhoPrestado> prestados = getVestibulinhosPrestados(candidato);
+		VestibulinhoPrestado prestado = null;
+		
+		for (VestibulinhoPrestado aprestado : prestados) {
+			Vestibulinho vestibulinho = aprestado.getVestibulinho();
+			
+			if(vestibulinho.getAno() == etapa.getAno() && vestibulinho.getSemestre() == etapa.getSemestre()){
+				prestado = aprestado;
+				break;
+			}
+		}
 		
 		if(prestado != null){
 			// significa que o aluno está sendo desmatriculado no primeiro módulo... 
 			
-			if(!etapaAtual.hasListaPiloto()){
+			if(!etapa.hasListaPiloto()){
 				//se a lista piloto não foi gerada, podemos remover o aluno, a matrícula e ajustar o candidato para desmatriculado
 				em().remove(em().getReference(Matricula.class, matricula.getCodigo()));
 				em().remove(em().getReference(Aluno.class, matricula.getAluno().getCodigo()));
@@ -184,12 +198,8 @@ public class MatriculaRepositoryImpl extends RepositoryImpl<Matricula> implement
 		Root<Matricula> from = cq.from(Matricula.class);
 		
 		CriteriaQuery<Matricula> select = cq.select(from);
-		select.where(qb.and(qb.equal(from.get("turma"), turma),
+		select.where(qb.and(qb.equal(from.get("etapa"), turma.getEtapaAtual()),
 				            qb.equal(from.get("aluno"), aluno)));
-		
-		if(turma.getEtapaAtual() != null){
-			select.where(qb.and(select.getRestriction(), qb.equal(from.get("turma").get("etapaAtual"), turma.getEtapaAtual())));
-		}
 		
 		try {
 			return em().createQuery(select).getSingleResult();
@@ -205,8 +215,8 @@ public class MatriculaRepositoryImpl extends RepositoryImpl<Matricula> implement
 		Root<Matricula> from = cq.from(Matricula.class);
 		
 		CriteriaQuery<Matricula> select = cq.select(from);
-		select.where(qb.and(qb.equal(from.get("turma").get("ano"), ano),
-				            qb.equal(from.get("turma").get("semestre"), semestre),
+		select.where(qb.and(qb.equal(from.get("etapa").get("ano"), ano),
+				            qb.equal(from.get("etapa").get("semestre"), semestre),
 				            qb.equal(from.get("aluno"), aluno)));
 		
 		try {
@@ -224,6 +234,22 @@ public class MatriculaRepositoryImpl extends RepositoryImpl<Matricula> implement
 		
 		CriteriaQuery<Matricula> select = cq.select(from);
 		select.where(qb.equal(from.get("aluno"), aluno));
+		
+		try {
+			return em().createQuery(select).getResultList();
+		} catch (NoResultException e) {
+			return Collections.emptyList();
+		}
+	}
+	
+	@Override
+	public List<VestibulinhoPrestado> getVestibulinhosPrestados(Candidato candidato) {
+		CriteriaBuilder qb = em().getCriteriaBuilder();
+		CriteriaQuery<VestibulinhoPrestado> cq = qb.createQuery(VestibulinhoPrestado.class);
+		Root<VestibulinhoPrestado> from = cq.from(VestibulinhoPrestado.class);
+		
+		CriteriaQuery<VestibulinhoPrestado> select = cq.select(from);
+		select.where(qb.equal(from.get("candidato"), candidato));
 		
 		try {
 			return em().createQuery(select).getResultList();
@@ -403,7 +429,7 @@ public class MatriculaRepositoryImpl extends RepositoryImpl<Matricula> implement
 		Root<Matricula> from = cq.from(Matricula.class);
 		
 		CriteriaQuery<Matricula> select = cq.select(from);
-		select.where(qb.and(qb.equal(from.get("turma"), turma),
+		select.where(qb.and(qb.equal(from.get("etapa"), turma.getEtapaAtual()),
 				            qb.equal(from.get("status"), StatusMatricula.ATIVO)));
 		
 		TypedQuery<Matricula> query = em().createQuery(select);

@@ -32,6 +32,30 @@ public class Etapa extends Entidade {
 	@OneToMany(mappedBy = "etapa")
 	private List<Aula> aulas;
 	
+	@OneToMany(mappedBy="etapa")
+	private List<Matricula> matriculas;
+	
+	public Etapa(String descricao, int ano, int semestre, Turma turma, Modulo modulo) {
+		super();
+		this.descricao = descricao;
+		this.ano = ano;
+		this.semestre = semestre;
+		this.turma = turma;
+		this.modulo = modulo;
+	}
+
+	public Etapa() {
+		super();
+	}
+	
+	public List<Matricula> getMatriculas() {
+		return matriculas;
+	}
+	
+	public void setMatriculas(List<Matricula> matriculas) {
+		this.matriculas = matriculas;
+	}
+
 	public void setListaPiloto(boolean listaPiloto) {
 		this.listaPiloto = listaPiloto;
 	}

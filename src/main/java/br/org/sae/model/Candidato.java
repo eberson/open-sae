@@ -217,46 +217,4 @@ public class Candidato extends Entidade {
 		vestibulinho.setCandidato(this);
 		getVestibulinhos().add(vestibulinho);
 	}
-	
-	public VestibulinhoPrestado getVestibulinhoPrestado(int ano, int semestre, Curso curso, Periodo periodo){
-		List<VestibulinhoPrestado> prestados = getVestibulinhos();
-		
-		for (VestibulinhoPrestado prestado : prestados) {
-			Vestibulinho vestibulinho = prestado.getVestibulinho();
-			
-			if(vestibulinho == null || vestibulinho.getAno() != ano || vestibulinho.getSemestre() != semestre){
-				continue;
-			}
-			
-			if(periodo == null){
-				if(prestado.getPrimeiraOpcao().getCurso().equals(curso) && prestado.getPrimeiraOpcao().getPeriodo() == periodo){
-					return prestado;
-				}
-				
-				OpcaoPrestada segundaOpcao = prestado.getSegundaOpcao();
-				
-				if(segundaOpcao != null && segundaOpcao.getCurso().equals(curso) && segundaOpcao.getPeriodo() == periodo){
-					return prestado;
-				}
-			}
-			else{
-				if(prestado.getPrimeiraOpcao().getCurso().equals(curso)){
-					return prestado;
-				}
-
-				OpcaoPrestada segundaOpcao = prestado.getSegundaOpcao();
-				
-				if(segundaOpcao != null && segundaOpcao.getCurso().equals(curso)){
-					return prestado;
-				}
-			}
-		}
-		
-		return null;
-	}
-
-	public VestibulinhoPrestado getVestibulinhoPrestado(int ano, int semestre, Curso curso){
-		return getVestibulinhoPrestado(ano, semestre, curso, null);
-	}
-
 }

@@ -1,20 +1,28 @@
 package br.org.sae.model;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import br.org.sae.util.OrdenadorEtapas;
+import br.org.sae.util.TurmaListener;
+
 @Entity
 @Table(name = "tbturma")
+@EntityListeners({TurmaListener.class})
 public class Turma extends Entidade {
 
 	private static final long serialVersionUID = 1L;
@@ -34,21 +42,20 @@ public class Turma extends Entidade {
 	@ManyToOne
 	@JoinColumn(name = "curso")
 	private Curso curso;
-	
-	@ManyToOne
-	@JoinColumn(name="etapa_atual")
-	private Etapa etapaAtual;
 
-	@OneToMany(mappedBy = "turma")
-	private List<Matricula> matriculas;
+	@Transient
+	private Etapa etapaAtual;
 	
+	@OneToMany(mappedBy="turma", fetch=FetchType.EAGER)
+	private List<Etapa> etapas;
+
 	private boolean encerrada;
 	
 	public Turma() {
 		super();
 	}
 	
-	public Turma(String descricao, Periodo periodo, int ano, int semestre, Curso curso, boolean encerrada, boolean geraPrimeiraEtapa) {
+	public Turma(String descricao, Periodo periodo, int ano, int semestre, Curso curso, boolean encerrada) {
 		super();
 		this.descricao = descricao;
 		this.periodo = periodo;
@@ -56,20 +63,26 @@ public class Turma extends Entidade {
 		this.semestre = semestre;
 		this.curso = curso;
 		this.encerrada = encerrada;
-		
-		if(geraPrimeiraEtapa){
-			Etapa etapa = new Etapa();
-			etapa.setAno(ano);
-			etapa.setSemestre(semestre);
-			etapa.setModulo(curso.getModulos().get(0));
-			etapa.setDescricao("Primeiro Módulo");
-			etapa.setTurma(this);
-			etapa.setEncerrada(false);
-			setEtapaAtual(etapa);
-		}
+	}
+	
+	public List<Etapa> getEtapas() {
+		return etapas;
+	}
+	
+	public void setEtapas(List<Etapa> etapas) {
+		this.etapas = etapas;
 	}
 	
 	public Etapa getEtapaAtual() {
+		if(etapaAtual == null){
+			List<Etapa> etapas = getEtapas();
+			
+			if(etapas != null && etapas.size() > 0){
+				Collections.sort(etapas, new OrdenadorEtapas());
+				etapaAtual = etapas.get(etapas.size() - 1);
+			}
+		}
+		
 		return etapaAtual;
 	}
 	
@@ -131,14 +144,6 @@ public class Turma extends Entidade {
 
 	public void setSemestre(int semestre) {
 		this.semestre = semestre;
-	}
-
-	public List<Matricula> getMatriculas() {
-		return matriculas;
-	}
-
-	public void setMatriculas(List<Matricula> matriculas) {
-		this.matriculas = matriculas;
 	}
 
 }

@@ -180,7 +180,6 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 		Matricula matricula = new Matricula();
 		matricula.setAluno(aluno);
 		matricula.setData(data);
-		matricula.setTurma(turma);
 		matricula.setEtapa(turma.getEtapaAtual());
 		
 		return matricula;
@@ -200,7 +199,7 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 			throw new MatriculaInvalidaException("Não existem vagas disponíveis para a turma informada!");
 		}
 		
-		List<VestibulinhoPrestado> vestibulinhos = candidato.getVestibulinhos();
+		List<VestibulinhoPrestado> vestibulinhos = repository.getVestibulinhosPrestados(candidato);
 		
 		for (VestibulinhoPrestado vestibulinho : vestibulinhos) {
 			if(validaCandidatoMatricula(vestibulinho, vestibulinho.getPrimeiraOpcao(), turma)){
@@ -350,7 +349,8 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 			List<Matricula> matriculas = repository.find(aluno, etapaAtual.getAno(), etapaAtual.getSemestre());
 			
 			for (Matricula matricula : matriculas) {
-				if(matricula.getTurma().getPeriodo() == turma.getPeriodo()){
+				Turma stored = matricula.getEtapa().getTurma();
+				if(stored.getPeriodo() == turma.getPeriodo()){
 					throw new MatriculaInvalidaException("O aluno já se encontra matriculado em outro curso neste período!");
 				}
 			}
