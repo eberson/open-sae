@@ -7,6 +7,7 @@ import java.util.Map;
 import br.org.sae.exception.MatriculaInvalidaException;
 import br.org.sae.model.Aluno;
 import br.org.sae.model.Candidato;
+import br.org.sae.model.Curso;
 import br.org.sae.model.Matricula;
 import br.org.sae.model.Periodo;
 import br.org.sae.model.Turma;
@@ -58,7 +59,8 @@ public interface MatriculaService extends EntityService<Matricula> {
 	 *            período a ser usado como referência
 	 * @return uma lista contando todos os convocados para cenário proposto
 	 */
-	List<Candidato> convoca(int ano, int semestre, long curso, Periodo periodo);
+	List<Candidato> convoca(int ano, int semestre, Curso curso, Periodo periodo);
+
 
 	/**
 	 * 
@@ -75,40 +77,7 @@ public interface MatriculaService extends EntityService<Matricula> {
 	 *            período a ser usado como referência
 	 * @return uma lista contando todos os convocados para cenário proposto
 	 */
-	List<Candidato> carregaConvocados(int ano, int semestre, long curso, Periodo periodo);
-
-	/**
-	 * Faz uma nova chamada para os candidatos que prestaram o vestibulinho no curso
-	 * e período informado
-	 * 
-	 * @param ano
-	 *            ano que será tomado como referência
-	 * @param semestre
-	 *            semestre que será tomado como referência
-	 * @param curso
-	 *            curso que será tomado como referência.
-	 * @param periodo
-	 *            período a ser usado como referência
-	 * @return uma lista contando todos os convocados para cenário proposto
-	 */
-	List<Candidato> convoca(int ano, int semestre, String curso, Periodo periodo);
-
-	/**
-	 * 
-	 * Repete a chamada dos candidatos que prestaram o vestibulinho no curso e
-	 * período informado
-	 * 
-	 * @param ano
-	 *            ano que será tomado como referência
-	 * @param semestre
-	 *            semestre que será tomado como referência
-	 * @param curso
-	 *            curso que será tomado como referência.
-	 * @param periodo
-	 *            período a ser usado como referência
-	 * @return uma lista contando todos os convocados para cenário proposto
-	 */
-	List<Candidato> carregaConvocados(int ano, int semestre, String curso, Periodo periodo);
+	List<Candidato> carregaConvocados(int ano, int semestre, Curso curso, Periodo periodo);
 	
 	/**
 	 * Matricula um candidato em curso.

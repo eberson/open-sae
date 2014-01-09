@@ -26,20 +26,20 @@ public class TestMatricula extends TestMatriculaGeneric{
 
 	@Test
 	public void testMatriculaTurmaInteira(){
-		List<Candidato> convocados = service.convoca(ano, semestre, INFORMATICA, Periodo.NOITE);
+		List<Candidato> convocados = service.convoca(ano, semestre, informatica, Periodo.NOITE);
 		Assert.assertEquals(40, convocados.size());
 		
 		for (Candidato candidato : convocados) {
 			service.matricular(candidato, tinformartica, new Date());
 		}
 		
-		Assert.assertEquals(0, service.convoca(ano, semestre, INFORMATICA, Periodo.NOITE).size());
-		Assert.assertEquals(0, service.carregaConvocados(ano, semestre, INFORMATICA, Periodo.NOITE).size());
+		Assert.assertEquals(0, service.convoca(ano, semestre, informatica, Periodo.NOITE).size());
+		Assert.assertEquals(0, service.carregaConvocados(ano, semestre, informatica, Periodo.NOITE).size());
 	}
 	
 	@Test
 	public void testMatriculaTodosDesmatriculaMetade(){
-		List<Candidato> convocados = service.convoca(ano, semestre, INFORMATICA, Periodo.NOITE);
+		List<Candidato> convocados = service.convoca(ano, semestre, informatica, Periodo.NOITE);
 		Assert.assertEquals(40, convocados.size());
 		
 		List<Candidato> desmatriculados = new ArrayList<>();
@@ -53,27 +53,27 @@ public class TestMatricula extends TestMatriculaGeneric{
 			}
 		}
 		
-		Assert.assertEquals(0, service.carregaConvocados(ano, semestre, INFORMATICA, Periodo.NOITE).size());
+		Assert.assertEquals(0, service.carregaConvocados(ano, semestre, informatica, Periodo.NOITE).size());
 		
-		convocados = service.convoca(ano, semestre, INFORMATICA, Periodo.NOITE);
+		convocados = service.convoca(ano, semestre, informatica, Periodo.NOITE);
 		Assert.assertEquals(20, convocados.size());
-		Assert.assertEquals(20, service.carregaConvocados(ano, semestre, INFORMATICA, Periodo.NOITE).size());
+		Assert.assertEquals(20, service.carregaConvocados(ano, semestre, informatica, Periodo.NOITE).size());
 		Assert.assertNotEquals(desmatriculados, convocados);
 		Assert.assertEquals(20, service.findAll().size());
 	}
 
 	@Test
 	public void testMatriculaCursoTrocado(){
-		List<Candidato> convocados = service.convoca(ano, semestre, INFORMATICA, Periodo.NOITE);
+		List<Candidato> convocados = service.convoca(ano, semestre, informatica, Periodo.NOITE);
 		Assert.assertEquals(40, convocados.size());
 		
-		RespostaMatricula resposta = service.matricular(convocados.get(0), tmecatronica, new Date());
+		RespostaMatricula resposta = service.matricular(convocados.get(0), tmecatronicaN, new Date());
 		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA, resposta);
 	}
 
 	@Test
 	public void testMatriculaMesmoCursoDuasVezes(){
-		List<Candidato> convocados = service.convoca(ano, semestre, INFORMATICA, Periodo.NOITE);
+		List<Candidato> convocados = service.convoca(ano, semestre, informatica, Periodo.NOITE);
 		Assert.assertEquals(40, convocados.size());
 		
 		Candidato candidato = convocados.get(0);
@@ -86,7 +86,7 @@ public class TestMatricula extends TestMatriculaGeneric{
 
 	@Test
 	public void testMatriculaDoisCursosMesmoPeriodo(){
-		List<Candidato> convocados = service.convoca(ano, semestre, INFORMATICA, Periodo.NOITE);
+		List<Candidato> convocados = service.convoca(ano, semestre, informatica, Periodo.NOITE);
 		Assert.assertEquals(40, convocados.size());
 		
 		Candidato candidato = convocados.get(0);
@@ -94,30 +94,30 @@ public class TestMatricula extends TestMatriculaGeneric{
 		RespostaMatricula resposta = service.matricular(candidato, tinformartica, new Date());
 		Assert.assertEquals(RespostaMatricula.SUCESSO, resposta);
 		
-		resposta = service.matricular(candidato, tmecatronica, new Date());
+		resposta = service.matricular(candidato, tmecatronicaN, new Date());
 		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA, resposta);
 	}
 	
 	@Test
 	public void testMatriculaExcepcionalDoisCursosMesmoPeriodo(){
-		List<Candidato> convocados = service.convoca(ano, semestre, INFORMATICA, Periodo.NOITE);
+		List<Candidato> convocados = service.convoca(ano, semestre, informatica, Periodo.NOITE);
 		Assert.assertEquals(40, convocados.size());
 		
 		Candidato candidato = convocados.get(0);
 		RespostaMatricula resposta = service.matricular(candidato, tinformartica, new Date());
 		Assert.assertEquals(RespostaMatricula.SUCESSO, resposta);
 		
-		resposta = service.matricularExcepcionalmente(candidato, tmecatronica, new Date());
+		resposta = service.matricularExcepcionalmente(candidato, tmecatronicaN, new Date());
 		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA, resposta);
 	}
 
 	@Test
 	public void testMatriculaDuasVezesMesmaTurmaEtapasDiferentes(){
-		List<Candidato> convocados = service.convoca(ano, semestre, MECATRONICA, Periodo.NOITE);
+		List<Candidato> convocados = service.convoca(ano, semestre, mecatronica, Periodo.NOITE);
 		Assert.assertEquals(40, convocados.size());
 		
 		Candidato candidato = convocados.get(0);
-		RespostaMatricula resposta = service.matricular(candidato, tmecatronica, new Date());
+		RespostaMatricula resposta = service.matricular(candidato, tmecatronicaN, new Date());
 		Assert.assertEquals(RespostaMatricula.SUCESSO, resposta);
 		
 		Etapa etapa = new Etapa();
@@ -125,19 +125,19 @@ public class TestMatricula extends TestMatriculaGeneric{
 		etapa.setSemestre(1);
 		etapa.setDescricao("2º Módulo");
 		etapa.setModulo(mecatronica.getModulos().get(1));
-		etapa.setTurma(tmecatronica);
-		tmecatronica.setEtapaAtual(etapa);
+		etapa.setTurma(tmecatronicaN);
+		tmecatronicaN.setEtapaAtual(etapa);
 		
 		etapaRepository.save(etapa);
-		turmaRepository.update(tmecatronica);
+		turmaRepository.update(tmecatronicaN);
 		
-		resposta = service.matricular(candidato, tmecatronica, new Date());
+		resposta = service.matricular(candidato, tmecatronicaN, new Date());
 		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA, resposta);
 	}
 
 	@Test
 	public void testMatriculaExcepcionalMesmoCursoDuasVezes(){
-		List<Candidato> convocados = service.convoca(ano, semestre, INFORMATICA, Periodo.NOITE);
+		List<Candidato> convocados = service.convoca(ano, semestre, informatica, Periodo.NOITE);
 		Assert.assertEquals(40, convocados.size());
 		
 		Candidato candidato = convocados.get(0);
@@ -151,7 +151,7 @@ public class TestMatricula extends TestMatriculaGeneric{
 
 	@Test
 	public void testMatriculaTodosDesmatriculaMetadeDepoisListaPiloto(){
-		List<Candidato> convocados = service.convoca(ano, semestre, INFORMATICA, Periodo.NOITE);
+		List<Candidato> convocados = service.convoca(ano, semestre, informatica, Periodo.NOITE);
 		Assert.assertEquals(40, convocados.size());
 		
 		List<Candidato> desmatriculados = new ArrayList<>();
@@ -171,11 +171,11 @@ public class TestMatricula extends TestMatriculaGeneric{
 			service.cancelarMatricula(alunoRepository.findByCPF(candidato.getCpf()), tinformartica);
 		}
 		
-		Assert.assertEquals(0, service.carregaConvocados(ano, semestre, INFORMATICA, Periodo.NOITE).size());
+		Assert.assertEquals(0, service.carregaConvocados(ano, semestre, informatica, Periodo.NOITE).size());
 		
-		convocados = service.convoca(ano, semestre, INFORMATICA, Periodo.NOITE);
+		convocados = service.convoca(ano, semestre, informatica, Periodo.NOITE);
 		Assert.assertEquals(20, convocados.size());
-		Assert.assertEquals(20, service.carregaConvocados(ano, semestre, INFORMATICA, Periodo.NOITE).size());
+		Assert.assertEquals(20, service.carregaConvocados(ano, semestre, informatica, Periodo.NOITE).size());
 		Assert.assertNotEquals(desmatriculados, convocados);
 		Assert.assertEquals(40, service.findAll().size());
 	}

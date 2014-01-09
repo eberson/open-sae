@@ -85,17 +85,6 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 	}
 
 	@Override
-	public List<Candidato> convoca(int ano, int semestre, long curso, Periodo periodo) {
-		return convoca(ano, semestre, cursoRepository.find(curso), periodo);
-	}
-
-	@Override
-	public List<Candidato> convoca(int ano, int semestre, String curso, Periodo periodo) {
-		return convoca(ano, semestre, cursoRepository.findByName(curso), periodo);
-	}
-
-	
-	@Override
 	public Map<Turma, List<Candidato>> carregaConvocados(int ano, int semestre) {
 		List<Turma> turmas = turmaRepository.all(ano, semestre);
 		Map<Turma, List<Candidato>> resultado = new HashMap<>();
@@ -108,18 +97,6 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 		return resultado;
 	}
 	
-	@Override
-	public List<Candidato> carregaConvocados(int ano, int semestre, long curso, Periodo periodo) {
-		return carregaConvocados(ano, semestre, cursoRepository.find(curso), periodo);
-	}
-	
-	@Override
-	public List<Candidato> carregaConvocados(int ano, int semestre, String curso, Periodo periodo) {
-		return carregaConvocados(ano, semestre, cursoRepository.findByName(curso), periodo);
-	}
-
-	
-
 	@Override
 	public RespostaMatricula matricular(Candidato candidato, Turma turma, Date data) {
 		try {
@@ -224,7 +201,8 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 				vestibulinho.getVestibulinho().getSemestre() == turma.getEtapaAtual().getSemestre();
 	}
 	
-	private List<Candidato> carregaConvocados(int ano, int semestre, Curso curso, Periodo periodo) {
+	@Override
+	public List<Candidato> carregaConvocados(int ano, int semestre, Curso curso, Periodo periodo) {
 		List<Turma> turmas = turmaRepository.find(ano, semestre, curso, periodo);
 		List<Candidato> convocados = new ArrayList<>();
 		
@@ -271,7 +249,8 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 		return true;
 	}
 	
-	private List<Candidato> convoca(int ano, int semestre, Curso curso, Periodo periodo) {
+	@Override
+	public List<Candidato> convoca(int ano, int semestre, Curso curso, Periodo periodo) {
 		if(!vestibulinhoValido(ano, semestre)){
 			return Collections.emptyList();
 		}

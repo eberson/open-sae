@@ -31,12 +31,14 @@ import br.org.sae.service.RespostaImportService;
 
 public class TestMatriculaGeneric {
 	
-	protected static final String ADMINISTRACAO = "ADMINISTRAÇÃO - (EAD - TELECURSO TEC)";
+	protected static final String ENSINOMEDIO = "ENSINO MÉDIO";
 	protected static final String ENFERMAGEM = "ENFERMAGEM";
 	protected static final String INFORMATICA = "INFORMÁTICA";
 	protected static final String MECATRONICA = "MECATRÔNICA";
-	protected static final String FINANCAS = "FINANÇAS";
-
+	protected static final String ELETROTECNICA = "ELETROTÉCNICA";
+	protected static final String ETIM = "INFORMÁTICA PARA INTERNET - INTEGRADO AO ENSINO MÉDIO";
+	protected static final String MECANICA = "MECÂNICA";
+	
 	@PersistenceContext
 	private EntityManager em;
 	
@@ -69,20 +71,25 @@ public class TestMatriculaGeneric {
 	
 	protected static boolean loaded = false;
 
-	protected static Curso financas;
+	protected static Curso eletrotecnica;
 	protected static Curso mecatronica;
 	protected static Curso informatica;
 	protected static Curso enfermagem;
-	protected static Curso administracao;
+	protected static Curso ensinomedio;
+	protected static Curso etim;
+	protected static Curso mecanica;
 	
 	protected static int semestre;
 	protected static int ano;
 
-	protected static Turma tfinancas;
-	protected static Turma tmecatronica;
+	protected static Turma teletrotecnica;
+	protected static Turma tmecatronicaM;
+	protected static Turma tmecatronicaN;
 	protected static Turma tinformartica;
 	protected static Turma tenfermagem;
-	protected static Turma tadministracao;
+	protected static Turma tensinomedio;
+	protected static Turma tetim;
+	protected static Turma tmecanica;
 	
 	protected void before(boolean hasVest2013, boolean hasVestAtual) throws Exception{
 		if(loaded){
@@ -93,47 +100,65 @@ public class TestMatriculaGeneric {
 		ano = calendar.get(Calendar.YEAR);
 		semestre = ((calendar.get(Calendar.MONTH) + 1) < 7) ? 1 : 2;
 		
-		financas = new Curso(FINANCAS, 40);
+		eletrotecnica = new Curso(ELETROTECNICA, 40);
+		enfermagem = new Curso(ENFERMAGEM, 30);
 		mecatronica = new Curso(MECATRONICA, 40);
 		informatica = new Curso(INFORMATICA, 40);
-		enfermagem = new Curso(ENFERMAGEM, 30);
-		administracao = new Curso(ADMINISTRACAO, 40);
+		ensinomedio = new Curso(ENSINOMEDIO, 40);
+		etim = new Curso(ETIM, 40);
+		mecanica = new Curso(MECANICA, 40);
 		
-		cursoRepository.save(financas);
+		cursoRepository.save(eletrotecnica);
 		cursoRepository.save(mecatronica);
 		cursoRepository.save(informatica);
 		cursoRepository.save(enfermagem);
-		cursoRepository.save(administracao);
+		cursoRepository.save(ensinomedio);
+		cursoRepository.save(etim);
+		cursoRepository.save(mecanica);
 
-		generateModulos(financas);
+		generateModulos(eletrotecnica);
 		generateModulos(mecatronica);
 		generateModulos(informatica);
 		generateModulos(enfermagem);
-		generateModulos(administracao);
+		generateModulos(ensinomedio);
+		generateModulos(etim);
+		generateModulos(mecanica);
 		
-		tfinancas = new Turma("Turma A", Periodo.NOITE, ano, semestre, financas, false);
-		tmecatronica = new Turma("Turma B", Periodo.NOITE, ano, semestre, mecatronica, false);
-		tinformartica = new Turma("Turma C", Periodo.NOITE, ano, semestre, informatica, false);
-		tenfermagem = new Turma("Turma D", Periodo.MANHA, ano, semestre, enfermagem, false);
-		tadministracao = new Turma("Turma E", Periodo.SABADOS_PE, ano, semestre, administracao, false);
+		teletrotecnica = new Turma("Turma A", Periodo.NOITE, ano, semestre, eletrotecnica, false);
+		tmecatronicaM = new Turma("Turma B", Periodo.NOITE, ano, semestre, mecatronica, false);
+		tmecatronicaN = new Turma("Turma B", Periodo.NOITE, ano, semestre, mecatronica, false);
+		tinformartica = new Turma("Turma C", Periodo.TARDE, ano, semestre, informatica, false);
+		tenfermagem = new Turma("Turma D", Periodo.NOITE, ano, semestre, enfermagem, false);
+		tensinomedio = new Turma("Turma E", Periodo.MANHA, ano, semestre, ensinomedio, false);
+		tetim = new Turma("Turma E", Periodo.INTEGRAL, ano, semestre, etim, false);
+		tmecanica = new Turma("Turma E", Periodo.NOITE, ano, semestre, mecanica, false);
 
-		turmaRepository.save(tfinancas);
-		turmaRepository.save(tmecatronica);
+		turmaRepository.save(teletrotecnica);
+		turmaRepository.save(tmecatronicaN);
+		turmaRepository.save(tmecatronicaM);
 		turmaRepository.save(tinformartica);
 		turmaRepository.save(tenfermagem);
-		turmaRepository.save(tadministracao);
+		turmaRepository.save(tensinomedio);
+		turmaRepository.save(tetim);
+		turmaRepository.save(tmecanica);
 		
-		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, tfinancas, financas.getModulos().get(0)));
-		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, tmecatronica, mecatronica.getModulos().get(0)));
+		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, teletrotecnica, eletrotecnica.getModulos().get(0)));
+		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, tmecatronicaM, mecatronica.getModulos().get(0)));
+		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, tmecatronicaN, mecatronica.getModulos().get(0)));
 		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, tinformartica, informatica.getModulos().get(0)));
 		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, tenfermagem, enfermagem.getModulos().get(0)));
-		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, tadministracao, administracao.getModulos().get(0)));
+		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, tensinomedio, ensinomedio.getModulos().get(0)));
+		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, tetim, etim.getModulos().get(0)));
+		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, tmecanica, mecanica.getModulos().get(0)));
 		
-		tfinancas = em.find(Turma.class, tfinancas.getCodigo());
-		tmecatronica = em.find(Turma.class, tmecatronica.getCodigo());
+		teletrotecnica = em.find(Turma.class, teletrotecnica.getCodigo());
+		tmecatronicaM = em.find(Turma.class, tmecatronicaM.getCodigo());
+		tmecatronicaN = em.find(Turma.class, tmecatronicaN.getCodigo());
 		tinformartica = em.find(Turma.class, tinformartica.getCodigo());
 		tenfermagem = em.find(Turma.class, tenfermagem.getCodigo());
-		tadministracao = em.find(Turma.class, tadministracao.getCodigo());
+		tensinomedio = em.find(Turma.class, tensinomedio.getCodigo());
+		tetim = em.find(Turma.class, tetim.getCodigo());
+		tmecanica = em.find(Turma.class, tmecanica.getCodigo());
 		
 		if(hasVest2013){
 			importaCandidatos2013();
@@ -147,14 +172,14 @@ public class TestMatriculaGeneric {
 	}
 	
 	protected void importaCandidatos2013() throws Exception{
-		URI uri = getClass().getResource("matricula-dados-reais.xls").toURI();
-		RespostaImportService resposta = importador.importar(ImportFileType.XLS, new FileInputStream(new File(uri)), 2013, 2);
+		URI uri = getClass().getResource("matricula-dados-reais.xlsx").toURI();
+		RespostaImportService resposta = importador.importar(ImportFileType.XLSX, new FileInputStream(new File(uri)), 2013, 2);
 		Assert.assertEquals(RespostaImportService.SUCESSO, resposta);
 	}
 	
 	protected void importaCandidatosAtual() throws Exception{
-		URI uri = getClass().getResource("matricula-dados-reais.xls").toURI();
-		RespostaImportService resposta = importador.importar(ImportFileType.XLS, new FileInputStream(new File(uri)), ano, semestre);
+		URI uri = getClass().getResource("matricula-dados-reais.xlsx").toURI();
+		RespostaImportService resposta = importador.importar(ImportFileType.XLSX, new FileInputStream(new File(uri)), ano, semestre);
 		Assert.assertEquals(RespostaImportService.SUCESSO, resposta);
 	}
 	
@@ -162,11 +187,12 @@ public class TestMatriculaGeneric {
 		matriculaRepository.deleteAll();
 		matriculaRepository.resetConvocados(ano, semestre);
 		
-		resetEtapa(tfinancas);
-		resetEtapa(tmecatronica);
+		resetEtapa(teletrotecnica);
+		resetEtapa(tmecatronicaM);
+		resetEtapa(tmecatronicaN);
 		resetEtapa(tinformartica);
 		resetEtapa(tenfermagem);
-		resetEtapa(tadministracao);
+		resetEtapa(tensinomedio);
 	}
 	
 	private void resetEtapa(Turma turma){
