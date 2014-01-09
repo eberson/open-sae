@@ -22,11 +22,6 @@ public class CursoServiceImpl extends EntityServiceImpl<Curso> implements CursoS
 	}
 
 	@Override
-	public Curso findByEscolaCode(int code) {
-		return repository.findByEscolaCode(code);
-	}
-
-	@Override
 	public Curso findByNome(String nome) {
 		return repository.findByName(nome);
 	}

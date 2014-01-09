@@ -93,11 +93,11 @@ public class TestMatriculaGeneric {
 		ano = calendar.get(Calendar.YEAR);
 		semestre = ((calendar.get(Calendar.MONTH) + 1) < 7) ? 1 : 2;
 		
-		financas = new Curso(903, FINANCAS, 40);
-		mecatronica = new Curso(914, MECATRONICA, 40);
-		informatica = new Curso(912, INFORMATICA, 40);
-		enfermagem = new Curso(910, ENFERMAGEM, 30);
-		administracao = new Curso(898, ADMINISTRACAO, 40);
+		financas = new Curso(FINANCAS, 40);
+		mecatronica = new Curso(MECATRONICA, 40);
+		informatica = new Curso(INFORMATICA, 40);
+		enfermagem = new Curso(ENFERMAGEM, 30);
+		administracao = new Curso(ADMINISTRACAO, 40);
 		
 		cursoRepository.save(financas);
 		cursoRepository.save(mecatronica);

@@ -35,18 +35,4 @@ public class CursoRepositoryImpl extends RepositoryImpl<Curso> implements CursoR
 			return null;
 		}
 	}
-	
-
-	@Override
-	public Curso findByEscolaCode(int code) {
-		TypedQuery<Curso> query = em().createNamedQuery("CursoByCodigoEscola", Curso.class);
-		query.setParameter("codigo", code);
-		query.setMaxResults(1);
-		
-		try {
-			return query.getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		}
-	}
 }

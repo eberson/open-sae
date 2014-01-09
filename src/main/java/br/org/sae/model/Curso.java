@@ -15,13 +15,10 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table(name = "tbcurso")
-@NamedQueries({@NamedQuery(name="CursoByNome", query="select c from Curso c where upper(c.nome) = upper(:nome)"),
-			   @NamedQuery(name="CursoByCodigoEscola", query="select c from Curso c where c.codigoEscolaCurso = :codigo") })
+@NamedQueries({@NamedQuery(name="CursoByNome", query="select c from Curso c where upper(c.nome) = upper(:nome)")})
 public class Curso extends Entidade {
 
 	private static final long serialVersionUID = 1L;
-	
-	private int codigoEscolaCurso;
 	
 	@NotNull
 	@NotBlank
@@ -33,9 +30,8 @@ public class Curso extends Entidade {
 	@OneToMany(mappedBy="curso")
 	private List<Modulo> modulos;
 	
-	public Curso(int codigoEscolaCurso, String nome, int vagas) {
+	public Curso(String nome, int vagas) {
 		super();
-		this.codigoEscolaCurso = codigoEscolaCurso;
 		this.nome = nome;
 		this.vagas = vagas;
 	}
@@ -59,14 +55,6 @@ public class Curso extends Entidade {
 	public void addModulo(Modulo modulo){
 		modulo.setCurso(this);
 		getModulos().add(modulo);
-	}
-
-	public int getCodigoEscolaCurso() {
-		return codigoEscolaCurso;
-	}
-	
-	public void setCodigoEscolaCurso(int codigoEscolaCurso) {
-		this.codigoEscolaCurso = codigoEscolaCurso;
 	}
 
 	public String getNome() {

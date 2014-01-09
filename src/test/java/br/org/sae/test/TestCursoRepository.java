@@ -45,14 +45,4 @@ public class TestCursoRepository extends TestDatabaseGeneric {
 	public void testCursoByNomeMaiusculas(){
 		Assert.assertNotNull(repository.findByName("FINANÇAS"));
 	}
-	
-	@Test
-	public void testeCursoByCodigoEscolaNotFound(){
-		Assert.assertNull(repository.findByEscolaCode(950));
-	}
-
-	@Test
-	public void testeCursoByCodigoEscola(){
-		Assert.assertNotNull(repository.findByEscolaCode(912));
-	}
 }

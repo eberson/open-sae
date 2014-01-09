@@ -67,11 +67,11 @@ public abstract class TestDatabaseGeneric {
 			return;
 		}
 		
-		cursoService.save(new Curso(903, "FINANÇAS", 40));
-		cursoService.save(new Curso(914, "MECATRÔNICA", 40));
-		cursoService.save(new Curso(912, "INFORMÁTICA", 40));
-		cursoService.save(new Curso(910, "ENFERMAGEM", 30));
-		cursoService.save(new Curso(898, "ADMINISTRAÇÃO - (EAD - TELECURSO TEC)", 40));
+		cursoService.save(new Curso("FINANÇAS", 40));
+		cursoService.save(new Curso("MECATRÔNICA", 40));
+		cursoService.save(new Curso("INFORMÁTICA", 40));
+		cursoService.save(new Curso("ENFERMAGEM", 30));
+		cursoService.save(new Curso("ADMINISTRAÇÃO - (EAD - TELECURSO TEC)", 40));
 
 		Assert.assertEquals(5, cursoService.all().size());
 		loadedCursos = true;

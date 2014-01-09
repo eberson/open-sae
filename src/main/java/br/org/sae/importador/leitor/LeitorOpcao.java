@@ -34,7 +34,6 @@ public class LeitorOpcao implements DadoLegivel<OpcaoPrestada[]> {
 		
 		op.setCurso(util.leitorColunaCurso().le(row.getCell(nomeCurso), util));
 		
-		op.getCurso().setCodigoEscolaCurso(ImportadorUtil.getIntValue(row.getCell(codCurso)));
 		op.setClassificacao(ImportadorUtil.getIntValue(row.getCell(classificacao)));
 		
 		String speriodo = Normalizer.normalize(row.getCell(periodo).getStringCellValue(), Form.NFD);
