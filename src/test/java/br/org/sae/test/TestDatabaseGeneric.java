@@ -67,13 +67,15 @@ public abstract class TestDatabaseGeneric {
 			return;
 		}
 		
-		cursoService.save(new Curso("FINANÇAS", 40));
-		cursoService.save(new Curso("MECATRÔNICA", 40));
-		cursoService.save(new Curso("INFORMÁTICA", 40));
+		cursoService.save(new Curso("ELETROTÉCNICA", 40));
 		cursoService.save(new Curso("ENFERMAGEM", 30));
-		cursoService.save(new Curso("ADMINISTRAÇÃO - (EAD - TELECURSO TEC)", 40));
+		cursoService.save(new Curso("ENSINO MÉDIO", 40));
+		cursoService.save(new Curso("INFORMÁTICA", 40));
+		cursoService.save(new Curso("INFORMÁTICA PARA INTERNET - INTEGRADO AO ENSINO MÉDIO", 40));
+		cursoService.save(new Curso("MECÂNICA", 40));
+		cursoService.save(new Curso("MECATRÔNICA", 40));
 
-		Assert.assertEquals(5, cursoService.all().size());
+		Assert.assertEquals(7, cursoService.all().size());
 		loadedCursos = true;
 	}
 	
@@ -88,7 +90,7 @@ public abstract class TestDatabaseGeneric {
 		RespostaImportService resposta = importService.importar(ImportFileType.XLSX, new FileInputStream(new File(uri)), 2013, 2);
 		
 		Assert.assertEquals(RespostaImportService.SUCESSO, resposta);
-		Assert.assertEquals(14, candidatoRepository.all().size());
+		Assert.assertEquals(20, candidatoRepository.all().size());
 		loadedCandidatos = true;
 	}
 

@@ -6,10 +6,6 @@ public class LeitorColunaAfroDescendente implements ColunaLegivel<Boolean>{
 
 	@Override
 	public Boolean le(Cell cell, LeitorUtil util) {
-		if (cell.getStringCellValue().equals("SIM")) {
-			return true;
-		}
-		else
-			return false;
+		return cell != null && cell.getStringCellValue().equals("SIM");
 	}
 }

@@ -87,7 +87,7 @@ public class Candidato extends Entidade {
 	private Telefone telefoneSecundario;
 
 	@OneToMany(mappedBy = "candidato")
-	private List<VestibulinhoPrestado> vestibulinhos;
+	private List<VestibulinhoPrestado> vestibulinhosPrestados;
 	
 	public String getCpf() {
 		return cpf;
@@ -201,20 +201,20 @@ public class Candidato extends Entidade {
 		this.necessidadeEspecial = necessidadeEspecial;
 	}
 	
-	public List<VestibulinhoPrestado> getVestibulinhos() {
-		if(vestibulinhos == null){
-			vestibulinhos = new ArrayList<>();
+	public List<VestibulinhoPrestado> getVestibulinhosPrestados() {
+		if(vestibulinhosPrestados == null){
+			vestibulinhosPrestados = new ArrayList<>();
 		}
 		
-		return vestibulinhos;
+		return vestibulinhosPrestados;
 	}
 	
-	public void setVestibulinhos(List<VestibulinhoPrestado> vestibulinhos) {
-		this.vestibulinhos = vestibulinhos;
+	public void setVestibulinhosPrestado(List<VestibulinhoPrestado> vestibulinhosPrestados) {
+		this.vestibulinhosPrestados = vestibulinhosPrestados;
 	}
 	
-	public void addVestibulinho(VestibulinhoPrestado vestibulinho){
+	public void addVestibulinhoPrestado(VestibulinhoPrestado vestibulinho){
 		vestibulinho.setCandidato(this);
-		getVestibulinhos().add(vestibulinho);
+		getVestibulinhosPrestados().add(vestibulinho);
 	}
 }

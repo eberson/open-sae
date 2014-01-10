@@ -45,23 +45,25 @@ public class TestImportacaoDatabase {
 		repository.deleteAll();
 		
 		if(cursoService.findAll().size() == 0){
-			cursoService.save(new Curso("FINANÇAS", 40));
-			cursoService.save(new Curso("MECATRÔNICA", 40));
-			cursoService.save(new Curso("INFORMÁTICA", 40));
+			cursoService.save(new Curso("ELETROTÉCNICA", 40));
 			cursoService.save(new Curso("ENFERMAGEM", 30));
-			cursoService.save(new Curso("ADMINISTRAÇÃO - (EAD - TELECURSO TEC)", 40));
+			cursoService.save(new Curso("ENSINO MÉDIO", 40));
+			cursoService.save(new Curso("INFORMÁTICA", 40));
+			cursoService.save(new Curso("INFORMÁTICA PARA INTERNET - INTEGRADO AO ENSINO MÉDIO", 40));
+			cursoService.save(new Curso("MECÂNICA", 40));
+			cursoService.save(new Curso("MECATRÔNICA", 40));
 		}
 		
-		Assert.assertEquals(5, cursoService.findAll().size());
+		Assert.assertEquals(7, cursoService.findAll().size());
 	}
 	
 	@Test
 	public void testDadosCarregadosXLS() throws Exception{
-		URI uri = getClass().getResource("matricula-dados-reais.xls").toURI();
+		URI uri = getClass().getResource("matricula-dados-reais.xlsx").toURI();
 		
-		RespostaImportService resposta = importService.importar(ImportFileType.XLS, new FileInputStream(new File(uri)), 2013, 2);
+		RespostaImportService resposta = importService.importar(ImportFileType.XLSX, new FileInputStream(new File(uri)), 2013, 2);
 		
 		Assert.assertEquals(RespostaImportService.SUCESSO, resposta);
-		Assert.assertEquals(496, candidatoService.findAll().size());
+		Assert.assertEquals(1133, candidatoService.findAll().size());
 	}
 }

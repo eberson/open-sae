@@ -27,7 +27,7 @@
 	</bean>
     
     <!-- LOCAL entity manager factory -->
-    <bean id="emfhsql" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="open-sae"/>
         <property name="dataSource" ref="dataSource" />
         <property name="jpaVendorAdapter">
@@ -39,7 +39,7 @@
         </property>
     </bean>
 
-<!--     <bean id="emfmysql" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> -->
+<!--     <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> -->
 <!--         <property name="persistenceUnitName" value="open-sae"/> -->
 <!--         <property name="dataSource" ref="mysqlDataSource" /> -->
 <!--         <property name="jpaVendorAdapter"> -->
@@ -58,8 +58,7 @@
 	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 	 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="emfhsql" />
-<!--         <property name="entityManagerFactory" ref="emfmysql" /> -->
+        <property name="entityManagerFactory" ref="emf" />
     </bean>
     
     <tx:annotation-driven transaction-manager="transactionManager"/>

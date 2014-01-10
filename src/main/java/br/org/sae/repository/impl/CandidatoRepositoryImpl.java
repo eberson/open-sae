@@ -23,11 +23,15 @@ import br.org.sae.model.Curso;
 import br.org.sae.model.OpcaoPrestada;
 import br.org.sae.model.VestibulinhoPrestado;
 import br.org.sae.repository.CandidatoRepository;
+import br.org.sae.repository.CursoRepository;
 import br.org.sae.repository.VestibulinhoRepository;
 
 @Repository
 public class CandidatoRepositoryImpl extends RepositoryImpl<Candidato> implements CandidatoRepository{
 
+	@Autowired
+	private CursoRepository cursoRepository;
+	
 	@Autowired
 	private VestibulinhoRepository repository;
 	
@@ -39,23 +43,23 @@ public class CandidatoRepositoryImpl extends RepositoryImpl<Candidato> implement
 	@Override
 	@Transactional(noRollbackFor={NoResultException.class})
 	public void saveOrUpdate(Candidato value) {
-		Candidato stored = findByCpfOrNome(value.getCpf(), value.getNome());
+		Candidato stored = findByCpfOrNome(value.getCpf(), "");
 		
 		if(stored == null){
 			super.save(value);
 		}
 		else{
 			value.setCodigo(stored.getCodigo());
-			List<VestibulinhoPrestado> vestibulinhos = stored.getVestibulinhos();
+			List<VestibulinhoPrestado> vestibulinhos = stored.getVestibulinhosPrestados();
 			
 			for (VestibulinhoPrestado vestibulinho : vestibulinhos) {
-				value.addVestibulinho(vestibulinho);
+				value.addVestibulinhoPrestado(vestibulinho);
 			}
 			
 			super.update(value);
 		}
 
-		List<VestibulinhoPrestado> prestados = value.getVestibulinhos();
+		List<VestibulinhoPrestado> prestados = value.getVestibulinhosPrestados();
 		
 		for (VestibulinhoPrestado prestado : prestados) {
 			TypedQuery<VestibulinhoPrestado> query = em().createNamedQuery("VestibulinhoPrestadoPorAnoSemestre", VestibulinhoPrestado.class);
@@ -110,6 +114,8 @@ public class CandidatoRepositoryImpl extends RepositoryImpl<Candidato> implement
 					continue;
 				}
 				
+				
+				
 				Curso curso = opcao.getCurso();
 				
 				if(resultado.containsKey(curso)){
@@ -154,7 +160,7 @@ public class CandidatoRepositoryImpl extends RepositoryImpl<Candidato> implement
 		CriteriaBuilder qb = em().getCriteriaBuilder();
 		CriteriaQuery<Candidato> cq = qb.createQuery(Candidato.class);
 		Root<Candidato> from = cq.from(Candidato.class);
-		Join<Object, Object> joinPrestado = from.join("vestibulinhos");
+		Join<Object, Object> joinPrestado = from.join("vestibulinhosPrestados");
 		Join<Object, Object> joinVestibulinho = joinPrestado.join("vestibulinho");
 		
 		Predicate whereAno = qb.equal(joinVestibulinho.get("ano"), ano);

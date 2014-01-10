@@ -1,7 +1,13 @@
 package br.org.sae.importador.leitor;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import br.org.sae.importador.leitor.cell.reader.CellReader;
+import br.org.sae.importador.leitor.cell.reader.DoubleCellReader;
+import br.org.sae.importador.leitor.cell.reader.IntegerCellReader;
+import br.org.sae.importador.leitor.cell.reader.StringCellReader;
 import br.org.sae.model.Candidato;
 import br.org.sae.model.Curso;
 import br.org.sae.model.Endereco;
@@ -25,8 +31,15 @@ public class LeitorUtil {
 	
 	private Vestibulinho vestibulinho;
 	
+	@SuppressWarnings("rawtypes")
+	private Map<Class, CellReader<?>> cellReaders = new HashMap<>();
+	
 	public LeitorUtil(int ano, int semestre) {
 		super();
+		
+		cellReaders.put(String.class, new StringCellReader());
+		cellReaders.put(Integer.class, new IntegerCellReader());
+		cellReaders.put(Double.class, new DoubleCellReader());
 		
 		vestibulinho = new Vestibulinho(ano, semestre); 
 		
@@ -40,6 +53,11 @@ public class LeitorUtil {
 		leitorColunaCurso = new LeitorColunaCurso();
 		leitorColunaDataNascimento = new LeitorColunaDataNascimento();
 		leitorColunaRGCandidato = new LeitorColunaRGCandidato();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> CellReader<T> reader(Class<T> type){
+		return (CellReader<T>) cellReaders.get(type);
 	}
 	
 	public Vestibulinho vestibulinho(){

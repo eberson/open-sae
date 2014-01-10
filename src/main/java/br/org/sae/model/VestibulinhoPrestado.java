@@ -32,6 +32,7 @@ public class VestibulinhoPrestado extends Entidade {
 	private String tipoProva;
 	
 	private double nota;
+	private boolean ausente;
 	
 	@Embedded
 	@NotNull
@@ -45,6 +46,14 @@ public class VestibulinhoPrestado extends Entidade {
 	@AssociationOverrides({ @AssociationOverride(name = "curso", joinColumns = @JoinColumn(name = "curso2")) })
 	private OpcaoPrestada segundaOpcao;
 
+	public boolean isAusente() {
+		return ausente;
+	}
+	
+	public void setAusente(boolean ausente) {
+		this.ausente = ausente;
+	}
+	
 	public double getNota() {
 		return nota;
 	}

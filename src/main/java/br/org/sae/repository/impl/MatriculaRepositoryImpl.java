@@ -45,7 +45,7 @@ public class MatriculaRepositoryImpl extends RepositoryImpl<Matricula> implement
 	@Transactional
 	public void marcaConvocado(Turma turma, List<Candidato> candidatos) {
 		for (Candidato candidato : candidatos) {
-			List<VestibulinhoPrestado> vestibulinhos = candidato.getVestibulinhos();
+			List<VestibulinhoPrestado> vestibulinhos = candidato.getVestibulinhosPrestados();
 			
 			for (VestibulinhoPrestado prestado : vestibulinhos) {
 				Vestibulinho vestibulinho = prestado.getVestibulinho();
@@ -72,7 +72,7 @@ public class MatriculaRepositoryImpl extends RepositoryImpl<Matricula> implement
 	@Transactional
 	public void marcaExpirado(Turma turma, List<Candidato> candidatos) {
 		for (Candidato candidato : candidatos) {
-			List<VestibulinhoPrestado> vestibulinhos = candidato.getVestibulinhos();
+			List<VestibulinhoPrestado> vestibulinhos = candidato.getVestibulinhosPrestados();
 			
 			for (VestibulinhoPrestado prestado : vestibulinhos) {
 				Vestibulinho vestibulinho = prestado.getVestibulinho();
@@ -99,7 +99,7 @@ public class MatriculaRepositoryImpl extends RepositoryImpl<Matricula> implement
 	@Transactional
 	public void marcaMatriculado(Turma turma, Candidato... candidatos) {
 		for (Candidato candidato : candidatos) {
-			List<VestibulinhoPrestado> vestibulinhos = candidato.getVestibulinhos();
+			List<VestibulinhoPrestado> vestibulinhos = candidato.getVestibulinhosPrestados();
 			
 			for (VestibulinhoPrestado prestado : vestibulinhos) {
 				Vestibulinho vestibulinho = prestado.getVestibulinho();
@@ -277,7 +277,7 @@ public class MatriculaRepositoryImpl extends RepositoryImpl<Matricula> implement
 		CriteriaQuery<Candidato> cq = qb.createQuery(Candidato.class);
 		
 		Root<Candidato> from = cq.from(Candidato.class);
-		Join<Object, Object> joinPrestado = from.join("vestibulinhos");
+		Join<Object, Object> joinPrestado = from.join("vestibulinhosPrestados");
 		Join<Object, Object> joinVestibulinho = joinPrestado.join("vestibulinho");
 		
 		Predicate whereAno = qb.equal(joinVestibulinho.get("ano"), turma.getAno());
@@ -321,7 +321,7 @@ public class MatriculaRepositoryImpl extends RepositoryImpl<Matricula> implement
 				List<Candidato> convocados = getCandidatosConvocados(turma, opcao);
 				
 				for (Candidato candidato : convocados) {
-					List<VestibulinhoPrestado> prestados = candidato.getVestibulinhos();
+					List<VestibulinhoPrestado> prestados = candidato.getVestibulinhosPrestados();
 					
 					for (VestibulinhoPrestado prestado : prestados) {
 						prestado.getPrimeiraOpcao().setStatus(StatusCandidato.INSCRITO);
@@ -345,12 +345,13 @@ public class MatriculaRepositoryImpl extends RepositoryImpl<Matricula> implement
 		CriteriaQuery<Candidato> cq = qb.createQuery(Candidato.class);
 		
 		Root<Candidato> from = cq.from(Candidato.class);
-		Join<Object, Object> joinPrestado = from.join("vestibulinhos");
+		Join<Object, Object> joinPrestado = from.join("vestibulinhosPrestados");
 		Join<Object, Object> joinVestibulinho = joinPrestado.join("vestibulinho");
 		
 		Predicate whereAno = qb.equal(joinVestibulinho.get("ano"), turma.getAno());
 		Predicate whereSemestre = qb.equal(joinVestibulinho.get("semestre"), turma.getSemestre());
-		Predicate where = qb.and(whereAno, whereSemestre);
+		Predicate whereAusente = qb.equal(joinPrestado.get("ausente"), false);
+		Predicate where = qb.and(whereAusente, whereAno, whereSemestre);
 		
 		CriteriaQuery<Candidato> select = cq.select(from);
 		
@@ -389,7 +390,7 @@ public class MatriculaRepositoryImpl extends RepositoryImpl<Matricula> implement
 		CriteriaQuery<Candidato> cq = qb.createQuery(Candidato.class);
 		
 		Root<Candidato> from = cq.from(Candidato.class);
-		Join<Object, Object> joinPrestado = from.join("vestibulinhos");
+		Join<Object, Object> joinPrestado = from.join("vestibulinhosPrestados");
 		Join<Object, Object> joinVestibulinho = joinPrestado.join("vestibulinho");
 		
 		Predicate whereAno = qb.equal(joinVestibulinho.get("ano"), turma.getAno());

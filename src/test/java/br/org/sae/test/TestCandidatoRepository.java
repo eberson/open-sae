@@ -119,13 +119,13 @@ public class TestCandidatoRepository extends TestDatabaseGeneric{
 	@Test
 	public void testFindCandidatoSomenteNome(){
 		carregaCandidato(repository);
-		Assert.assertNotNull(repository.findByCpfOrNome("22222222222", ""));
+		Assert.assertNotNull(repository.findByCpfOrNome("", "Joaquim Manuel dos Santos"));
 	}
 
 	@Test
 	public void testFindCandidatoSomenteCPF(){
 		carregaCandidato(repository);
-		Assert.assertNotNull(repository.findByCpfOrNome("", "Joaquim Manuel dos Santos"));
+		Assert.assertNotNull(repository.findByCpfOrNome("22222222222", ""));
 	}
 	
 	@Test
@@ -148,23 +148,8 @@ public class TestCandidatoRepository extends TestDatabaseGeneric{
 		for (Entry<Curso, List<Candidato>> entry : entrySet) {
 			String nome = entry.getKey().getNome();
 			
-			if("MECATRÔNICA".equals(nome)){
-				Assert.assertEquals(6, entry.getValue().size());
-				continue;
-			}
-			
-			if("FINANÇAS".equals(nome)){
-				Assert.assertEquals(4, entry.getValue().size());
-				continue;
-			}
-			
-			if("ENFERMAGEM".equals(nome)){
-				Assert.assertEquals(2, entry.getValue().size());
-				continue;
-			}
-			
-			if("INFORMÁTICA".equals(nome)){
-				Assert.assertEquals(2, entry.getValue().size());
+			if("ELETROTÉCNICA".equals(nome)){
+				Assert.assertEquals(20, entry.getValue().size());
 				continue;
 			}
 			
@@ -180,13 +165,18 @@ public class TestCandidatoRepository extends TestDatabaseGeneric{
 		for (Entry<Curso, List<Candidato>> entry : entrySet) {
 			String nome = entry.getKey().getNome();
 			
-			if("FINANÇAS".equals(nome)){
-				Assert.assertEquals(2, entry.getValue().size());
+			if("MECATRÔNICA".equals(nome)){
+				Assert.assertEquals(11, entry.getValue().size());
 				continue;
 			}
 			
-			if("INFORMÁTICA".equals(nome)){
-				Assert.assertEquals(4, entry.getValue().size());
+			if("MECÂNICA".equals(nome)){
+				Assert.assertEquals(2, entry.getValue().size());
+				continue;
+			}
+
+			if("ENFERMAGEM".equals(nome)){
+				Assert.assertEquals(2, entry.getValue().size());
 				continue;
 			}
 			
@@ -196,25 +186,25 @@ public class TestCandidatoRepository extends TestDatabaseGeneric{
 
 	@Test
 	public void testFindCandidatoPorCursoVestibulinoSemResultado(){
-		List<Candidato> lista = repository.findByVestibulinhoAndCurso(2015, 2, "MECATRÔNICA", true);
+		List<Candidato> lista = repository.findByVestibulinhoAndCurso(2015, 2, "ELETROTÉCNICA", true);
 		Assert.assertEquals(0, lista.size());
 	}
 
 	@Test
 	public void testFindCandidatoPorCursoVestibulino(){
-		List<Candidato> lista = repository.findByVestibulinhoAndCurso(2013, 2, "MECATRÔNICA", true);
-		Assert.assertEquals(6, lista.size());
+		List<Candidato> lista = repository.findByVestibulinhoAndCurso(2013, 2, "ELETROTÉCNICA", true);
+		Assert.assertEquals(20, lista.size());
 	}
 
 	@Test
 	public void testFindCandidatoPorCursoVestibulinoSegundaOpcaoSemResultado(){
-		List<Candidato> lista = repository.findByVestibulinhoAndCurso(2013, 2, "MECATRÔNICA", false);
+		List<Candidato> lista = repository.findByVestibulinhoAndCurso(2013, 2, "ELETROTÉCNICA", false);
 		Assert.assertEquals(0, lista.size());
 	}
 
 	@Test
 	public void testFindCandidatoPorCursoVestibulinoSegundaOpcao(){
-		List<Candidato> lista = repository.findByVestibulinhoAndCurso(2013, 2, "INFORMÁTICA", false);
-		Assert.assertEquals(4, lista.size());
+		List<Candidato> lista = repository.findByVestibulinhoAndCurso(2013, 2, "MECATRÔNICA", false);
+		Assert.assertEquals(11, lista.size());
 	}
 }

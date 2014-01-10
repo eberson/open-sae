@@ -63,7 +63,12 @@ public class ImportServiceImpl implements ImportService{
 
 	private void save(List<Candidato> candidatos) {
 		for (Candidato candidato : candidatos) {
-			loadCursos(candidato.getVestibulinhos().get(0));
+			List<VestibulinhoPrestado> prestados = candidato.getVestibulinhosPrestados();
+			
+			for (VestibulinhoPrestado prestado : prestados) {
+				loadCursos(prestado);
+			}
+			
 			candidatoService.saveOrUpdate(candidato);
 		}
 	}

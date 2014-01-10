@@ -13,11 +13,9 @@ import static br.org.sae.importador.ImportadorConstants.CANDIDATO_RG_NUMERO;
 import static br.org.sae.importador.ImportadorConstants.CANDIDATO_RG_ORGAO_EXPED;
 import static br.org.sae.importador.ImportadorConstants.CANDIDATO_SEXO;
 import static br.org.sae.importador.ImportadorConstants.CURSO1_CLASSIFICACAO;
-import static br.org.sae.importador.ImportadorConstants.CURSO1_CODESCOLACURSO;
 import static br.org.sae.importador.ImportadorConstants.CURSO1_NOME;
 import static br.org.sae.importador.ImportadorConstants.CURSO1_PERIODO;
 import static br.org.sae.importador.ImportadorConstants.CURSO2_CLASSIFICACAO;
-import static br.org.sae.importador.ImportadorConstants.CURSO2_CODESCOLACURSO;
 import static br.org.sae.importador.ImportadorConstants.CURSO2_NOME;
 import static br.org.sae.importador.ImportadorConstants.CURSO2_PERIODO;
 import static br.org.sae.importador.ImportadorConstants.ENDERECO_BAIRRO;
@@ -37,7 +35,10 @@ import static br.org.sae.importador.ImportadorConstants.VESTIBULINHO_TIPO_PROVA;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.POIXMLException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -52,9 +53,11 @@ import br.org.sae.exception.EstruturaInvalidaException;
 import br.org.sae.importador.leitor.LeitorUtil;
 import br.org.sae.model.Candidato;
 import br.org.sae.model.Vestibulinho;
+import br.org.sae.model.VestibulinhoPrestado;
 
 public abstract class Importador {
 	
+	private static final String PLANILHA_VESTIBULINHO = "VESTIBULINHO";
 	protected int limiteInferior = 1;
 	protected int limiteSuperior = 1000;
 	
@@ -101,14 +104,34 @@ public abstract class Importador {
 			
 			checkFormato(workbook);
 			
-			Sheet sheet = workbook.getSheet("dados");
+			Sheet sheet = workbook.getSheet(PLANILHA_VESTIBULINHO);
 			
 			limiteInferior = 1;
 			limiteSuperior = sheet.getLastRowNum();
-
 			
-			return processa(sheet, util);
-			
+			try {
+				List<Candidato> candidatos = processa(sheet, util);
+				Map<String, Candidato> mapa = new HashMap<>();
+				
+				for (Candidato candidato : candidatos) {
+					if(mapa.containsKey(candidato.getCpf())){
+						Candidato armazenado = mapa.get(candidato.getCpf());
+						List<VestibulinhoPrestado> vestibulinhos = candidato.getVestibulinhosPrestados();
+						
+						for (VestibulinhoPrestado prestado : vestibulinhos) {
+							armazenado.addVestibulinhoPrestado(prestado);
+						}
+						
+						continue;
+					}
+					
+					mapa.put(candidato.getCpf(), candidato);
+				}
+				
+				return new ArrayList<>(mapa.values());
+			} catch (RuntimeException e) {
+				throw new EstruturaInvalidaException();
+			}
 		} catch (POIXMLException e) {
 			if(e.getCause() != null && e.getCause() instanceof InvalidFormatException ){
 				throw new ArquivoInvalidoImportacaoException();
@@ -121,7 +144,7 @@ public abstract class Importador {
 	}
 	
 	protected void checkFormato(Workbook workbook) throws ArquivoVazioException, EstruturaInvalidaException{
-		Sheet sheet = workbook.getSheet("dados");
+		Sheet sheet = workbook.getSheet(PLANILHA_VESTIBULINHO);
 		
 		if(sheet == null){
 			throw new EstruturaInvalidaException();
@@ -155,9 +178,7 @@ public abstract class Importador {
 			}
 			
 			switch (i) {
-				case CURSO1_CODESCOLACURSO:
 				case CURSO1_CLASSIFICACAO:
-				case CURSO2_CODESCOLACURSO:
 				case CURSO2_CLASSIFICACAO:
 				case TELEFONE_P_DDD:
 				case TELEFONE_S_DDD:

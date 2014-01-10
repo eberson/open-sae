@@ -96,15 +96,15 @@ public class TestImportacaoLeitura {
 	@Test
 	public void testDadosCarregadosXLS() throws EstruturaInvalidaException, ArquivoVazioException, URISyntaxException, ArquivoInvalidoImportacaoException{
 //		URI uri = getClass().getResource("arquivo-completo.xls").toURI();
-		URI uri = getClass().getResource("matricula-dados-reais.xls").toURI();
+		URI uri = getClass().getResource("matricula-dados-reais.xlsx").toURI();
 		
 		ImportadorBuilder builder = new ImportadorBuilder();
-		builder.setFileType(ImportFileType.XLS).setAno(2013).setSemestre(2).setSource(new File(uri));
+		builder.setFileType(ImportFileType.XLSX).setAno(2013).setSemestre(2).setSource(new File(uri));
 		
 		Importador importador = builder.build();
 		List<Candidato> candidatos = importador.importar();
 		
-		Assert.assertEquals(496, candidatos.size());
+		Assert.assertEquals(1133, candidatos.size());
 		
 		for (Candidato candidato : candidatos) {
 			assertNotNull(candidato.getNome());

@@ -7,11 +7,13 @@ public class LeitorColunaRGCandidato implements ColunaLegivel<String>{
 
 	@Override
 	public String le(Cell cell, LeitorUtil util) {
-		switch (cell.getCellType()) {
+		if(cell != null){
+			switch (cell.getCellType()) {
 			case HSSFCell.CELL_TYPE_NUMERIC:
 				return String.valueOf(cell.getNumericCellValue());
 			case HSSFCell.CELL_TYPE_STRING:
 				return cell.getStringCellValue();
+			}
 		}
 		
 		return "";

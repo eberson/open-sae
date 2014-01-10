@@ -1,8 +1,24 @@
 package br.org.sae.importador;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 
 public class ImportadorUtil {
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T read(Row row, int cellNumber, Class<T> type){
+		Cell cell = row.getCell(cellNumber);
+		
+		if(String.class.isAssignableFrom(type)){
+			if(cell == null){
+				return (T) "";
+			}
+			
+			return (T) cell.getStringCellValue();
+		}
+		
+		return null;
+	}
 	
 	public static int getIntValue(Cell cell){
 		if (cell.getCellType() == Cell.CELL_TYPE_STRING) {

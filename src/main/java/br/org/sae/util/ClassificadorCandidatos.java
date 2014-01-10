@@ -48,7 +48,7 @@ public class ClassificadorCandidatos implements Comparator<Candidato>{
 	}
 	
 	private OpcaoPrestada getOpcaoPrestada(Candidato candidato){
-		List<VestibulinhoPrestado> vestibulinhos = candidato.getVestibulinhos();
+		List<VestibulinhoPrestado> vestibulinhos = candidato.getVestibulinhosPrestados();
 		
 		for (VestibulinhoPrestado vestibulinhoPrestado : vestibulinhos) {
 			int anoPrestado = vestibulinhoPrestado.getVestibulinho().getAno();
@@ -72,7 +72,7 @@ public class ClassificadorCandidatos implements Comparator<Candidato>{
 	}
 
 	private VestibulinhoPrestado getVestibulinhoPrestado(Candidato candidato){
-		List<VestibulinhoPrestado> vestibulinhos = candidato.getVestibulinhos();
+		List<VestibulinhoPrestado> vestibulinhos = candidato.getVestibulinhosPrestados();
 		
 		for (VestibulinhoPrestado vestibulinhoPrestado : vestibulinhos) {
 			int anoPrestado = vestibulinhoPrestado.getVestibulinho().getAno();

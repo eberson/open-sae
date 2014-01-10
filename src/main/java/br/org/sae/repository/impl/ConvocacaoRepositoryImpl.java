@@ -48,7 +48,7 @@ public class ConvocacaoRepositoryImpl implements ConvocacaoRepository{
 				List<Candidato> convocados = getCandidatosConvocados(turma, opcao);
 				
 				for (Candidato candidato : convocados) {
-					List<VestibulinhoPrestado> prestados = candidato.getVestibulinhos();
+					List<VestibulinhoPrestado> prestados = candidato.getVestibulinhosPrestados();
 					
 					for (VestibulinhoPrestado prestado : prestados) {
 						prestado.getPrimeiraOpcao().setStatus(StatusCandidato.INSCRITO);
@@ -72,7 +72,7 @@ public class ConvocacaoRepositoryImpl implements ConvocacaoRepository{
 		CriteriaQuery<Candidato> cq = qb.createQuery(Candidato.class);
 		
 		Root<Candidato> from = cq.from(Candidato.class);
-		Join<Object, Object> joinPrestado = from.join("vestibulinhos");
+		Join<Object, Object> joinPrestado = from.join("vestibulinhosPrestados");
 		Join<Object, Object> joinVestibulinho = joinPrestado.join("vestibulinho");
 		
 		Predicate whereAno = qb.equal(joinVestibulinho.get("ano"), turma.getAno());
@@ -116,7 +116,7 @@ public class ConvocacaoRepositoryImpl implements ConvocacaoRepository{
 		CriteriaQuery<Candidato> cq = qb.createQuery(Candidato.class);
 		
 		Root<Candidato> from = cq.from(Candidato.class);
-		Join<Object, Object> joinPrestado = from.join("vestibulinhos");
+		Join<Object, Object> joinPrestado = from.join("vestibulinhosPrestados");
 		Join<Object, Object> joinVestibulinho = joinPrestado.join("vestibulinho");
 		
 		Predicate whereAno = qb.equal(joinVestibulinho.get("ano"), turma.getAno());

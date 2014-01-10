@@ -7,9 +7,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "tbetapa")
+@Table(name = "tbetapa", uniqueConstraints={@UniqueConstraint(columnNames={"turma", "ano", "semestre", "modulo"})})
 public class Etapa extends Entidade {
 
 	private static final long serialVersionUID = 1L;

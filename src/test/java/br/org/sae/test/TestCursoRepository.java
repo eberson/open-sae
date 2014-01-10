@@ -28,7 +28,7 @@ public class TestCursoRepository extends TestDatabaseGeneric {
 	
 	@Test
 	public void testListaTodos(){
-		Assert.assertEquals(5, repository.all().size());
+		Assert.assertEquals(7, repository.all().size());
 	}
 	
 	@Test
@@ -38,11 +38,11 @@ public class TestCursoRepository extends TestDatabaseGeneric {
 
 	@Test
 	public void testCursoByNomeMinusculas(){
-		Assert.assertNotNull(repository.findByName("finanças"));
+		Assert.assertNotNull(repository.findByName("eletrotécnica"));
 	}
 
 	@Test
 	public void testCursoByNomeMaiusculas(){
-		Assert.assertNotNull(repository.findByName("FINANÇAS"));
+		Assert.assertNotNull(repository.findByName("ELETROTÉCNICA"));
 	}
 }

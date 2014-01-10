@@ -85,7 +85,7 @@ public class TestMatriculaGeneric {
 	protected static Turma teletrotecnica;
 	protected static Turma tmecatronicaM;
 	protected static Turma tmecatronicaN;
-	protected static Turma tinformartica;
+	protected static Turma tinformatica;
 	protected static Turma tenfermagem;
 	protected static Turma tensinomedio;
 	protected static Turma tetim;
@@ -125,9 +125,9 @@ public class TestMatriculaGeneric {
 		generateModulos(mecanica);
 		
 		teletrotecnica = new Turma("Turma A", Periodo.NOITE, ano, semestre, eletrotecnica, false);
-		tmecatronicaM = new Turma("Turma B", Periodo.NOITE, ano, semestre, mecatronica, false);
+		tmecatronicaM = new Turma("Turma B", Periodo.MANHA, ano, semestre, mecatronica, false);
 		tmecatronicaN = new Turma("Turma B", Periodo.NOITE, ano, semestre, mecatronica, false);
-		tinformartica = new Turma("Turma C", Periodo.TARDE, ano, semestre, informatica, false);
+		tinformatica = new Turma("Turma C", Periodo.TARDE, ano, semestre, informatica, false);
 		tenfermagem = new Turma("Turma D", Periodo.NOITE, ano, semestre, enfermagem, false);
 		tensinomedio = new Turma("Turma E", Periodo.MANHA, ano, semestre, ensinomedio, false);
 		tetim = new Turma("Turma E", Periodo.INTEGRAL, ano, semestre, etim, false);
@@ -136,7 +136,7 @@ public class TestMatriculaGeneric {
 		turmaRepository.save(teletrotecnica);
 		turmaRepository.save(tmecatronicaN);
 		turmaRepository.save(tmecatronicaM);
-		turmaRepository.save(tinformartica);
+		turmaRepository.save(tinformatica);
 		turmaRepository.save(tenfermagem);
 		turmaRepository.save(tensinomedio);
 		turmaRepository.save(tetim);
@@ -145,7 +145,7 @@ public class TestMatriculaGeneric {
 		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, teletrotecnica, eletrotecnica.getModulos().get(0)));
 		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, tmecatronicaM, mecatronica.getModulos().get(0)));
 		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, tmecatronicaN, mecatronica.getModulos().get(0)));
-		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, tinformartica, informatica.getModulos().get(0)));
+		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, tinformatica, informatica.getModulos().get(0)));
 		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, tenfermagem, enfermagem.getModulos().get(0)));
 		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, tensinomedio, ensinomedio.getModulos().get(0)));
 		etapaRepository.save(new Etapa("1º Módulo", ano, semestre, tetim, etim.getModulos().get(0)));
@@ -154,7 +154,7 @@ public class TestMatriculaGeneric {
 		teletrotecnica = em.find(Turma.class, teletrotecnica.getCodigo());
 		tmecatronicaM = em.find(Turma.class, tmecatronicaM.getCodigo());
 		tmecatronicaN = em.find(Turma.class, tmecatronicaN.getCodigo());
-		tinformartica = em.find(Turma.class, tinformartica.getCodigo());
+		tinformatica = em.find(Turma.class, tinformatica.getCodigo());
 		tenfermagem = em.find(Turma.class, tenfermagem.getCodigo());
 		tensinomedio = em.find(Turma.class, tensinomedio.getCodigo());
 		tetim = em.find(Turma.class, tetim.getCodigo());
@@ -190,7 +190,7 @@ public class TestMatriculaGeneric {
 		resetEtapa(teletrotecnica);
 		resetEtapa(tmecatronicaM);
 		resetEtapa(tmecatronicaN);
-		resetEtapa(tinformartica);
+		resetEtapa(tinformatica);
 		resetEtapa(tenfermagem);
 		resetEtapa(tensinomedio);
 	}

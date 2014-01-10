@@ -57,13 +57,13 @@ public class TestMatriculaConvocacao extends TestMatriculaGeneric{
 	public void testNovaChamadaMatriculaGeral(){
 		Map<Turma, List<Candidato>> chamada = service.convoca(ano, semestre);
 		
-		Assert.assertEquals(30, chamada.get(enfermagem).size());
-		Assert.assertEquals(40, chamada.get(eletrotecnica).size());
-		Assert.assertEquals(40, chamada.get(mecatronica).size());
-		Assert.assertEquals(40, chamada.get(informatica).size());
-		Assert.assertEquals(40, chamada.get(etim).size());
-		Assert.assertEquals(40, chamada.get(ensinomedio).size());
-		Assert.assertEquals(40, chamada.get(mecanica).size());
+		Assert.assertEquals(30, chamada.get(tenfermagem).size());
+		Assert.assertEquals(40, chamada.get(teletrotecnica).size());
+		Assert.assertEquals(40, chamada.get(tmecatronicaN).size());
+		Assert.assertEquals(40, chamada.get(tinformatica).size());
+		Assert.assertEquals(40, chamada.get(tetim).size());
+		Assert.assertEquals(40, chamada.get(tensinomedio).size());
+		Assert.assertEquals(40, chamada.get(tmecanica).size());
 	}
 	
 	@Test
@@ -83,22 +83,22 @@ public class TestMatriculaConvocacao extends TestMatriculaGeneric{
 		
 		chamada = service.carregaConvocados(ano, semestre);
 		
-		Assert.assertEquals(26, chamada.get(enfermagem).size());
-		Assert.assertEquals(36, chamada.get(eletrotecnica).size());
-		Assert.assertEquals(36, chamada.get(mecatronica).size());
-		Assert.assertEquals(36, chamada.get(informatica).size());
-		Assert.assertEquals(36, chamada.get(ensinomedio).size());
+		Assert.assertEquals(26, chamada.get(tenfermagem).size());
+		Assert.assertEquals(36, chamada.get(teletrotecnica).size());
+		Assert.assertEquals(36, chamada.get(tmecatronicaN).size());
+		Assert.assertEquals(36, chamada.get(tinformatica).size());
+		Assert.assertEquals(36, chamada.get(tensinomedio).size());
 	}
 	
 	@Test
 	public void testPrimeiraChamadaInformatica(){
-		List<Candidato> convocados = service.convoca(ano, semestre, informatica, Periodo.NOITE);
+		List<Candidato> convocados = service.convoca(ano, semestre, informatica, Periodo.TARDE);
 		Assert.assertEquals(40, convocados.size());
 	}
 
 	@Test
 	public void testRepetePrimeiraChamadaInformatica(){
-		List<Candidato> convocados = service.convoca(ano, semestre, informatica, Periodo.NOITE);
+		List<Candidato> convocados = service.convoca(ano, semestre, informatica, Periodo.TARDE);
 		Assert.assertEquals(40, convocados.size());
 		
 		Iterator<Candidato> iterator = convocados.iterator();
@@ -107,14 +107,14 @@ public class TestMatriculaConvocacao extends TestMatriculaGeneric{
 			Candidato candidato = (Candidato) iterator.next();
 			iterator.remove();
 			
-			service.matricular(candidato, tinformartica, new Date());
+			service.matricular(candidato, tinformatica, new Date());
 			
 			if(convocados.size() == 20){
 				break;
 			}
 		}
 		
-		convocados = service.carregaConvocados(ano, semestre, informatica, Periodo.NOITE);
+		convocados = service.carregaConvocados(ano, semestre, informatica, Periodo.TARDE);
 		Assert.assertEquals(20, convocados.size());
 	}
 

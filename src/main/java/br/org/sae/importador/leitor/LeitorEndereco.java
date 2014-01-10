@@ -18,13 +18,13 @@ public class LeitorEndereco implements DadoLegivel<Endereco>{
 	public Endereco le(Row row, LeitorUtil util) {
 		Endereco endereco = new Endereco();
 		
-		endereco.setEndereco(row.getCell(ENDERECO_LOGRADOURO).getStringCellValue());
-		endereco.setNumero(row.getCell(ENDERECO_NUMERO).getStringCellValue());
-		endereco.setComplemento(row.getCell(ENDERECO_COMPLEMENTO).getStringCellValue());
-		endereco.setBairro(row.getCell(ENDERECO_BAIRRO).getStringCellValue());
-		endereco.setCidade(row.getCell(ENDERECO_CIDADE).getStringCellValue());
-		endereco.setUf(row.getCell(ENDERECO_UF).getStringCellValue());
-		endereco.setCep(row.getCell(ENDERECO_CEP).getStringCellValue());
+		endereco.setEndereco(util.reader(String.class).value(row, ENDERECO_LOGRADOURO));
+		endereco.setNumero(util.reader(String.class).value(row, ENDERECO_NUMERO));
+		endereco.setComplemento(util.reader(String.class).value(row, ENDERECO_COMPLEMENTO));
+		endereco.setBairro(util.reader(String.class).value(row, ENDERECO_BAIRRO));
+		endereco.setCidade(util.reader(String.class).value(row, ENDERECO_CIDADE));
+		endereco.setUf(util.reader(String.class).value(row, ENDERECO_UF));
+		endereco.setCep(util.reader(String.class).value(row, ENDERECO_CEP));
 		
 		return endereco;
 	}
