@@ -31,12 +31,23 @@ public class Matricula extends Entidade {
 	@Enumerated(EnumType.STRING)
 	private StatusMatricula status = StatusMatricula.ATIVO;
 	
+	@Enumerated(EnumType.STRING)
+	private SituacaoAluno situacao = SituacaoAluno.ATIVO; 
+	
 	public Etapa getEtapa() {
 		return etapa;
 	}
 	
 	public void setEtapa(Etapa etapa) {
 		this.etapa = etapa;
+	}
+	
+	public SituacaoAluno getSituacao() {
+		return situacao;
+	}
+	
+	public void setSituacao(SituacaoAluno situacao) {
+		this.situacao = situacao;
 	}
 	
 	public StatusMatricula getStatus() {

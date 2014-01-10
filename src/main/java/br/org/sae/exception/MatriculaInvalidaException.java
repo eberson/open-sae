@@ -1,6 +1,6 @@
 package br.org.sae.exception;
 
-public class MatriculaInvalidaException extends RuntimeException {
+public class MatriculaInvalidaException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 

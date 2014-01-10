@@ -72,7 +72,7 @@ public class TestMatricula extends TestMatriculaGeneric{
 		Assert.assertEquals(40, convocados.size());
 		
 		RespostaMatricula resposta = service.matricular(convocados.get(0), tmecatronicaN, new Date());
-		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA, resposta);
+		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA_NAO_PRESTOU_VESTIBULINHO, resposta);
 	}
 
 	@Test
@@ -85,7 +85,7 @@ public class TestMatricula extends TestMatriculaGeneric{
 		Assert.assertEquals(RespostaMatricula.MATRICULA_SUCESSO, resposta);
 		
 		resposta = service.matricular(candidato, tinformatica, new Date());
-		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA, resposta);
+		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA_MATRICULA_JA_EXISTENTE, resposta);
 	}
 
 	@Test
@@ -99,7 +99,7 @@ public class TestMatricula extends TestMatriculaGeneric{
 		Assert.assertEquals(RespostaMatricula.MATRICULA_SUCESSO, resposta);
 		
 		resposta = service.matricular(candidato, tmecatronicaN, new Date());
-		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA, resposta);
+		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA_NAO_PRESTOU_VESTIBULINHO, resposta);
 	}
 	
 	@Test
@@ -112,31 +112,7 @@ public class TestMatricula extends TestMatriculaGeneric{
 		Assert.assertEquals(RespostaMatricula.MATRICULA_SUCESSO, resposta);
 		
 		resposta = service.matricularExcepcionalmente(candidato, tmecanica, new Date());
-		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA, resposta);
-	}
-
-	@Test
-	public void testMatriculaDuasVezesMesmaTurmaEtapasDiferentes(){
-		List<Candidato> convocados = service.convoca(mecatronica, Periodo.NOITE);
-		Assert.assertEquals(40, convocados.size());
-		
-		Candidato candidato = convocados.get(0);
-		RespostaMatricula resposta = service.matricular(candidato, tmecatronicaN, new Date());
-		Assert.assertEquals(RespostaMatricula.MATRICULA_SUCESSO, resposta);
-		
-		Etapa etapa = new Etapa();
-		etapa.setAno(2014);
-		etapa.setSemestre(1);
-		etapa.setDescricao("2º Módulo");
-		etapa.setModulo(mecatronica.getModulos().get(1));
-		etapa.setTurma(tmecatronicaN);
-		tmecatronicaN.setEtapaAtual(etapa);
-		
-		etapaRepository.save(etapa);
-		turmaRepository.update(tmecatronicaN);
-		
-		resposta = service.matricular(candidato, tmecatronicaN, new Date());
-		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA, resposta);
+		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA_JA_MATRICULADO_NO_MESMO_PERIODO, resposta);
 	}
 
 	@Test
@@ -149,7 +125,7 @@ public class TestMatricula extends TestMatriculaGeneric{
 		Assert.assertEquals(RespostaMatricula.MATRICULA_SUCESSO, resposta);
 		
 		resposta = service.matricularExcepcionalmente(candidato, tinformatica, new Date());
-		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA, resposta);
+		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA_MATRICULA_JA_EXISTENTE, resposta);
 	}
 
 

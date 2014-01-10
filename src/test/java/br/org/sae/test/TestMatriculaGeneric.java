@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.net.URI;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -28,6 +29,7 @@ import br.org.sae.service.ImportFileType;
 import br.org.sae.service.ImportService;
 import br.org.sae.service.MatriculaService;
 import br.org.sae.service.RespostaImportService;
+import br.org.sae.util.OrdenadorEtapas;
 
 public class TestMatriculaGeneric {
 	
@@ -197,6 +199,14 @@ public class TestMatriculaGeneric {
 	
 	private void resetEtapa(Turma turma){
 		List<Etapa> etapas = turma.getEtapas();
+		
+		if(etapas.size() > 1){
+			Collections.sort(etapas, new OrdenadorEtapas());
+			while(etapas.size() > 1){
+				Etapa etapa = etapas.remove(etapas.size() - 1);
+				etapaRepository.delete(etapa.getCodigo());
+			}
+		}
 		
 		for (Etapa etapa : etapas) {
 			etapa.setListaPiloto(false);

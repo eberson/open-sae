@@ -144,6 +144,14 @@ public interface MatriculaService extends EntityService<Matricula> {
 	 */
 	RespostaMatricula cancelarMatricula(Aluno aluno, Turma turma);
 	
+	RespostaMatricula trancarMatrcula(Aluno aluno, Turma turma);
+	
+	RespostaMatricula desistir(Aluno aluno, Turma turma);
+
+	RespostaMatricula transferir(Aluno aluno, Turma turma);
+
+	RespostaMatricula remanejar(Aluno aluno, Turma origem, Turma destino);
+	
 	/**
 	 * Busca todas as matrículas já efetuadas pelo aluno.
 	 * 

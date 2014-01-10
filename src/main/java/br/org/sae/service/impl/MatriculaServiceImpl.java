@@ -11,7 +11,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.org.sae.exception.JaMatriculadoMesmoPeriodoException;
 import br.org.sae.exception.MatriculaInvalidaException;
+import br.org.sae.exception.MatriculaJaExisteException;
+import br.org.sae.exception.NaoPrestouVestibulinhoException;
+import br.org.sae.exception.VagasIndisponiveisException;
 import br.org.sae.model.Aluno;
 import br.org.sae.model.Candidato;
 import br.org.sae.model.Curso;
@@ -19,6 +23,8 @@ import br.org.sae.model.Etapa;
 import br.org.sae.model.Matricula;
 import br.org.sae.model.OpcaoPrestada;
 import br.org.sae.model.Periodo;
+import br.org.sae.model.SituacaoAluno;
+import br.org.sae.model.StatusMatricula;
 import br.org.sae.model.Turma;
 import br.org.sae.model.VestibulinhoPrestado;
 import br.org.sae.repository.CandidatoRepository;
@@ -101,6 +107,14 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 			checkCandidatoMatricula(candidato, turma);
 			matricularImpl(candidato, turma, data);
 			return RespostaMatricula.MATRICULA_SUCESSO;
+		} catch (JaMatriculadoMesmoPeriodoException e) {
+			return RespostaMatricula.MATRICULA_INVALIDA_JA_MATRICULADO_NO_MESMO_PERIODO;
+		} catch (VagasIndisponiveisException e) {
+			return RespostaMatricula.MATRICULA_INVALIDA_VAGAS_INDISPONIVEIS;
+		} catch (NaoPrestouVestibulinhoException e) {
+			return RespostaMatricula.MATRICULA_INVALIDA_NAO_PRESTOU_VESTIBULINHO;
+		} catch (MatriculaJaExisteException e) {
+			return RespostaMatricula.MATRICULA_INVALIDA_MATRICULA_JA_EXISTENTE;
 		} catch (MatriculaInvalidaException e) {
 			return RespostaMatricula.MATRICULA_INVALIDA;
 		} catch (Exception e) {
@@ -113,6 +127,12 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 		try {
 			matricularImpl(candidato, turma, data);
 			return RespostaMatricula.MATRICULA_SUCESSO;
+		} catch (JaMatriculadoMesmoPeriodoException e) {
+			return RespostaMatricula.MATRICULA_INVALIDA_JA_MATRICULADO_NO_MESMO_PERIODO;
+		} catch (VagasIndisponiveisException e) {
+			return RespostaMatricula.MATRICULA_INVALIDA_VAGAS_INDISPONIVEIS;
+		} catch (MatriculaJaExisteException e) {
+			return RespostaMatricula.MATRICULA_INVALIDA_MATRICULA_JA_EXISTENTE;
 		} catch (MatriculaInvalidaException e) {
 			return RespostaMatricula.MATRICULA_INVALIDA;
 		} catch (Exception e) {
@@ -128,6 +148,47 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 		} catch (Exception e) {
 			return RespostaMatricula.ERRO_DESCONHECIDO;
 		}
+	}
+	
+	@Override
+	public RespostaMatricula desistir(Aluno aluno, Turma turma) {
+		try {
+			Matricula matricula = repository.find(aluno, turma);
+			matricula.setStatus(StatusMatricula.TRANCAMENTO_MATRICULA);
+			matricula.setSituacao(SituacaoAluno.INATIVO);
+			return RespostaMatricula.DESISTENCIA_SUCESSO;
+		} catch (Exception e) {
+			return RespostaMatricula.ERRO_DESCONHECIDO;
+		}
+	}
+	
+	@Override
+	public RespostaMatricula remanejar(Aluno aluno, Turma origem, Turma destino) {
+		try {
+			if(vagasDisponiveis(destino) < 1){
+				return RespostaMatricula.REMANEJAMENTO_INVALIDO_VAGAS_INDISPONIVEIS;
+			}
+			
+			Matricula matricula = repository.find(aluno, origem);
+			createMatricula(aluno, destino, new Date());
+			
+			
+			return RespostaMatricula.REMANEJAMENTO_SUCESSO;
+		} catch (Exception e) {
+			return RespostaMatricula.ERRO_DESCONHECIDO;
+		}
+	}
+	
+	@Override
+	public RespostaMatricula trancarMatrcula(Aluno aluno, Turma turma) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public RespostaMatricula transferir(Aluno aluno, Turma turma) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	@Override
@@ -233,13 +294,13 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 	}
 	
 	
-	private void checkCandidatoMatricula(Candidato candidato, Turma turma){
+	private void checkCandidatoMatricula(Candidato candidato, Turma turma) throws MatriculaInvalidaException{
 		if(candidato == null || turma == null){
 			throw new MatriculaInvalidaException();
 		}
 		
 		if(vagasDisponiveis(turma) <= 0){
-			throw new MatriculaInvalidaException("Não existem vagas disponíveis para a turma informada!");
+			throw new VagasIndisponiveisException(turma);
 		}
 		
 		List<VestibulinhoPrestado> vestibulinhos = repository.getVestibulinhosPrestados(candidato);
@@ -254,7 +315,7 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 			}
 		}
 		
-		throw new MatriculaInvalidaException("O candidato não prestou vestibulinho para o curso que prentede matriculá-lo!");
+		throw new NaoPrestouVestibulinhoException();
 	}
 	
 	private boolean validaCandidatoMatricula(VestibulinhoPrestado vestibulinho, OpcaoPrestada opcao, Turma turma){
@@ -334,7 +395,7 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 		return chamados;
 	}
 	
-	private void matricularImpl(Candidato candidato, Turma turma, Date data) {
+	private void matricularImpl(Candidato candidato, Turma turma, Date data) throws MatriculaInvalidaException {
 		Aluno aluno = alunoService.findByCPF(candidato.getCpf());
 
 		if(aluno != null){
@@ -350,12 +411,12 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 		repository.marcaMatriculado(turma, candidato);
 	}
 
-	private void checkAlunoMatriculado(Turma turma, Aluno aluno) {
+	private void checkAlunoMatriculado(Turma turma, Aluno aluno) throws MatriculaInvalidaException {
 		if(aluno != null){
 			Matricula m1 = repository.find(aluno, turma);
 			
 			if(m1 != null){
-				throw new MatriculaInvalidaException("O aluno já se encontra matriculado neste curso!");
+				throw new MatriculaJaExisteException(turma);
 			}
 			
 			Etapa etapaAtual = turma.getEtapaAtual();
@@ -365,7 +426,7 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 			for (Matricula matricula : matriculas) {
 				Turma stored = matricula.getEtapa().getTurma();
 				if(stored.getPeriodo() == turma.getPeriodo()){
-					throw new MatriculaInvalidaException("O aluno já se encontra matriculado em outro curso neste período!");
+					throw new JaMatriculadoMesmoPeriodoException();
 				}
 			}
 		}

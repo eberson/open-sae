@@ -170,7 +170,7 @@ public class TestMatriculaConvocacao extends TestMatriculaGeneric{
 		}
 		
 		RespostaMatricula reposta = service.matricular(aux, tmecatronicaN, new Date());
-		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA, reposta);
+		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA_VAGAS_INDISPONIVEIS, reposta);
 	}
 
 	@Test
