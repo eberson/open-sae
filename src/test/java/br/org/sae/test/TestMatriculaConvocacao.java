@@ -92,13 +92,13 @@ public class TestMatriculaConvocacao extends TestMatriculaGeneric{
 	
 	@Test
 	public void testPrimeiraChamadaInformatica(){
-		List<Candidato> convocados = service.convoca(ano, semestre, informatica, Periodo.TARDE);
+		List<Candidato> convocados = service.convoca(informatica, Periodo.TARDE);
 		Assert.assertEquals(40, convocados.size());
 	}
 
 	@Test
 	public void testRepetePrimeiraChamadaInformatica(){
-		List<Candidato> convocados = service.convoca(ano, semestre, informatica, Periodo.TARDE);
+		List<Candidato> convocados = service.convoca(informatica, Periodo.TARDE);
 		Assert.assertEquals(40, convocados.size());
 		
 		Iterator<Candidato> iterator = convocados.iterator();
@@ -114,13 +114,13 @@ public class TestMatriculaConvocacao extends TestMatriculaGeneric{
 			}
 		}
 		
-		convocados = service.carregaConvocados(ano, semestre, informatica, Periodo.TARDE);
+		convocados = service.carregaConvocados(informatica, Periodo.TARDE);
 		Assert.assertEquals(20, convocados.size());
 	}
 
 	@Test
 	public void testSegundaChamadaEletrotecnica(){
-		List<Candidato> convocados = service.convoca(ano, semestre, eletrotecnica, Periodo.NOITE);
+		List<Candidato> convocados = service.convoca(eletrotecnica, Periodo.NOITE);
 		Assert.assertEquals(40, convocados.size());
 		
 		List<Candidato> ref = new ArrayList<>();
@@ -134,27 +134,27 @@ public class TestMatriculaConvocacao extends TestMatriculaGeneric{
 			}
 		}
 		
-		convocados = service.convoca(ano, semestre, eletrotecnica, Periodo.NOITE);
+		convocados = service.convoca(eletrotecnica, Periodo.NOITE);
 		Assert.assertEquals(20, convocados.size());
 		Assert.assertNotEquals(ref, convocados);
 	}
 	
 	@Test
 	public void testVagasIndisponiveis(){
-		List<Candidato> convocados = service.convoca(ano, semestre, mecatronica, Periodo.MANHA);
+		List<Candidato> convocados = service.convoca(mecatronica, Periodo.MANHA);
 		
 		for (Candidato candidato : convocados) {
 			service.matricular(candidato, tmecatronicaM, new Date());
 		}
 		
 		Assert.assertEquals(0, service.vagasDisponiveis(tmecatronicaM));
-		Assert.assertEquals(0, service.convoca(ano, semestre, mecatronica, Periodo.MANHA).size());
-		Assert.assertEquals(0, service.carregaConvocados(ano, semestre, mecatronica, Periodo.MANHA).size());
+		Assert.assertEquals(0, service.convoca(mecatronica, Periodo.MANHA).size());
+		Assert.assertEquals(0, service.carregaConvocados(mecatronica, Periodo.MANHA).size());
 	}
 	
 	@Test
 	public void testMatriculaVagaIndisponivel(){
-		List<Candidato> convocados = service.convoca(ano, semestre, mecatronica, Periodo.NOITE);
+		List<Candidato> convocados = service.convoca(mecatronica, Periodo.NOITE);
 		Candidato aux = convocados.remove(0);
 		
 		for (Candidato candidato : convocados) {
@@ -162,7 +162,7 @@ public class TestMatriculaConvocacao extends TestMatriculaGeneric{
 			Assert.assertEquals(RespostaMatricula.SUCESSO, reposta);
 		}
 		
-		convocados = service.convoca(ano, semestre, mecatronica, Periodo.NOITE);
+		convocados = service.convoca(mecatronica, Periodo.NOITE);
 		
 		for (Candidato candidato : convocados) {
 			RespostaMatricula reposta = service.matricular(candidato, tmecatronicaN, new Date());
@@ -176,23 +176,23 @@ public class TestMatriculaConvocacao extends TestMatriculaGeneric{
 	@Test
 	public void testEsgotarChamadas(){
 		//tem 110 candidatos na primeira opção e 9 na segunda opção.. a turma tem 30 alunos
-		List<Candidato> convocados = service.convoca(ano, semestre, enfermagem, Periodo.NOITE);
+		List<Candidato> convocados = service.convoca(enfermagem, Periodo.NOITE);
 		Assert.assertEquals(30, convocados.size());
 
 		//na segunda chamada deve vir somente 30 alunos
-		convocados = service.convoca(ano, semestre, enfermagem, Periodo.NOITE);
+		convocados = service.convoca(enfermagem, Periodo.NOITE);
 		Assert.assertEquals(30, convocados.size());
 
 		//na segunda chamada deve vir somente 30 alunos
-		convocados = service.convoca(ano, semestre, enfermagem, Periodo.NOITE);
+		convocados = service.convoca(enfermagem, Periodo.NOITE);
 		Assert.assertEquals(30, convocados.size());
 		
 		//na segunda chamada deve vir somente 30 alunos
-		convocados = service.convoca(ano, semestre, enfermagem, Periodo.NOITE);
+		convocados = service.convoca(enfermagem, Periodo.NOITE);
 		Assert.assertEquals(29, convocados.size());
 		
 		//na terceira chamada não deve vir nenhum
-		convocados = service.convoca(ano, semestre, enfermagem, Periodo.NOITE);
+		convocados = service.convoca(enfermagem, Periodo.NOITE);
 		Assert.assertEquals(0, convocados.size());
 	}
 

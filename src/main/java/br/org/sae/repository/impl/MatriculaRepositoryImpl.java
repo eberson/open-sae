@@ -17,8 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.org.sae.model.Aluno;
 import br.org.sae.model.Candidato;
+import br.org.sae.model.Curso;
 import br.org.sae.model.Etapa;
 import br.org.sae.model.Matricula;
+import br.org.sae.model.Periodo;
 import br.org.sae.model.StatusCandidato;
 import br.org.sae.model.StatusMatricula;
 import br.org.sae.model.Turma;
@@ -442,5 +444,10 @@ public class MatriculaRepositoryImpl extends RepositoryImpl<Matricula> implement
 		} catch (NoResultException e) {
 			return turma.getCurso().getVagas();
 		}
+	}
+
+	@Override
+	public List<Aluno> getAlunosMatriculados(Curso curso, Periodo periodo) {
+		return Collections.emptyList();
 	}
 }

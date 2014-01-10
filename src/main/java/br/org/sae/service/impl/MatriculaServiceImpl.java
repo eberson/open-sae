@@ -202,8 +202,10 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 	}
 	
 	@Override
-	public List<Candidato> carregaConvocados(int ano, int semestre, Curso curso, Periodo periodo) {
-		List<Turma> turmas = turmaRepository.find(ano, semestre, curso, periodo);
+	public List<Candidato> carregaConvocados(Curso curso, Periodo periodo) {
+		SemestreInfo info = atual();
+		
+		List<Turma> turmas = turmaRepository.find(info.ano, info.semestre, curso, periodo);
 		List<Candidato> convocados = new ArrayList<>();
 		
 		for (Turma turma : turmas) {
@@ -250,12 +252,10 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 	}
 	
 	@Override
-	public List<Candidato> convoca(int ano, int semestre, Curso curso, Periodo periodo) {
-		if(!vestibulinhoValido(ano, semestre)){
-			return Collections.emptyList();
-		}
+	public List<Candidato> convoca(Curso curso, Periodo periodo) {
+		SemestreInfo info = atual();
 		
-		List<Turma> turmas = turmaRepository.find(ano, semestre, curso, periodo);
+		List<Turma> turmas = turmaRepository.find(info.ano, info.semestre, curso, periodo);
 		List<Candidato> convocados = new ArrayList<>();
 		
 		for (Turma turma : turmas) {
@@ -334,6 +334,21 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 				}
 			}
 		}
+	}
+	
+	public SemestreInfo atual(){
+		Calendar calendar = Calendar.getInstance();
+		
+		SemestreInfo info = new SemestreInfo();
+		info.ano = calendar.get(Calendar.YEAR);
+		info.semestre  = calendar.get(Calendar.MONTH) <= 5 ? 1 : 2;
+		
+		return info;
+	}
+	
+	private class SemestreInfo{
+		private int ano;
+		private int semestre;
 	}
 
 }
