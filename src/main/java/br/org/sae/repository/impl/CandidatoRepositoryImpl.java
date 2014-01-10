@@ -10,6 +10,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -43,7 +44,7 @@ public class CandidatoRepositoryImpl extends RepositoryImpl<Candidato> implement
 	@Override
 	@Transactional(noRollbackFor={NoResultException.class})
 	public void saveOrUpdate(Candidato value) {
-		Candidato stored = findByCpfOrNome(value.getCpf(), "");
+		Candidato stored = find(value.getCpf());
 		
 		if(stored == null){
 			super.save(value);
@@ -76,19 +77,40 @@ public class CandidatoRepositoryImpl extends RepositoryImpl<Candidato> implement
 	}
 	
 	@Override
-	public Candidato findByCpfOrNome(String cpf, String nome) {
-		TypedQuery<Candidato> query = em().createNamedQuery("CandidatoPorNomeOuCPF", Candidato.class);
+	public Candidato find(String cpf) {
+		CriteriaBuilder qb = em().getCriteriaBuilder();
+		CriteriaQuery<Candidato> cq = qb.createQuery(Candidato.class);
 		
-		query.setParameter("cpf", cpf);
-		query.setParameter("nome", nome);
+		Root<Candidato> from = cq.from(Candidato.class);
+		cq.where(qb.equal(from.get("cpf"), cpf));
 		
 		try {
+			TypedQuery<Candidato> query = em().createQuery(cq);
+			query.setMaxResults(1);
+			
 			return query.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		}
 	}
-
+	
+	@Override
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<Candidato> findAll(String nome) {
+		CriteriaBuilder qb = em().getCriteriaBuilder();
+		CriteriaQuery<Candidato> cq = qb.createQuery(Candidato.class);
+		
+		Root<Candidato> from = cq.from(Candidato.class);
+		cq.where(qb.like(qb.upper((Expression)from.get("nome")), nome.toUpperCase() + "%"));
+		
+		try {
+			TypedQuery<Candidato> query = em().createQuery(cq);
+			
+			return query.getResultList();
+		} catch (NoResultException e) {
+			return Collections.emptyList();
+		}
+	}
 	
 	@Override
 	public Map<Curso, List<Candidato>> findByVestibulinho(int ano, int semestre, boolean primeiraOpcao) {

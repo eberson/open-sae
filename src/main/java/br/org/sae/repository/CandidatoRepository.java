@@ -8,7 +8,9 @@ import br.org.sae.model.Curso;
 
 public interface CandidatoRepository extends Repository<Candidato>{
 	
-	Candidato findByCpfOrNome(String cpf, String nome);
+	Candidato find(String cpf);
+	
+	List<Candidato> findAll(String nome);
 	
 	void saveOrUpdate(Candidato candidato);
 	

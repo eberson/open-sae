@@ -113,19 +113,24 @@ public class TestCandidatoRepository extends TestDatabaseGeneric{
 	
 	@Test
 	public void testFindCandidatoNotFound(){
-		Assert.assertNull(repository.findByCpfOrNome("", ""));
+		Assert.assertNull(repository.find(""));
 	}
 
 	@Test
 	public void testFindCandidatoSomenteNome(){
 		carregaCandidato(repository);
-		Assert.assertNotNull(repository.findByCpfOrNome("", "Joaquim Manuel dos Santos"));
+		Assert.assertNotNull(repository.findAll("Joaquim Manuel dos Santos"));
 	}
 
 	@Test
 	public void testFindCandidatoSomenteCPF(){
 		carregaCandidato(repository);
-		Assert.assertNotNull(repository.findByCpfOrNome("22222222222", ""));
+		Assert.assertNotNull(repository.find("22222222222"));
+	}
+	
+	@Test
+	public void testFindAllCandidatosPorNome(){
+		Assert.assertEquals(2, repository.findAll("Fernando").size());
 	}
 	
 	@Test

@@ -1,5 +1,7 @@
 package br.org.sae.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +18,13 @@ public class CandidatoServiceImpl extends EntityServiceImpl<Candidato> implement
 	private CandidatoRepository repository;
 	
 	@Override
-	public Candidato find(String nome, String cpf) {
-		return repository.findByCpfOrNome(cpf, nome);
+	public Candidato find(String cpf) {
+		return repository.find(cpf);
+	}
+	
+	@Override
+	public List<Candidato> findAll(String nome) {
+		return repository.findAll(nome);
 	}
 	
 	@Override

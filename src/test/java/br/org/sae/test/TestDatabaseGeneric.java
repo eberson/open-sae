@@ -27,7 +27,7 @@ public abstract class TestDatabaseGeneric {
 	
 	@Transactional
 	protected void carregaCandidato(CandidatoRepository repository){
-		if(repository.findByCpfOrNome("22222222222", "") != null){
+		if(repository.find("22222222222") != null){
 			return;
 		}
 		
