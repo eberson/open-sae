@@ -2,8 +2,10 @@ package br.org.sae.test;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.org.sae.repository.CursoRepository;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/br/org/sae/test/opensae.xml" })
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class })
