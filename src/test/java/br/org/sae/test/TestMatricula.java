@@ -16,10 +16,12 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
+import br.org.sae.model.Aluno;
 import br.org.sae.model.Candidato;
 import br.org.sae.model.Etapa;
 import br.org.sae.model.Periodo;
 import br.org.sae.service.RespostaMatricula;
+import br.org.sae.service.RespostaRematricula;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -323,6 +325,36 @@ public class TestMatricula extends TestMatriculaGeneric{
 		}
 		
 		Assert.assertEquals(20, service.loadMatriculados(informatica, Periodo.TARDE).get(tinformatica).size());
+	}
+	
+	@Test
+	public void testRematricula(){
+		List<Candidato> convocados = service.convoca(eletrotecnica, Periodo.NOITE);
+		Assert.assertEquals(40, convocados.size());
+		
+		for (Candidato candidato : convocados) {
+			Assert.assertEquals(RespostaMatricula.SUCESSO, service.matricular(candidato, teletrotecnica, new Date()));
+		}
+		
+		List<Aluno> matriculados = service.loadMatriculados(teletrotecnica);
+		Assert.assertEquals(40, matriculados.size());
+
+		Etapa etapa = new Etapa();
+		etapa.setAno(2014);
+		etapa.setSemestre(2);
+		etapa.setDescricao("2º Módulo");
+		etapa.setModulo(eletrotecnica.getModulos().get(1));
+		etapa.setTurma(teletrotecnica);
+		
+		etapaRepository.save(etapa);
+		teletrotecnica = turmaRepository.find(teletrotecnica.getCodigo());
+		
+		for (Aluno aluno : matriculados) {
+			Assert.assertEquals(RespostaRematricula.SUCESSO, service.rematricular(aluno, teletrotecnica, new Date()));
+		}
+
+		matriculados = service.loadMatriculados(teletrotecnica);
+		Assert.assertEquals(40, matriculados.size());
 	}
 	
 	
