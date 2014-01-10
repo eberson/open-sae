@@ -182,6 +182,148 @@ public class TestMatricula extends TestMatriculaGeneric{
 		Assert.assertNotEquals(desmatriculados, convocados);
 		Assert.assertEquals(40, service.findAll().size());
 	}
+
+	@Test
+	public void testMatriculaTodosListaMatriculados(){
+		List<Candidato> convocados = service.convoca(informatica, Periodo.TARDE);
+		Assert.assertEquals(40, convocados.size());
+		
+		for (Candidato candidato : convocados) {
+			service.matricular(candidato, tinformatica, new Date());
+		}
+		
+		Assert.assertEquals(40, service.loadMatriculados(tinformatica).size());
+	}
+	
+	@Test
+	public void testMatriculaMetadeListaMatriculados(){
+		List<Candidato> convocados = service.convoca(informatica, Periodo.TARDE);
+		Assert.assertEquals(40, convocados.size());
+		
+		for(int i = 0; i < 20; i++){
+			service.matricular(convocados.get(i), tinformatica, new Date());
+		}
+		
+		Assert.assertEquals(20, service.loadMatriculados(tinformatica).size());
+	}
+
+	@Test
+	public void testMatriculaTodosDesmatriculaMetadeAntesListaPilotoListaMatriculados(){
+		List<Candidato> convocados = service.convoca(informatica, Periodo.TARDE);
+		Assert.assertEquals(40, convocados.size());
+		
+		List<Candidato> desmatriculados = new ArrayList<>();
+		
+		for (Candidato candidato : convocados) {
+			service.matricular(candidato, tinformatica, new Date());
+			
+			if(desmatriculados.size() < 20){
+				desmatriculados.add(candidato);
+			}
+		}
+		
+		for (Candidato candidato : desmatriculados) {
+			service.cancelarMatricula(alunoRepository.findByCPF(candidato.getCpf()), tinformatica);
+		}
+		
+		Assert.assertEquals(20, service.loadMatriculados(tinformatica).size());
+	}
+
+	@Test
+	public void testMatriculaTodosDesmatriculaMetadeDepoisListaPilotoListaMatriculados(){
+		List<Candidato> convocados = service.convoca(informatica, Periodo.TARDE);
+		Assert.assertEquals(40, convocados.size());
+		
+		List<Candidato> desmatriculados = new ArrayList<>();
+		
+		for (Candidato candidato : convocados) {
+			service.matricular(candidato, tinformatica, new Date());
+			
+			if(desmatriculados.size() < 20){
+				desmatriculados.add(candidato);
+			}
+		}
+		
+		tinformatica.getEtapaAtual().setListaPiloto(true);
+		etapaRepository.update(tinformatica.getEtapaAtual());
+		
+		for (Candidato candidato : desmatriculados) {
+			service.cancelarMatricula(alunoRepository.findByCPF(candidato.getCpf()), tinformatica);
+		}
+		
+		Assert.assertEquals(20, service.loadMatriculados(tinformatica).size());
+	}
+
+	@Test
+	public void testMatriculaTodosListaMatriculadosPorCurso(){
+		List<Candidato> convocados = service.convoca(informatica, Periodo.TARDE);
+		Assert.assertEquals(40, convocados.size());
+		
+		for (Candidato candidato : convocados) {
+			service.matricular(candidato, tinformatica, new Date());
+		}
+		
+		Assert.assertEquals(40, service.loadMatriculados(informatica, Periodo.TARDE).get(tinformatica).size());
+	}
+	
+	@Test
+	public void testMatriculaMetadeListaMatriculadosCurso(){
+		List<Candidato> convocados = service.convoca(informatica, Periodo.TARDE);
+		Assert.assertEquals(40, convocados.size());
+		
+		for(int i = 0; i < 20; i++){
+			service.matricular(convocados.get(i), tinformatica, new Date());
+		}
+		
+		Assert.assertEquals(20, service.loadMatriculados(informatica, Periodo.TARDE).get(tinformatica).size());
+	}
+	
+	@Test
+	public void testMatriculaTodosDesmatriculaMetadeAntesListaPilotoListaMatriculadosCurso(){
+		List<Candidato> convocados = service.convoca(informatica, Periodo.TARDE);
+		Assert.assertEquals(40, convocados.size());
+		
+		List<Candidato> desmatriculados = new ArrayList<>();
+		
+		for (Candidato candidato : convocados) {
+			service.matricular(candidato, tinformatica, new Date());
+			
+			if(desmatriculados.size() < 20){
+				desmatriculados.add(candidato);
+			}
+		}
+		
+		for (Candidato candidato : desmatriculados) {
+			service.cancelarMatricula(alunoRepository.findByCPF(candidato.getCpf()), tinformatica);
+		}
+		
+		Assert.assertEquals(20, service.loadMatriculados(informatica, Periodo.TARDE).get(tinformatica).size());
+	}
+	
+	@Test
+	public void testMatriculaTodosDesmatriculaMetadeDepoisListaPilotoListaMatriculadosCurso(){
+		List<Candidato> convocados = service.convoca(informatica, Periodo.TARDE);
+		Assert.assertEquals(40, convocados.size());
+		
+		List<Candidato> desmatriculados = new ArrayList<>();
+		
+		for (Candidato candidato : convocados) {
+			service.matricular(candidato, tinformatica, new Date());
+			
+			if(desmatriculados.size() < 20){
+				desmatriculados.add(candidato);
+			}
+		}
+		
+		tinformatica.getEtapaAtual().setListaPiloto(true);
+		etapaRepository.update(tinformatica.getEtapaAtual());
+		
+		for (Candidato candidato : desmatriculados) {
+			service.cancelarMatricula(alunoRepository.findByCPF(candidato.getCpf()), tinformatica);
+		}
+		
+		Assert.assertEquals(20, service.loadMatriculados(informatica, Periodo.TARDE).get(tinformatica).size());
+	}
 	
 	
 	@Before

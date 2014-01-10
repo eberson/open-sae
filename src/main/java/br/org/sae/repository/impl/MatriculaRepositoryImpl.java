@@ -260,19 +260,6 @@ public class MatriculaRepositoryImpl extends RepositoryImpl<Matricula> implement
 		}
 	}
 
-	private Candidato findCandidato(Matricula matricula) {
-		CriteriaBuilder qb = em().getCriteriaBuilder();
-		CriteriaQuery<Candidato> cq = qb.createQuery(Candidato.class);
-		Root<Candidato> from = cq.from(Candidato.class);
-		
-		CriteriaQuery<Candidato> select = cq.select(from);
-		select.where(qb.equal(from.get("cpf"), matricula.getAluno().getCpf()));
-		
-		TypedQuery<Candidato> query = em().createQuery(select);
-		Candidato candidato = query.getSingleResult();
-		return candidato;
-	}
-	
 	@Override
 	public boolean candidatoEstaVestibulinho(Candidato candidato, Turma turma) {
 		CriteriaBuilder qb = em().getCriteriaBuilder();
@@ -306,11 +293,6 @@ public class MatriculaRepositoryImpl extends RepositoryImpl<Matricula> implement
 		}
 	}
 
-	@Override
-	protected Class<Matricula> type() {
-		return Matricula.class;
-	}
-	
 	@Override
 	@Transactional
 	public void resetConvocados(int ano, int semestre) {
@@ -449,5 +431,46 @@ public class MatriculaRepositoryImpl extends RepositoryImpl<Matricula> implement
 	@Override
 	public List<Aluno> getAlunosMatriculados(Curso curso, Periodo periodo) {
 		return Collections.emptyList();
+	}
+	
+	@Override
+	public List<Aluno> findMatriculados(Turma turma) {
+		return findMatriculados(turma.getEtapaAtual());
+	}
+	
+	@Override
+	public List<Aluno> findMatriculados(Etapa etapa) {
+		CriteriaBuilder qb = em().getCriteriaBuilder();
+		CriteriaQuery<Aluno> cq = qb.createQuery(Aluno.class);
+		
+		Root<Aluno> from = cq.from(Aluno.class);
+		Join<Object, Object> join = from.join("matriculas");
+		
+		cq.where(qb.and(qb.equal(join.get("etapa"), etapa),
+				        qb.equal(join.get("status"), StatusMatricula.ATIVO)));
+		
+		try {
+			return em().createQuery(cq).getResultList();
+		} catch (NoResultException e) {
+			return Collections.emptyList();
+		}
+	}
+	
+	private Candidato findCandidato(Matricula matricula) {
+		CriteriaBuilder qb = em().getCriteriaBuilder();
+		CriteriaQuery<Candidato> cq = qb.createQuery(Candidato.class);
+		Root<Candidato> from = cq.from(Candidato.class);
+		
+		CriteriaQuery<Candidato> select = cq.select(from);
+		select.where(qb.equal(from.get("cpf"), matricula.getAluno().getCpf()));
+		
+		TypedQuery<Candidato> query = em().createQuery(select);
+		Candidato candidato = query.getSingleResult();
+		return candidato;
+	}
+	
+	@Override
+	protected Class<Matricula> type() {
+		return Matricula.class;
 	}
 }

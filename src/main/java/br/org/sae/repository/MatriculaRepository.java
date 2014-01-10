@@ -5,6 +5,7 @@ import java.util.List;
 import br.org.sae.model.Aluno;
 import br.org.sae.model.Candidato;
 import br.org.sae.model.Curso;
+import br.org.sae.model.Etapa;
 import br.org.sae.model.Matricula;
 import br.org.sae.model.Periodo;
 import br.org.sae.model.Turma;
@@ -42,6 +43,10 @@ public interface MatriculaRepository extends Repository<Matricula>{
 	List<Matricula> find(Aluno aluno, int ano, int semestre);
 	
 	List<Matricula> find(Aluno aluno);
+	
+	List<Aluno> findMatriculados(Turma turma);
+
+	List<Aluno> findMatriculados(Etapa etapa);
 	
 	List<VestibulinhoPrestado> getVestibulinhosPrestados(Candidato candidato);
 	

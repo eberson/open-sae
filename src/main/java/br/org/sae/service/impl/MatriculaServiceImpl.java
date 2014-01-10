@@ -152,6 +152,78 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 			return RespostaRematricula.ERRO_DESCONHECIDO;
 		}
 	}
+	
+	@Override
+	public List<Candidato> convoca(Curso curso, Periodo periodo) {
+		SemestreInfo info = atual();
+		
+		List<Turma> turmas = turmaRepository.find(info.ano, info.semestre, curso, periodo);
+		List<Candidato> convocados = new ArrayList<>();
+		
+		for (Turma turma : turmas) {
+			List<Candidato> chamados = convocaImpl(turma);
+			mrepository.marcaConvocado(turma, chamados);
+			convocados.addAll(chamados);
+		}
+		
+		return convocados;
+	}
+
+	@Override
+	public List<Matricula> findAll(Aluno aluno) {
+		return repository.find(aluno);
+	}
+	
+	@Override
+	public List<Candidato> carregaConvocados(Curso curso, Periodo periodo) {
+		SemestreInfo info = atual();
+		
+		List<Turma> turmas = turmaRepository.find(info.ano, info.semestre, curso, periodo);
+		List<Candidato> convocados = new ArrayList<>();
+		
+		for (Turma turma : turmas) {
+			List<Candidato> chamados = carregaConvocadosImpl(turma);
+			convocados.addAll(chamados);
+		}
+		
+		return convocados;
+	}
+	
+	@Override
+	public Map<Turma, List<Aluno>> loadMatriculados(Curso curso, Periodo periodo) {
+		SemestreInfo atual = atual();
+		
+		List<Turma> turmas = turmaRepository.find(atual.ano, atual.semestre, curso, periodo);
+		Map<Turma, List<Aluno>> resultado = new HashMap<>();
+		
+		for (Turma turma : turmas) {
+			resultado.put(turma, loadMatriculados(turma));
+		}
+		
+		return resultado;
+	}
+	
+	@Override
+	public List<Aluno> loadMatriculados(Turma turma) {
+		return repository.findMatriculados(turma);
+	}
+	
+	@Override
+	public List<Aluno> loadMatriculados(Etapa etapa) {
+		return repository.findMatriculados(etapa);
+	}
+	
+	@Override
+	public Map<Turma, List<Aluno>> loadMatriculados(int ano, int semestre) {
+		List<Turma> turmas = turmaRepository.all(ano, semestre);
+		Map<Turma, List<Aluno>> resultado = new HashMap<>();
+		
+		for (Turma turma : turmas) {
+			resultado.put(turma, loadMatriculados(turma));
+		}
+		
+		return resultado;
+	}
 
 	private Matricula createMatricula(Aluno aluno, Turma turma, Date data) {
 		Matricula matricula = new Matricula();
@@ -162,10 +234,6 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 		return matricula;
 	}
 	
-	@Override
-	public List<Matricula> findAll(Aluno aluno) {
-		return repository.find(aluno);
-	}
 	
 	private void checkCandidatoMatricula(Candidato candidato, Turma turma){
 		if(candidato == null || turma == null){
@@ -201,21 +269,6 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 				vestibulinho.getVestibulinho().getSemestre() == turma.getEtapaAtual().getSemestre();
 	}
 	
-	@Override
-	public List<Candidato> carregaConvocados(Curso curso, Periodo periodo) {
-		SemestreInfo info = atual();
-		
-		List<Turma> turmas = turmaRepository.find(info.ano, info.semestre, curso, periodo);
-		List<Candidato> convocados = new ArrayList<>();
-		
-		for (Turma turma : turmas) {
-			List<Candidato> chamados = carregaConvocadosImpl(turma);
-			convocados.addAll(chamados);
-		}
-		
-		return convocados;
-	}
-	
 	private List<Candidato> carregaConvocadosImpl(Turma turma){
 		int vagasDisponiveis = vagasDisponiveis(turma);
 		
@@ -249,22 +302,6 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 		}
 		
 		return true;
-	}
-	
-	@Override
-	public List<Candidato> convoca(Curso curso, Periodo periodo) {
-		SemestreInfo info = atual();
-		
-		List<Turma> turmas = turmaRepository.find(info.ano, info.semestre, curso, periodo);
-		List<Candidato> convocados = new ArrayList<>();
-		
-		for (Turma turma : turmas) {
-			List<Candidato> chamados = convocaImpl(turma);
-			mrepository.marcaConvocado(turma, chamados);
-			convocados.addAll(chamados);
-		}
-		
-		return convocados;
 	}
 	
 	private List<Candidato> convocaImpl(Turma turma){
@@ -336,7 +373,7 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 		}
 	}
 	
-	public SemestreInfo atual(){
+	private SemestreInfo atual(){
 		Calendar calendar = Calendar.getInstance();
 		
 		SemestreInfo info = new SemestreInfo();

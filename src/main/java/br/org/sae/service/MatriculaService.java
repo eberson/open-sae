@@ -8,6 +8,7 @@ import br.org.sae.exception.MatriculaInvalidaException;
 import br.org.sae.model.Aluno;
 import br.org.sae.model.Candidato;
 import br.org.sae.model.Curso;
+import br.org.sae.model.Etapa;
 import br.org.sae.model.Matricula;
 import br.org.sae.model.Periodo;
 import br.org.sae.model.Turma;
@@ -152,5 +153,48 @@ public interface MatriculaService extends EntityService<Matricula> {
 	 *         uma lista vazia caso não haja nenhuma.
 	 */
 	List<Matricula> findAll(Aluno aluno);
+	
+	/**
+	 * Carrrega um mapa contendo todas as turmas cadastradas para o curso atual
+	 * no período informado e seus alunos regularmente matriculados.
+	 * 
+	 * @param curso
+	 *            curso a ser usado como referência na busca
+	 * @param periodo
+	 *            período a ser usado como referência na busca
+	 * @return mapa contendo as turmas existentes para o curso citado e seus
+	 *         alunos matriculados.
+	 */
+	Map<Turma, List<Aluno>> loadMatriculados(Curso curso, Periodo periodo);
+
+	/**
+	 * Carrega os alunos matriculados na etapa atual da turma citada
+	 * 
+	 * @param turma
+	 *            turma para ser tomada como referência
+	 * @return lista de alunos matriculados na turma
+	 */
+	List<Aluno> loadMatriculados(Turma turma);
+
+	/**
+	 * Carrega os alunos matriculados na etapa citada
+	 * 
+	 * @param etapa
+	 *            etapa para ser tomada como referência
+	 * @return lista de alunos matriculados na turma
+	 */
+	List<Aluno> loadMatriculados(Etapa etapa);
+	
+	/**
+	 * Carrega uma mapa com todas as turmas cadastradas e seus alunos
+	 * matriculados em um determinado ano e semestre.
+	 * 
+	 * @param ano
+	 *            ano de referência
+	 * @param semestre
+	 *            semestre de referência
+	 * @return mapa contendo as turmas e os alunos matriculados
+	 */
+	Map<Turma, List<Aluno>> loadMatriculados(int ano, int semestre);
 
 }
