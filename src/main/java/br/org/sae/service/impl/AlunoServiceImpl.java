@@ -1,5 +1,7 @@
 package br.org.sae.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,8 +51,8 @@ public class AlunoServiceImpl extends EntityServiceImpl<Aluno> implements AlunoS
 	}
 	
 	@Override
-	public Aluno findByNome(String nome) {
-		return repository.findByNome(nome);
+	public List<Aluno> findAll(String nome) {
+		return repository.findAll(nome);
 	}
 
 }

@@ -1,5 +1,7 @@
 package br.org.sae.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,10 @@ public class ProfessorServiceImpl extends EntityServiceImpl<Professor> implement
 	protected Repository<Professor> repository() {
 		return repository;
 	}
-
-
+	
+	@Override
+	public List<Professor> findAll(String nome) {
+		return repository.findAll(nome);
+	}
 
 }

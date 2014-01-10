@@ -1,8 +1,12 @@
 package br.org.sae.repository.impl;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
@@ -53,21 +57,21 @@ public class AlunoRepositoryImpl extends RepositoryImpl<Aluno> implements AlunoR
 		}
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Aluno findByNome(String nome) {
+	public List<Aluno> findAll(String nome) {
 		try {
 			CriteriaBuilder qb = em().getCriteriaBuilder();
 			CriteriaQuery<Aluno> cq = qb.createQuery(Aluno.class);
 			Root<Aluno> from = cq.from(Aluno.class);
 			CriteriaQuery<Aluno> select = cq.select(from);
 			
-			select.where(qb.equal(from.get("nome"), nome));
+			select.where(qb.like(qb.lower((Expression)from.get("nome")), nome.toLowerCase() + "%"));
 			
 			TypedQuery<Aluno> query = em().createQuery(select);
-			query.setMaxResults(1);
-			return query.getSingleResult();
+			return query.getResultList();
 		} catch (Exception e) {
-			return null;
+			return Collections.emptyList();
 		}
 	}
 

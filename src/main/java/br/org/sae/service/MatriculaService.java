@@ -125,7 +125,7 @@ public interface MatriculaService extends EntityService<Matricula> {
 	 *             período, ou, caso seja a primeira matrícula do aluno
 	 * 
 	 */
-	RespostaRematricula rematricular(Aluno aluno, Turma turma, Date data);
+	RespostaMatricula rematricular(Aluno aluno, Turma turma, Date data);
 	
 	/**
 	 * Cancela a matrícula de um aluno em uma determinada turma. Caso ainda não
@@ -142,7 +142,7 @@ public interface MatriculaService extends EntityService<Matricula> {
 	 * 
 	 * @return status da operação
 	 */
-	RespostaCancelamentoMatricula cancelarMatricula(Aluno aluno, Turma turma);
+	RespostaMatricula cancelarMatricula(Aluno aluno, Turma turma);
 	
 	/**
 	 * Busca todas as matrículas já efetuadas pelo aluno.

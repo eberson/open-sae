@@ -159,14 +159,14 @@ public class TestMatriculaConvocacao extends TestMatriculaGeneric{
 		
 		for (Candidato candidato : convocados) {
 			RespostaMatricula reposta = service.matricular(candidato, tmecatronicaN, new Date());
-			Assert.assertEquals(RespostaMatricula.SUCESSO, reposta);
+			Assert.assertEquals(RespostaMatricula.MATRICULA_SUCESSO, reposta);
 		}
 		
 		convocados = service.convoca(mecatronica, Periodo.NOITE);
 		
 		for (Candidato candidato : convocados) {
 			RespostaMatricula reposta = service.matricular(candidato, tmecatronicaN, new Date());
-			Assert.assertEquals(RespostaMatricula.SUCESSO, reposta);
+			Assert.assertEquals(RespostaMatricula.MATRICULA_SUCESSO, reposta);
 		}
 		
 		RespostaMatricula reposta = service.matricular(aux, tmecatronicaN, new Date());

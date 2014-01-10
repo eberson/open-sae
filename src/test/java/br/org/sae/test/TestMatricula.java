@@ -21,7 +21,6 @@ import br.org.sae.model.Candidato;
 import br.org.sae.model.Etapa;
 import br.org.sae.model.Periodo;
 import br.org.sae.service.RespostaMatricula;
-import br.org.sae.service.RespostaRematricula;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -83,7 +82,7 @@ public class TestMatricula extends TestMatriculaGeneric{
 		
 		Candidato candidato = convocados.get(0);
 		RespostaMatricula resposta = service.matricular(candidato, tinformatica, new Date());
-		Assert.assertEquals(RespostaMatricula.SUCESSO, resposta);
+		Assert.assertEquals(RespostaMatricula.MATRICULA_SUCESSO, resposta);
 		
 		resposta = service.matricular(candidato, tinformatica, new Date());
 		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA, resposta);
@@ -97,7 +96,7 @@ public class TestMatricula extends TestMatriculaGeneric{
 		Candidato candidato = convocados.get(0);
 
 		RespostaMatricula resposta = service.matricular(candidato, tinformatica, new Date());
-		Assert.assertEquals(RespostaMatricula.SUCESSO, resposta);
+		Assert.assertEquals(RespostaMatricula.MATRICULA_SUCESSO, resposta);
 		
 		resposta = service.matricular(candidato, tmecatronicaN, new Date());
 		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA, resposta);
@@ -110,7 +109,7 @@ public class TestMatricula extends TestMatriculaGeneric{
 		
 		Candidato candidato = convocados.get(0);
 		RespostaMatricula resposta = service.matricular(candidato, tmecatronicaN, new Date());
-		Assert.assertEquals(RespostaMatricula.SUCESSO, resposta);
+		Assert.assertEquals(RespostaMatricula.MATRICULA_SUCESSO, resposta);
 		
 		resposta = service.matricularExcepcionalmente(candidato, tmecanica, new Date());
 		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA, resposta);
@@ -123,7 +122,7 @@ public class TestMatricula extends TestMatriculaGeneric{
 		
 		Candidato candidato = convocados.get(0);
 		RespostaMatricula resposta = service.matricular(candidato, tmecatronicaN, new Date());
-		Assert.assertEquals(RespostaMatricula.SUCESSO, resposta);
+		Assert.assertEquals(RespostaMatricula.MATRICULA_SUCESSO, resposta);
 		
 		Etapa etapa = new Etapa();
 		etapa.setAno(2014);
@@ -147,7 +146,7 @@ public class TestMatricula extends TestMatriculaGeneric{
 		
 		Candidato candidato = convocados.get(0);
 		RespostaMatricula resposta = service.matricular(candidato, tinformatica, new Date());
-		Assert.assertEquals(RespostaMatricula.SUCESSO, resposta);
+		Assert.assertEquals(RespostaMatricula.MATRICULA_SUCESSO, resposta);
 		
 		resposta = service.matricularExcepcionalmente(candidato, tinformatica, new Date());
 		Assert.assertEquals(RespostaMatricula.MATRICULA_INVALIDA, resposta);
@@ -333,7 +332,7 @@ public class TestMatricula extends TestMatriculaGeneric{
 		Assert.assertEquals(40, convocados.size());
 		
 		for (Candidato candidato : convocados) {
-			Assert.assertEquals(RespostaMatricula.SUCESSO, service.matricular(candidato, teletrotecnica, new Date()));
+			Assert.assertEquals(RespostaMatricula.MATRICULA_SUCESSO, service.matricular(candidato, teletrotecnica, new Date()));
 		}
 		
 		List<Aluno> matriculados = service.loadMatriculados(teletrotecnica);
@@ -350,7 +349,7 @@ public class TestMatricula extends TestMatriculaGeneric{
 		teletrotecnica = turmaRepository.find(teletrotecnica.getCodigo());
 		
 		for (Aluno aluno : matriculados) {
-			Assert.assertEquals(RespostaRematricula.SUCESSO, service.rematricular(aluno, teletrotecnica, new Date()));
+			Assert.assertEquals(RespostaMatricula.REMATRICULA_SUCESSO, service.rematricular(aluno, teletrotecnica, new Date()));
 		}
 
 		matriculados = service.loadMatriculados(teletrotecnica);

@@ -28,9 +28,7 @@ import br.org.sae.repository.Repository;
 import br.org.sae.repository.TurmaRepository;
 import br.org.sae.service.AlunoService;
 import br.org.sae.service.MatriculaService;
-import br.org.sae.service.RespostaCancelamentoMatricula;
 import br.org.sae.service.RespostaMatricula;
-import br.org.sae.service.RespostaRematricula;
 import br.org.sae.util.ClassificadorCandidatos;
 import br.org.sae.util.OpcaoVestibulinho;
 
@@ -102,7 +100,7 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 		try {
 			checkCandidatoMatricula(candidato, turma);
 			matricularImpl(candidato, turma, data);
-			return RespostaMatricula.SUCESSO;
+			return RespostaMatricula.MATRICULA_SUCESSO;
 		} catch (MatriculaInvalidaException e) {
 			return RespostaMatricula.MATRICULA_INVALIDA;
 		} catch (Exception e) {
@@ -114,7 +112,7 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 	public RespostaMatricula matricularExcepcionalmente(Candidato candidato, Turma turma, Date data) {
 		try {
 			matricularImpl(candidato, turma, data);
-			return RespostaMatricula.SUCESSO;
+			return RespostaMatricula.MATRICULA_SUCESSO;
 		} catch (MatriculaInvalidaException e) {
 			return RespostaMatricula.MATRICULA_INVALIDA;
 		} catch (Exception e) {
@@ -123,20 +121,20 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 	}
 
 	@Override
-	public RespostaCancelamentoMatricula cancelarMatricula(Aluno aluno, Turma turma) {
+	public RespostaMatricula cancelarMatricula(Aluno aluno, Turma turma) {
 		try {
 			repository.cancelarMatricula(repository.find(aluno, turma));
-			return RespostaCancelamentoMatricula.SUCESSO;
+			return RespostaMatricula.CANCELAMENTO_SUCESSO;
 		} catch (Exception e) {
-			return RespostaCancelamentoMatricula.ERRO_DESCONHECIDO;
+			return RespostaMatricula.ERRO_DESCONHECIDO;
 		}
 	}
 	
 	@Override
-	public RespostaRematricula rematricular(Aluno aluno, Turma turma, Date data) {
+	public RespostaMatricula rematricular(Aluno aluno, Turma turma, Date data) {
 		try {
 			if(aluno == null){
-				return RespostaRematricula.REMATRICULA_INVALIDA;
+				return RespostaMatricula.REMATRICULA_INVALIDA;
 			}
 
 			checkAlunoMatriculado(turma, aluno);
@@ -145,11 +143,11 @@ public class MatriculaServiceImpl extends EntityServiceImpl<Matricula> implement
 			
 			repository.matricular(matricula);
 			
-			return RespostaRematricula.SUCESSO;
+			return RespostaMatricula.REMATRICULA_SUCESSO;
 		} catch (MatriculaInvalidaException e) {
-			return RespostaRematricula.REMATRICULA_INVALIDA;
+			return RespostaMatricula.REMATRICULA_INVALIDA;
 		} catch (Exception e) {
-			return RespostaRematricula.ERRO_DESCONHECIDO;
+			return RespostaMatricula.ERRO_DESCONHECIDO;
 		}
 	}
 	
